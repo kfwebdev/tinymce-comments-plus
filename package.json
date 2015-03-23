@@ -1,5 +1,8 @@
 {
-	"name": "tinymce-comments-plus",
-	"version": "1.0.0",
-	"dependencies": {}
+  "name": "tinymce-comments-plus",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.8.11"
+  }
 }
