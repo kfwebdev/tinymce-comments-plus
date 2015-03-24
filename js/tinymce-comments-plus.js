@@ -16,8 +16,11 @@
 	$(function () {
 
 		$( document ).on( 'click', '.comment-reply-link, #cancel-comment-reply-link',	function(){
+			// Remove old textarea tinyMCE editor instance
 			tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'comment');
+			// Remove old inline toolbar created by old tinyMCE editor instance
 			$( 'div.mce-inline-toolbar-grp' ).remove();
+			// Recreate new tinyMCE editor at new #comment textarea position
 			tinymce.EditorManager.execCommand('mceAddEditor', true, 'comment');
 		});
 
