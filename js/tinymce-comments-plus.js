@@ -17,7 +17,7 @@
 
 		$( document ).on( 'click', '.comment-reply-link, #cancel-comment-reply-link',	function(){
 			tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'comment');
-			$( 'div.mce-inline-toolbar-grp' ).unbind().remove();
+			$( 'div.mce-inline-toolbar-grp' ).remove();
 			tinymce.EditorManager.execCommand('mceAddEditor', true, 'comment');
 		});
 
