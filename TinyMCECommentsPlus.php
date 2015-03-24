@@ -78,7 +78,7 @@ class TinyMCECommentsPlus{
 
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_action("TODO", array($this, "action_method_name"));
-		add_filter("TODO", array($this, "filter_method_name"));
+		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
 
 	}
 
@@ -193,7 +193,7 @@ class TinyMCECommentsPlus{
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script($this->plugin_slug . "-plugin-script", plugins_url("js/public.js", __FILE__), array("jquery"),
+		wp_enqueue_script($this->plugin_slug . "-plugin-script", plugins_url("js/" . $this->plugin_slug . ".js", __FILE__), array("jquery"),
 			$this->version);
 	}
 
@@ -240,6 +240,34 @@ class TinyMCECommentsPlus{
 	 */
 	public function filter_method_name() {
 		// TODO: Define your filter hook callback here
+	}
+
+	/**
+	 *
+	 * @since    1.0.0
+	 */
+	public function filter_tinymce_editor($test) {
+		global $post;
+
+	  ob_start();
+
+	  wp_editor( '', 'comment',
+			array(
+		    'textarea_rows' => 15,
+		    'teeny' => false,
+		    'quicktags' => false,
+		    'media_buttons' => false
+	  		)
+			);
+
+	  $editor = ob_get_contents();
+
+	  ob_end_clean();
+
+	  //make sure comment media is attached to parent post
+	  //$editor = str_replace( 'post_id=0', 'post_id='.get_the_ID(), $editor );
+
+	  return $editor;
 	}
 
 }

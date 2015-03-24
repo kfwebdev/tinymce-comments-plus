@@ -14,6 +14,12 @@
 (function ($) {
 	"use strict";
 	$(function () {
-		// Place your public-facing JavaScript here
+
+		$( document ).on( 'click', '.comment-reply-link, #cancel-comment-reply-link',	function(){
+			tinymce.EditorManager.execCommand('mceRemoveEditor', true, 'comment');
+			$( 'div.mce-inline-toolbar-grp' ).unbind().remove();
+			tinymce.EditorManager.execCommand('mceAddEditor', true, 'comment');
+		});
+
 	});
-}(jQuery));
+}( jQuery ));
