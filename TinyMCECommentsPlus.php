@@ -79,6 +79,7 @@ class TinyMCECommentsPlus{
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_action("TODO", array($this, "action_method_name"));
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
+		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_edit_link' ), 10, 3 );
 
 	}
 
@@ -183,7 +184,7 @@ class TinyMCECommentsPlus{
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/public.css", __FILE__), array(),
+		wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(),
 			$this->version);
 	}
 
@@ -243,7 +244,6 @@ class TinyMCECommentsPlus{
 	}
 
 	/**
-	 *
 	 * @since    1.0.0
 	 */
 	public function filter_tinymce_editor($test) {
@@ -268,6 +268,15 @@ class TinyMCECommentsPlus{
 	  //$editor = str_replace( 'post_id=0', 'post_id='.get_the_ID(), $editor );
 
 	  return $editor;
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
+	public function filter_comment_reply_edit_link( $args, $comment, $post ) {
+		$comment_id = $post->comment_ID;
+		echo '<div class="edit-comment" onclick="editLink( ' . $comment_id . ' );">Edit</div>' . PHP_EOL;
+		return $args;
 	}
 
 }
