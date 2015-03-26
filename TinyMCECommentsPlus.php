@@ -77,7 +77,7 @@ class TinyMCECommentsPlus{
 		add_action("wp_enqueue_scripts", array($this, "enqueue_scripts"));
 
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
-		add_action("TODO", array($this, "action_method_name"));
+		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_edit_link' ), 10, 3 );
 
@@ -277,6 +277,69 @@ class TinyMCECommentsPlus{
 		$comment_id = $post->comment_ID;
 		echo '<div class="edit-comment" onclick="editLink( ' . $comment_id . ' );">Edit</div>' . PHP_EOL;
 		return $args;
+	}
+
+	/**
+	* customise list of allowed HTML tags in comments
+	* @since    1.0.0
+	*/
+	public function filter_customize_allowed_tags( $comment_data ) {
+				global $allowedtags;
+
+				// add wanted tags
+				$newTags = array(
+					'a' => array(
+						'href' => true,
+						'title' => true,
+						'target' => true
+					),
+					'del' => true,
+					'h1' => array(
+						'style' => true
+					),
+					'h2' => array(
+						'style' => true
+					),
+					'h3' => array(
+						'style' => true
+					),
+					'h4' => array(
+						'style' => true
+					),
+					'h5' => array(
+						'style' => true
+					),
+					'h6' => array(
+						'style' => true
+					),
+					'img' => array(
+						'style' => true,
+						'title' => true
+					),
+					'ol' => array(
+						'style' => true,
+						'li' => array(
+							'style' => true
+						)
+					),
+					'p' => array(
+						'style' => true
+					),
+					'pre' => true,
+					'span' => array(
+						'style' => true
+					),
+					'ul' => array(
+						'style' => true,
+						'li' => array(
+							'style' => true
+						)
+					)
+				);
+
+				$allowedtags = array_merge( $allowedtags, $newTags );
+
+				return $comment_data;
 	}
 
 }
