@@ -11,7 +11,7 @@
  * @copyright 3-22-2015 Kentaro Fischer
  */
 
-var tcp = tcp || {};
+var tcp = {};
 
 ( function ( $ ) {
 	"use strict";
@@ -23,21 +23,32 @@ var tcp = tcp || {};
 			el: '#tcpEditComment',
 
 			events: {
-				'click .tcp-edit-comment' : 'editComment',
 				'click .tcp-cancel-edit' : 'cancelEdit'
 			},
 
-			render: function() {
-				$( this ).before( '<textarea id="tcpCommentEditor" rows="12"> ' + $content.html() + '</textarea>' );
-				$( this ).before( '<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel Edit</a>' );
-				tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpEditComment' );
+			template: _.template('<textarea id="tcpCommentEditor" rows="12"><%= content %></textarea>' +
+			'<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel Edit</a>'),
+
+			initialize: function( model ) {
+				this.model = model;
+			},
+
+			render: function() { cl(this.$el);
+				this.$el.html( this.template({ content: this.model.content }) );
+				return this;
 			},
 
 			cancelEdit: function() {
 				// Remove old textarea tinyMCE editor instance
 				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'tcpCommentEditor' );
+				// Remove old inline toolbar created by old tinyMCE editor instance
+				$( 'div.mce-inline-toolbar-grp' ).remove();
+				// Remove this view
+				this.$el.remove();
 			}
-		});
+
+		}); /* /tcp.EditView */
+
 
 		tcp.CommentsView = Backbone.View.extend({
 			el: '#comments',
@@ -58,16 +69,18 @@ var tcp = tcp || {};
 			},
 
 			editComment: function( event ) {
-				var $editLink = $( event.currentTarget ),
-						commentId = $editLink.attr( 'data-comment-id' );
+					var $editLink = $( event.currentTarget ),
+							$content = $editLink.siblings( '.comment-content' );
 
-				if ( parseInt( commentId ) > 0 ) {
-					var $content = $editLink.siblings( '.comment-content' );
-					$content.hide();
-					var editView = new tcp.EditView({ commentId: commentId });
-				}
+					if ( $editLink.length ) {
+						$content.hide();
+						$editLink.before('<div id="tcpEditComment"></div>');
+						var	editView = new tcp.EditView({ content: $content.html() });
+						$( editView.el ).append( editView.render().el );
+						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' );
+					}
 			}
-		});
+		}); /* /tc.CommentsView */
 
 		new tcp.CommentsView();
 

@@ -194,7 +194,7 @@ class TinyMCECommentsPlus{
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script($this->plugin_slug . "-plugin-script", plugins_url("js/" . $this->plugin_slug . ".js", __FILE__), array( 'jquery', 'backbone' ),
+		wp_enqueue_script($this->plugin_slug . "-plugin-script", plugins_url("js/" . $this->plugin_slug . ".js", __FILE__), array( 'jquery', 'backbone', 'underscore' ),
 			$this->version);
 	}
 
@@ -275,7 +275,7 @@ class TinyMCECommentsPlus{
 	 */
 	public function filter_comment_reply_edit_link( $args, $comment, $post ) {
 		$comment_id = $post->comment_ID;
-		echo '<a href="javascript:void(0)" class="tcp-edit-comment" data-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
+		echo '<a href="javascript:void(0);" class="tcp-edit-comment" data-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
 		return $args;
 	}
 
