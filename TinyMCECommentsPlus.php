@@ -15,7 +15,7 @@
  * @package TinyMCECommentsPlus
  * @author  Kentaro Fischer <webdev@kentarofischer.com>
  */
-class TinyMCECommentsPlus{
+class TinyMCECommentsPlus {
 	/**
 	 * Plugin version, used for cache-busting of style and script file references.
 	 *
@@ -80,7 +80,7 @@ class TinyMCECommentsPlus{
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_edit_link' ), 10, 3 );
-
+		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
 	}
 
 	/**
@@ -217,6 +217,26 @@ class TinyMCECommentsPlus{
 		include_once("views/admin.php");
 	}
 
+
+	/**
+	* check if current user can edit comment
+	* @since    1.0.0
+	*/
+	public function user_can_edit( $comment_user_id ) {
+		global $current_user;
+		if ( ! $current_user ) { get_currentuserinfo(); }
+		$can_edit = current_user_can( 'moderate_comments' );
+
+		// if user can moderate comments (admin) then user can edit
+		if ( $can_edit ) { return true; }
+		// else if user is comment author then user can edit
+		else if ( $comment_user_id == $current_user->ID ) { return true; }
+		// else user cannot edit
+		else { return false; }
+	}
+
+
+
 	/**
 	 * NOTE:  Actions are points in the execution of a page or process
 	 *        lifecycle that WordPress fires.
@@ -228,19 +248,6 @@ class TinyMCECommentsPlus{
 	 */
 	public function action_method_name() {
 		// TODO: Define your action hook callback here
-	}
-
-	/**
-	 * NOTE:  Filters are points of execution in which WordPress modifies data
-	 *        before saving it or sending it to the browser.
-	 *
-	 *        WordPress Filters: http://codex.wordpress.org/Plugin_API#Filters
-	 *        Filter Reference:  http://codex.wordpress.org/Plugin_API/Filter_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function filter_method_name() {
-		// TODO: Define your filter hook callback here
 	}
 
 	/**
@@ -273,9 +280,30 @@ class TinyMCECommentsPlus{
 	/**
 	 * @since    1.0.0
 	 */
+	public function filter_comment_editing( $content, $comment ) {
+
+		if ( ! $this->user_can_edit( $comment->user_id ) ) { return $content; }
+
+		$comment_id = $comment->comment_ID;
+		$post_id = $comment->comment_post_ID;
+		$original_content = $content;
+
+		$tcp_content = sprintf( '<div class="tcp-comment-content" data-tcp-comment-id="%d">' . $content . '</div>', $comment_id );
+
+		return $tcp_content;
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
 	public function filter_comment_reply_edit_link( $args, $comment, $post ) {
+		if ( ! $this->user_can_edit( $post->user_id ) ) { return $args; }
+
 		$comment_id = $post->comment_ID;
-		echo '<a href="javascript:void(0);" class="tcp-edit-comment" data-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
+		$tcp_edit_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
+
+		$args = $tcp_edit_link . $args;
+
 		return $args;
 	}
 

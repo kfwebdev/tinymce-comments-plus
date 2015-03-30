@@ -29,12 +29,11 @@ var tcp = {};
 			template: _.template('<textarea id="tcpCommentEditor" rows="12"><%= content %></textarea>' +
 			'<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel Edit</a>'),
 
-			initialize: function( model ) {
-				this.model = model;
-			},
+			render: function() {
+				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.model.commentId + ']' );
+				$content.hide();
+				this.$el.html( this.template({ content: $content.html() }) );
 
-			render: function() { cl(this.$el);
-				this.$el.html( this.template({ content: this.model.content }) );
 				return this;
 			},
 
@@ -45,6 +44,8 @@ var tcp = {};
 				$( 'div.mce-inline-toolbar-grp' ).remove();
 				// Remove this view
 				this.$el.remove();
+				$( '.tcp-comment-content[data-tcp-comment-id=' + this.model.commentId + ']' ).show();
+				$( '.tcp-edit-comment[data-tcp-comment-id=' + this.model.commentId + ']' ).show();
 			}
 
 		}); /* /tcp.EditView */
@@ -70,14 +71,19 @@ var tcp = {};
 
 			editComment: function( event ) {
 					var $editLink = $( event.currentTarget ),
-							$content = $editLink.siblings( '.comment-content' );
+							commentId = $editLink.attr('data-tcp-comment-id');
 
-					if ( $editLink.length ) {
-						$content.hide();
+					if ( $editLink.length &&
+							parseInt( commentId ) > 0 ) {
 						$editLink.before('<div id="tcpEditComment"></div>');
-						var	editView = new tcp.EditView({ content: $content.html() });
+						var	editView = new tcp.EditView({
+							model: {
+								commentId: commentId
+							}
+						});
 						$( editView.el ).append( editView.render().el );
 						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' );
+						$editLink.hide();
 					}
 			}
 		}); /* /tc.CommentsView */
