@@ -75,6 +75,8 @@ class TinyMCECommentsPlus {
 		// Load public-facing style sheet and JavaScript.
 		add_action("wp_enqueue_scripts", array($this, "enqueue_styles"));
 		add_action("wp_enqueue_scripts", array($this, "enqueue_scripts"));
+		add_action( 'wp_ajax_action_update_comment', array( $this, 'action_ajax_update_comment' ) );
+		add_action( 'wp_ajax_nopriv_action_update_comment', array( $this, 'action_ajax_update_comment' ) );
 
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
@@ -253,6 +255,13 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
+	public function action_ajax_update_comment() {
+		
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
 	public function filter_tinymce_editor($test) {
 		global $post;
 
@@ -288,7 +297,7 @@ class TinyMCECommentsPlus {
 		$post_id = $comment->comment_post_ID;
 		$original_content = $content;
 
-		$tcp_content = sprintf( '<div class="tcp-comment-content" data-tcp-comment-id="%d">' . $content . '</div>', $comment_id );
+		$tcp_content = sprintf( '<div class="tcp-comment-content" data-tcp-post-id="%d" data-tcp-comment-id="%d">' . $content . '</div>', $post_id, $comment_id );
 
 		return $tcp_content;
 	}
@@ -300,7 +309,8 @@ class TinyMCECommentsPlus {
 		if ( ! $this->user_can_edit( $post->user_id ) ) { return $args; }
 
 		$comment_id = $post->comment_ID;
-		$tcp_edit_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
+		$post_id = $post->comment_post_ID;
+		$tcp_edit_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post_id . '" data-tcp-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
 
 		$args = $tcp_edit_link . $args;
 

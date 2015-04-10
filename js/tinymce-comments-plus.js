@@ -23,18 +23,38 @@ var tcp = {};
 			el: '#tcpEditComment',
 
 			events: {
+				'click .tcp-submit-edit' : 'submitEdit',
 				'click .tcp-cancel-edit' : 'cancelEdit'
 			},
 
 			template: _.template('<textarea id="tcpCommentEditor" rows="12"><%= content %></textarea>' +
+			'<a href="javascript:void(0);" class="tcp-submit-edit">Submit Edit</a> | ' +
 			'<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel Edit</a>'),
 
 			render: function() {
 				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.model.commentId + ']' );
 				$content.hide();
-				this.$el.html( this.template({ content: $content.html() }) );
+				this.$el.html(
+					this.template({
+						content: $content.html()
+						})
+				);
 
 				return this;
+			},
+
+			submitEdit: function() {
+				var content = tinymce.get( 'tcpCommentEditor' ).getContent();
+				this.model.content = content;
+				var $params = {
+					emulateJSON: true,
+					data: {
+						action: 'wp_ajax_action_update_comment',
+						payload: this.toJSON()
+					}
+				}
+
+				return Backbone.sync( 'create', this, $params );
 			},
 
 			cancelEdit: function() {
@@ -71,13 +91,16 @@ var tcp = {};
 
 			editComment: function( event ) {
 					var $editLink = $( event.currentTarget ),
-							commentId = $editLink.attr('data-tcp-comment-id');
+							postId = $editLink.attr( 'data-tcp-post-id' ),
+							commentId = $editLink.attr( 'data-tcp-comment-id' );
 
 					if ( $editLink.length &&
+							parseInt( postId ) > 0 &&
 							parseInt( commentId ) > 0 ) {
 						$editLink.before('<div id="tcpEditComment"></div>');
 						var	editView = new tcp.EditView({
 							model: {
+								postId: postId,
 								commentId: commentId
 							}
 						});
