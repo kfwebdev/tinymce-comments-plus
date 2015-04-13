@@ -56,11 +56,27 @@ class TinyMCECommentsPlus {
 	protected $plugin_screen_hook_suffix = null;
 
 	/**
+	 * Public Javascript Global Variables
+	 *
+	 * @since    1.0.0
+	 *
+	 * @var      string
+	 */
+	private $tcp_javascript_globals = array();
+
+	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
 	 * @since     1.0.0
 	 */
 	private function __construct() {
+
+		define( 'tcp_javascript_globals', 'tcpGlobals' );
+		define( 'ajax_action_update_comment', 'update_comment' );
+
+		$this->tcp_javascript_globals = array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' )
+		);
 
 		// Load plugin text domain
 		add_action("init", array($this, "load_plugin_textdomain"));
@@ -73,15 +89,16 @@ class TinyMCECommentsPlus {
 		add_action("admin_enqueue_scripts", array($this, "enqueue_admin_scripts"));
 
 		// Load public-facing style sheet and JavaScript.
-		add_action("wp_enqueue_scripts", array($this, "enqueue_styles"));
-		add_action("wp_enqueue_scripts", array($this, "enqueue_scripts"));
-		add_action( 'wp_ajax_action_update_comment', array( $this, 'action_ajax_update_comment' ) );
-		add_action( 'wp_ajax_nopriv_action_update_comment', array( $this, 'action_ajax_update_comment' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+
+		add_action( 'wp_ajax_nopriv_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
-		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_edit_link' ), 10, 3 );
+		add_filter( 'comment_reply_link', array( $this, 'filter_comment_edit_link' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
 	}
 
@@ -196,8 +213,10 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script($this->plugin_slug . "-plugin-script", plugins_url("js/" . $this->plugin_slug . ".js", __FILE__), array( 'jquery', 'backbone', 'underscore' ),
-			$this->version);
+		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),
+			$this->version );
+
+		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_javascript_globals ) );
 	}
 
 	/**
@@ -252,18 +271,71 @@ class TinyMCECommentsPlus {
 		// TODO: Define your action hook callback here
 	}
 
+
 	/**
 	 * @since    1.0.0
 	 */
-	public function action_ajax_update_comment() {
-		
+	public function tcp_update_comment( $post_id, $comment_id, $content ) {
+		global 	$post,
+				$current_user;
+
+		get_currentuserinfo();
+		$comment = get_comment( $comment_id );
+
+		if ( ! current_user_can( 'edit_posts' ) &&
+			 $current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
+
+		$update = array(
+			'comment_ID' => $comment_id,
+			'comment_content' => $content
+		);
+
+		if ( wp_update_comment( $update ) ) {
+			wp_send_json( $update );
+		} else {
+			wp_send_json_error( 'failed to update comment' );
+		}
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
+	public function action_ajax_request() {
+		global $allowedtags;
+		// add additional tags to allowed tags in comments
+		$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
+
+		// validate ajax request variables
+		$result = false;
+		$action = sanitize_key( $_REQUEST[ 'action' ] );
+		$post_id = intval( $_REQUEST[ 'postId'] );
+		$comment_id = intval( $_REQUEST[ 'commentId' ] );
+		$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
+		$security = sanitize_text_field( $_REQUEST[ 'security' ] );
+
+		// check for valid ajax request variables
+		if ( ! $action ||
+			 ! $post_id ||
+			 ! $comment_id ||
+			 ! $security ) { wp_send_json_error( 'bad request' ); }
+
+		switch ( $action ) {
+			case ajax_action_update_comment:
+				// check ajax referer's security nonce
+				check_ajax_referer( ajax_action_update_comment . $comment_id, 'security' );
+
+				$result = $this->tcp_update_comment( $post_id, $comment_id, $content );
+			break;
+		}
+
+		wp_send_json( $result );
 	}
 
 	/**
 	 * @since    1.0.0
 	 */
 	public function filter_tinymce_editor($test) {
-		global $post;
+	  global $post;
 
 	  ob_start();
 
@@ -274,7 +346,7 @@ class TinyMCECommentsPlus {
 		    'quicktags' => false,
 		    'media_buttons' => false
 	  		)
-			);
+	  );
 
 	  $editor = ob_get_contents();
 
@@ -305,12 +377,15 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_comment_reply_edit_link( $args, $comment, $post ) {
+	public function filter_comment_edit_link( $args, $comment, $post ) {
 		if ( ! $this->user_can_edit( $post->user_id ) ) { return $args; }
 
-		$comment_id = $post->comment_ID;
 		$post_id = $post->comment_post_ID;
-		$tcp_edit_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post_id . '" data-tcp-comment-id="' . $comment_id . '">Edit</a>' . PHP_EOL;
+		$comment_id = $post->comment_ID;
+		$nonce = wp_create_nonce( ajax_action_update_comment . $comment_id );
+
+		$tcp_edit_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post_id. '" ';
+		$tcp_edit_link .= 'data-tcp-comment-id="' . $comment_id . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
 
 		$args = $tcp_edit_link . $args;
 
@@ -321,61 +396,69 @@ class TinyMCECommentsPlus {
 	* customise list of allowed HTML tags in comments
 	* @since    1.0.0
 	*/
+	public function tcp_new_tags() {
+		// additionally allowed tags
+		$new_tags = array(
+			'a' => array(
+				'href' => true,
+				'title' => true,
+				'target' => true
+			),
+			'del' => true,
+			'h1' => array(
+				'style' => true
+			),
+			'h2' => array(
+				'style' => true
+			),
+			'h3' => array(
+				'style' => true
+			),
+			'h4' => array(
+				'style' => true
+			),
+			'h5' => array(
+				'style' => true
+			),
+			'h6' => array(
+				'style' => true
+			),
+			'img' => array(
+				'style' => true,
+				'title' => true
+			),
+			'ol' => array(
+				'style' => true,
+				'li' => array(
+					'style' => true
+				)
+			),
+			'p' => array(
+				'style' => true
+			),
+			'pre' => true,
+			'span' => array(
+				'style' => true
+			),
+			'ul' => array(
+				'style' => true,
+				'li' => array(
+					'style' => true
+				)
+			)
+		);
+
+		return $new_tags;
+	}
+
+	/**
+	* customise list of allowed HTML tags in comments
+	* @since    1.0.0
+	*/
 	public function filter_customize_allowed_tags( $comment_data ) {
 				global $allowedtags;
 
-				// add wanted tags
-				$newTags = array(
-					'a' => array(
-						'href' => true,
-						'title' => true,
-						'target' => true
-					),
-					'del' => true,
-					'h1' => array(
-						'style' => true
-					),
-					'h2' => array(
-						'style' => true
-					),
-					'h3' => array(
-						'style' => true
-					),
-					'h4' => array(
-						'style' => true
-					),
-					'h5' => array(
-						'style' => true
-					),
-					'h6' => array(
-						'style' => true
-					),
-					'img' => array(
-						'style' => true,
-						'title' => true
-					),
-					'ol' => array(
-						'style' => true,
-						'li' => array(
-							'style' => true
-						)
-					),
-					'p' => array(
-						'style' => true
-					),
-					'pre' => true,
-					'span' => array(
-						'style' => true
-					),
-					'ul' => array(
-						'style' => true,
-						'li' => array(
-							'style' => true
-						)
-					)
-				);
-
-				$allowedtags = array_merge( $allowedtags, $newTags );
+				$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
 
 				return $comment_data;
 	}

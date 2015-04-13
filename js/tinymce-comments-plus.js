@@ -16,8 +16,21 @@ var tcp = {};
 ( function ( $ ) {
 	"use strict";
 
+	window.cl = console.dir.bind( console );
+	if ( tcpGlobals.length ) { tcpGlobals = JSON.parse( tcpGlobals ); }
+
+
 	$(function () {
-		window.cl = console.dir.bind( console );
+		tcp.EditModel = Backbone.Model.extend({
+			defaults: {
+				action: '',
+				security: '',
+				postId: 0,
+				commentId: 0,
+				content: ''
+			}
+		});
+
 
 		tcp.EditView = Backbone.View.extend({
 			el: '#tcpEditComment',
@@ -27,12 +40,13 @@ var tcp = {};
 				'click .tcp-cancel-edit' : 'cancelEdit'
 			},
 
-			template: _.template('<textarea id="tcpCommentEditor" rows="12"><%= content %></textarea>' +
+			template: _.template('<textarea id="tcpCommentEditor" rows="8"><%= content %></textarea>' +
 			'<a href="javascript:void(0);" class="tcp-submit-edit">Submit Edit</a> | ' +
 			'<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel Edit</a>'),
 
 			render: function() {
-				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.model.commentId + ']' );
+				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.model.get( 'commentId' ) + ']' );
+
 				$content.hide();
 				this.$el.html(
 					this.template({
@@ -44,17 +58,24 @@ var tcp = {};
 			},
 
 			submitEdit: function() {
-				var content = tinymce.get( 'tcpCommentEditor' ).getContent();
-				this.model.content = content;
-				var $params = {
-					emulateJSON: true,
-					data: {
-						action: 'wp_ajax_action_update_comment',
-						payload: this.toJSON()
-					}
-				}
+				var self = this,
+					tinymceContent = tinymce.get( 'tcpCommentEditor' ).getContent(),
+					$content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.model.get( 'commentId' ) + ']' );
+				this.model.set( 'content', tinymceContent );
+				this.model.set( 'action', 'update_comment' );
 
-				return Backbone.sync( 'create', this, $params );
+				var $commentPost = $.ajax({
+					url: tcpGlobals.ajaxUrl,
+					type: 'post',
+					data: this.model.toJSON()
+				})
+					.done( function( data ){
+						$content.html( data.comment_content );
+						self.cancelEdit();
+					})
+					.fail( function( data ){
+						cl('fail'); cl(data);
+				});
 			},
 
 			cancelEdit: function() {
@@ -64,8 +85,8 @@ var tcp = {};
 				$( 'div.mce-inline-toolbar-grp' ).remove();
 				// Remove this view
 				this.$el.remove();
-				$( '.tcp-comment-content[data-tcp-comment-id=' + this.model.commentId + ']' ).show();
-				$( '.tcp-edit-comment[data-tcp-comment-id=' + this.model.commentId + ']' ).show();
+				$( '.tcp-comment-content[data-tcp-comment-id=' + this.model.get( 'commentId' ) + ']' ).show();
+				$( '.tcp-edit-comment[data-tcp-comment-id=' + this.model.get( 'commentId' ) + ']' ).show();
 			}
 
 		}); /* /tcp.EditView */
@@ -75,12 +96,12 @@ var tcp = {};
 			el: '#comments',
 
 			events: {
-				'click .comment-reply-link' : 'reAddEditors',
-				'click #cancel-comment-reply-link' : 'reAddEditors',
+				'click .comment-reply-link' : 'resetEditors',
+				'click #cancel-comment-reply-link' : 'resetEditors',
 				'click .tcp-edit-comment' : 'editComment'
 			},
 
-			reAddEditors: function() {
+			resetEditors: function() {
 				// Remove old textarea tinyMCE editor instance
 				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
 				// Remove old inline toolbar created by old tinyMCE editor instance
@@ -92,18 +113,21 @@ var tcp = {};
 			editComment: function( event ) {
 					var $editLink = $( event.currentTarget ),
 							postId = $editLink.attr( 'data-tcp-post-id' ),
-							commentId = $editLink.attr( 'data-tcp-comment-id' );
+							commentId = $editLink.attr( 'data-tcp-comment-id' ),
+							nonce = $editLink.attr( 'data-tcp-nc' );
 
 					if ( $editLink.length &&
 							parseInt( postId ) > 0 &&
 							parseInt( commentId ) > 0 ) {
 						$editLink.before('<div id="tcpEditComment"></div>');
-						var	editView = new tcp.EditView({
-							model: {
-								postId: postId,
-								commentId: commentId
-							}
-						});
+
+						var	editModel = new tcp.EditModel({
+									security: nonce,
+									postId: postId,
+									commentId: commentId
+								}),
+							editView = new tcp.EditView({ model: editModel });
+
 						$( editView.el ).append( editView.render().el );
 						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' );
 						$editLink.hide();
