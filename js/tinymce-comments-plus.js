@@ -97,6 +97,26 @@ var tcp = {};
 
 
 		tcp.CommentsView = Backbone.View.extend({
+			initialize: function() {
+				var $commentForm = this.$el.find('#tcpCommentFormSpan').parent();
+				$commentForm.submit( function( event ){ cl(event);
+					event.preventDefault();
+
+					var $commentPost = $.ajax({
+						url: tcpGlobals.ajaxUrl,
+						type: 'post',
+						data: this.model.toJSON()
+					})
+						.done( function( data ){
+							$content.html( data.comment_content );
+							self.cancelEdit();
+						})
+						.fail( function( data ){
+							cl('fail'); cl(data);
+					});
+				});
+			},
+
 			el: '#comments',
 
 			events: {

@@ -95,9 +95,12 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_ajax_nopriv_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 
+		add_action( 'comment_form', array( $this, 'action_comment_form' ), 11 );
+
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
+		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_edit_link' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
 	}
@@ -275,6 +278,15 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
+	public function action_comment_form() {
+		// marker for comment form
+		echo '<span style="display:none;" id="tcpCommentFormSpan"></span>' . PHP_EOL;
+	}
+
+
+	/**
+	 * @since    1.0.0
+	 */
 	public function tcp_update_comment( $post_id, $comment_id, $content ) {
 		global 	$post,
 				$current_user;
@@ -331,10 +343,11 @@ class TinyMCECommentsPlus {
 		wp_send_json( $result );
 	}
 
+
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_tinymce_editor($test) {
+	public function filter_tinymce_editor() {
 	  global $post;
 
 	  ob_start();
@@ -356,6 +369,16 @@ class TinyMCECommentsPlus {
 	  //$editor = str_replace( 'post_id=0', 'post_id='.get_the_ID(), $editor );
 
 	  return $editor;
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
+	public function filter_comment_form_defaults( $defaults ) {
+		$comment_form_id = $defaults[ 'id_form' ];
+		$tcp_form_id_span = '<span style="display:none;" data-tcp-comment-form-id="' . $comment_form_id . '"></span>';
+		echo $tcp_form_id_span;
+		return $defaults;
 	}
 
 	/**
