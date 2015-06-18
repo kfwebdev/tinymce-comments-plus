@@ -72,6 +72,7 @@ class TinyMCECommentsPlus {
 	private function __construct() {
 
 		define( 'tcp_javascript_globals', 'tcpGlobals' );
+		define( 'ajax_action_add_comment', 'add_comment' );
 		define( 'ajax_action_update_comment', 'update_comment' );
 
 		$this->tcp_javascript_globals = array(
@@ -278,11 +279,36 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function action_comment_form() {
+	public function action_comment_form( $post_id ) {
 		// marker for comment form
-		echo '<span style="display:none;" id="tcpCommentFormSpan"></span>' . PHP_EOL;
+		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
+		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
 	}
 
+
+	/**
+	 * @since    1.0.0
+	 */
+	public function tcp_add_comment( $post_id, $content ) {
+		global 	$post,
+				$current_user;
+
+		get_currentuserinfo();
+
+		if ( ! current_user_can( 'edit_posts' ) ) { wp_send_json_error( 'permission denied' ); }
+
+		$add_comment = array(
+			'comment_post_ID' => $post_id,
+			'comment_content' => $content,
+			'user_id' => $current_user->ID
+		);
+
+		if ( wp_new_comment( $add_comment ) ) {
+			wp_send_json( $add_comment );
+		} else {
+			wp_send_json_error( 'failed to update comment' );
+		}
+	}
 
 	/**
 	 * @since    1.0.0
@@ -328,11 +354,17 @@ class TinyMCECommentsPlus {
 		// check for valid ajax request variables
 		if ( ! $action ||
 			 ! $post_id ||
-			 ! $comment_id ||
 			 ! $security ) { wp_send_json_error( 'bad request' ); }
 
 		switch ( $action ) {
+			case ajax_action_add_comment:
+				// check ajax referer's security nonce
+				check_ajax_referer( ajax_action_add_comment . $post_id, 'security' );
+
+				$result = $this->tcp_add_comment( $post_id, $content );
+			break;
 			case ajax_action_update_comment:
+				if ( ! $comment_id ) { wp_send_json_error( 'bad request' ); }
 				// check ajax referer's security nonce
 				check_ajax_referer( ajax_action_update_comment . $comment_id, 'security' );
 

@@ -1,8 +1,4 @@
 /**
- * Represents the view for the public-facing component of the plugin.
- *
- * This typically includes any information, if any, that is rendered to the
- * frontend of the theme when the plugin is activated.
  *
  * @package   tinymce-comments-plus
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
@@ -17,7 +13,9 @@ var tcp = {};
 	"use strict";
 
 	window.cl = console.dir.bind( console );
-	if ( tcpGlobals.length ) { tcpGlobals = JSON.parse( tcpGlobals ); }
+	if ( tcpGlobals.length ) {
+		tcpGlobals = JSON.parse( tcpGlobals );
+	}
 
 
 	$(function () {
@@ -98,31 +96,48 @@ var tcp = {};
 
 		tcp.CommentsView = Backbone.View.extend({
 			initialize: function() {
-				var $commentForm = this.$el.find('#tcpCommentFormSpan').parent();
-				$commentForm.submit( function( event ){ cl(event);
-					event.preventDefault();
-
-					var $commentPost = $.ajax({
-						url: tcpGlobals.ajaxUrl,
-						type: 'post',
-						data: this.model.toJSON()
-					})
-						.done( function( data ){
-							$content.html( data.comment_content );
-							self.cancelEdit();
-						})
-						.fail( function( data ){
-							cl('fail'); cl(data);
-					});
-				});
+				this.$tcpSpan = this.$el.find('#tcpCommentFormSpan');
+				this.$commentForm = this.$el.find('#tcpCommentFormSpan').parent();
 			},
 
 			el: '#comments',
 
-			events: {
-				'click .comment-reply-link' : 'resetEditors',
-				'click #cancel-comment-reply-link' : 'resetEditors',
-				'click .tcp-edit-comment' : 'editComment'
+			events: function() {
+				var _events = {
+					'click .comment-reply-link' : 'resetEditors',
+					'click #cancel-comment-reply-link' : 'resetEditors',
+					'click .tcp-edit-comment' : 'editComment'
+				};
+				_events['submit #' + this.$commentForm.attr( 'id' ) ] = 'submitForm';
+				return _events;
+			},
+
+			submitForm: function( event ) {
+				event.preventDefault();
+
+				var	postId = this.$tcpSpan.attr( 'data-tcp-post-id' ),
+					nonce = this.$tcpSpan.attr( 'data-tcp-nc' ),
+					tinymceContent = tinymce.activeEditor.getContent();
+
+				this.model = new tcp.EditModel({
+					security: nonce,
+					postId: postId,
+					content: tinymceContent
+				});
+
+
+				$.ajax({
+					url: tcpGlobals.ajaxUrl,
+					type: 'post',
+					data: this.model.toJSON()
+				})
+					.done( function( data ){
+						cl( data );
+					})
+					.fail( function( data ){
+						cl( 'fail' );
+						cl( data );
+				});
 			},
 
 			resetEditors: function() {
