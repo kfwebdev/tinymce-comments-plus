@@ -116,6 +116,8 @@ var tcp = {};
 			},
 
 			submitForm: function( event ) {
+				var self = this;
+
 				event.preventDefault();
 
 				$.ajax({
@@ -126,7 +128,10 @@ var tcp = {};
 				.done( function( data ){
 					var comments = $( data ).find( '#comments' );
 					if ( comments.length ) {
+						// replace #comments element with data response #comments element
 						$( '#comments' ).replaceWith( comments );
+						// restore tinymce editor to refreshed reply form
+						self.resetEditors();
 					}
 				})
 				.fail( function( data ){

@@ -233,7 +233,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function add_plugin_admin_menu() {
-		$this->plugin_screen_hook_suffix = add_plugins_page(__("TinyMCE Comments Plus - Administration", $this->plugin_slug),
+		$this->plugin_screen_hook_suffix = add_options_page(__("TinyMCE Comments Plus - Settings", $this->plugin_slug),
 			__("TinyMCE Comments Plus", $this->plugin_slug), "read", $this->plugin_slug, array($this, "display_plugin_admin_page"));
 	}
 
