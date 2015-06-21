@@ -118,24 +118,16 @@ var tcp = {};
 			submitForm: function( event ) {
 				event.preventDefault();
 
-				var	postId = this.$tcpSpan.attr( 'data-tcp-post-id' ),
-					nonce = this.$tcpSpan.attr( 'data-tcp-nc' ),
-					tinymceContent = tinymce.activeEditor.getContent();
-
-				this.model = new tcp.EditModel({
-					action: tcpGlobals.addCommentAction,
-					security: nonce,
-					postId: postId,
-					content: tinymceContent
-				});
-
 				$.ajax({
-					url: tcpGlobals.ajaxUrl,
+					url: this.$commentForm.attr( 'action' ),
 					type: 'post',
-					data: this.model.toJSON()
+					data: this.$commentForm.serialize()
 				})
 				.done( function( data ){
-					cl( data );
+					var comments = $( data ).find( '#comments' );
+					if ( comments.length ) {
+						$( '#comments' ).replaceWith( comments );
+					}
 				})
 				.fail( function( data ){
 					cl( 'fail' );

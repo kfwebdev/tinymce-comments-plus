@@ -1,2 +1,5 @@
 .form-allowed-tags { display: none; }
-.wp-editor-wrap { margin-bottom: 1.25em; }
+.wp-editor-wrap {
+    border: 1px solid #eee;
+    margin-bottom: 1.25em;
+}
