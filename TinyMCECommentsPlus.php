@@ -76,6 +76,8 @@ class TinyMCECommentsPlus {
 		define( 'ajax_action_update_comment', 'update_comment' );
 
 		$this->tcp_javascript_globals = array(
+			'addCommentAction' => ajax_action_add_comment,
+			'updateCommentAction' => ajax_action_update_comment,
 			'ajaxUrl' => admin_url( 'admin-ajax.php' )
 		);
 
@@ -93,6 +95,8 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		add_action( 'wp_ajax_nopriv_' . ajax_action_add_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 
@@ -300,7 +304,10 @@ class TinyMCECommentsPlus {
 		$add_comment = array(
 			'comment_post_ID' => $post_id,
 			'comment_content' => $content,
-			'user_id' => $current_user->ID
+			'user_id' => $current_user->ID,
+			'comment_author' => $current_user->display_name,
+			'comment_author_url' => $current_user->user_url,
+			'comment_author_email' => $current_user->user_email
 		);
 
 		if ( wp_new_comment( $add_comment ) ) {
@@ -407,8 +414,11 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function filter_comment_form_defaults( $defaults ) {
+		global $post;
+		$nonce = wp_create_nonce( ajax_action_add_comment . $post->ID );
+
 		$comment_form_id = $defaults[ 'id_form' ];
-		$tcp_form_id_span = '<span style="display:none;" data-tcp-comment-form-id="' . $comment_form_id . '"></span>';
+		$tcp_form_id_span = '<span style="display:none;" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
 		echo $tcp_form_id_span;
 		return $defaults;
 	}

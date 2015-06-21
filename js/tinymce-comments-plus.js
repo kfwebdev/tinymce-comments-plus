@@ -48,6 +48,7 @@ var tcp = {};
 				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
 
 				$content.hide();
+
 				this.$el.html(
 					this.template({
 						commentId: this.commentId,
@@ -96,7 +97,9 @@ var tcp = {};
 
 		tcp.CommentsView = Backbone.View.extend({
 			initialize: function() {
+				// store reply comment form marker span
 				this.$tcpSpan = this.$el.find('#tcpCommentFormSpan');
+				// store reply comment form element
 				this.$commentForm = this.$el.find('#tcpCommentFormSpan').parent();
 			},
 
@@ -120,23 +123,23 @@ var tcp = {};
 					tinymceContent = tinymce.activeEditor.getContent();
 
 				this.model = new tcp.EditModel({
+					action: tcpGlobals.addCommentAction,
 					security: nonce,
 					postId: postId,
 					content: tinymceContent
 				});
-
 
 				$.ajax({
 					url: tcpGlobals.ajaxUrl,
 					type: 'post',
 					data: this.model.toJSON()
 				})
-					.done( function( data ){
-						cl( data );
-					})
-					.fail( function( data ){
-						cl( 'fail' );
-						cl( data );
+				.done( function( data ){
+					cl( data );
+				})
+				.fail( function( data ){
+					cl( 'fail' );
+					cl( data );
 				});
 			},
 
@@ -162,6 +165,7 @@ var tcp = {};
 						$editLink.before('<div id="' + editElement + '"></div>');
 
 						var	editModel = new tcp.EditModel({
+									action: tcpGlobals.updateCommentAction,
 									security: nonce,
 									postId: postId,
 									commentId: commentId
