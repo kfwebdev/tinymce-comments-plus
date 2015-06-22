@@ -172,7 +172,7 @@ var tcp = {};
 								model: editModel
 							});
 
-						$( editView.el ).append( editView.render().el );
+						$( '#comment-' + commentId + ' .comment-content' ).after( editView.render().el );
 						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' + commentId );
 						$editLink.hide();
 					}

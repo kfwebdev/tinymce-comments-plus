@@ -104,7 +104,7 @@ class TinyMCECommentsPlus {
 
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
-		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
+		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 11 );
 		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
@@ -287,6 +287,7 @@ class TinyMCECommentsPlus {
 	public function action_comment_form( $post_id ) {
 		// marker for comment form
 		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
+
 		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
 	}
 
@@ -387,17 +388,15 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_tinymce_editor() {
-	  global $post;
-
+	public function filter_tinymce_editor() { echo 'wtf';
 	  ob_start();
 
 	  wp_editor( '', 'comment',
 			array(
-		    'textarea_rows' => 12,
-		    'teeny' => false,
-		    'quicktags' => false,
-		    'media_buttons' => false
+			    'textarea_rows' => 12,
+			    'teeny' => false,
+			    'quicktags' => false,
+			    'media_buttons' => false
 	  		)
 	  );
 
@@ -419,6 +418,7 @@ class TinyMCECommentsPlus {
 		$nonce = wp_create_nonce( ajax_action_add_comment . $post->ID );
 
 		$comment_form_id = $defaults[ 'id_form' ];
+
 		$tcp_form_id_span = '<span style="display:none;" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
 		echo $tcp_form_id_span;
 		return $defaults;
@@ -462,7 +462,7 @@ class TinyMCECommentsPlus {
 	public function filter_comment_reply_link_args( $args, $comment, $post ) {
 		$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
 
-		$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post->ID. '" ';
+		$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment comment-reply-link" data-tcp-post-id="' . $post->ID. '" ';
 		$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
 
 		$args[ 'before' ] .= $tcp_reply_link;
@@ -534,11 +534,11 @@ class TinyMCECommentsPlus {
 	* @since    1.0.0
 	*/
 	public function filter_customize_allowed_tags( $comment_data ) {
-				global $allowedtags;
+		global $allowedtags;
 
-				$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
+		$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
 
-				return $comment_data;
+		return $comment_data;
 	}
 
 }
