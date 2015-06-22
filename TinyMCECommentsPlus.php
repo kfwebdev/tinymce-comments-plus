@@ -82,14 +82,14 @@ class TinyMCECommentsPlus {
 		);
 
 		// Load plugin text domain
-		add_action("init", array($this, "load_plugin_textdomain"));
+		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
 		// Add the options page and menu item.
-		add_action("admin_menu", array($this, "add_plugin_admin_menu"));
+		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
 
 		// Load admin style sheet and JavaScript.
-		add_action("admin_enqueue_scripts", array($this, "enqueue_admin_styles"));
-		add_action("admin_enqueue_scripts", array($this, "enqueue_admin_scripts"));
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 
 		// Load public-facing style sheet and JavaScript.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
@@ -106,7 +106,8 @@ class TinyMCECommentsPlus {
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ) );
 		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
-		add_filter( 'comment_reply_link', array( $this, 'filter_comment_edit_link' ), 10, 3 );
+		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
+		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
 	}
 
@@ -442,17 +443,29 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_comment_edit_link( $args, $comment, $post ) {
-		if ( ! $this->user_can_edit( $post->user_id ) ) { return $args; }
+	public function filter_comment_reply_link( $link, $args, $comment ) {
+		// if ( ! $this->user_can_edit( $post->user_id ) ) { return $link; }
+		//
+		// $post_id = $comment->comment_post_ID;
+		// $comment_id = $comment->comment_ID;
+		// $nonce = wp_create_nonce( ajax_action_update_comment . $comment_id );
+		//
+		// $tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post_id. '" ';
+		// $tcp_reply_link .= 'data-tcp-comment-id="' . $comment_id . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
 
-		$post_id = $post->comment_post_ID;
-		$comment_id = $post->comment_ID;
-		$nonce = wp_create_nonce( ajax_action_update_comment . $comment_id );
+		return $link;
+	}
 
-		$tcp_edit_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post_id. '" ';
-		$tcp_edit_link .= 'data-tcp-comment-id="' . $comment_id . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
+	/**
+	 * @since    1.0.0
+	 */
+	public function filter_comment_reply_link_args( $args, $comment, $post ) {
+		$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
 
-		$args = $tcp_edit_link . $args;
+		$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post->ID. '" ';
+		$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
+
+		$args[ 'before' ] .= $tcp_reply_link;
 
 		return $args;
 	}
