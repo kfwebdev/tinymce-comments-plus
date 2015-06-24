@@ -41,7 +41,7 @@ var tcp = {};
 			},
 
 			template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-			'<div class="reply"><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
+			'<div class="reply tcp-reply-container"><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
 			'<a href="javascript:void(0);" class="tcp-cancel-edit comment-reply-link">Cancel</a></div>'),
 
 			render: function() {
@@ -96,10 +96,6 @@ var tcp = {};
 
 
 		tcp.CommentsView = Backbone.View.extend({
-
-			initialize: function() {
-					cl (this.el);
-			},
 
 			events: function() {
 				var _events = {
@@ -168,7 +164,7 @@ var tcp = {};
 								model: editModel
 							});
 
-						$( '#comment-' + commentId + ' .comment-content' ).after( editView.render().el );
+						$( '#comment-' + commentId + ' .tcp-comment-content' ).after( editView.render().el );
 						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' + commentId );
 						$editLink.hide();
 					}
@@ -177,7 +173,7 @@ var tcp = {};
 
 		var
 			$tcpCommentForm = $( '#tcpCommentFormSpan' ).parent(),
-			$tcpCommentsList = $( '#tcpCommentsListSpan' ).next();
+			$tcpCommentsList = $( '#comments' );
 		;
 
 		new tcp.CommentsView({

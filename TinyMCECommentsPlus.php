@@ -105,7 +105,6 @@ class TinyMCECommentsPlus {
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 11 );
-		add_filter( 'comments_array', array( $this, 'filter_comments_array' ), 11 );
 		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
@@ -412,15 +411,6 @@ class TinyMCECommentsPlus {
 	  //$editor = str_replace( 'post_id=0', 'post_id='.get_the_ID(), $editor );
 
 	  return $editor;
-	}
-
-	/**
-	 * @since    1.0.0
-	 */
-	public function filter_comments_array( $comments ) {
-		echo '<span style="display:none;" id="tcpCommentsListSpan"></span>';
-
-		return $comments;
 	}
 
 	/**
