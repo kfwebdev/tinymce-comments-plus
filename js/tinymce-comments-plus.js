@@ -95,9 +95,14 @@ var tcp = {};
 		}); /* /tcp.EditView */
 
 
-		tcp.SubmitCommentView = Backbone.View.extend({
+		tcp.RespondView = Backbone.View.extend({
 			events: {
+				'click a#cancel-comment-reply-link' : 'resetEditors',
 				'submit': 'submitForm'
+			},
+
+			resetEditors: function() {
+				tcp.resetEditors();
 			},
 
 			submitForm: function( event ) {
@@ -114,6 +119,9 @@ var tcp = {};
 					data: $tcpCommentForm.serialize()
 				})
 				.done( function( data ){
+					self.$el.find( 'a#cancel-comment-reply-link' ).click();
+					tinyMCE.activeEditor.setContent('');
+
 					var $comments = $( data ).find( $tcpCommentsList.selector );
 					if ( $comments.length ) {
 
@@ -122,33 +130,22 @@ var tcp = {};
 						// restore tinymce editor to refreshed reply form
 						tcp.resetEditors();
 
-						// scroll to latest comment
-						var $commentsList = $comments.find( '.comment' );
-						if ( $commentsList.length ) {
-							var $lastComment = $commentsList[ $commentsList.length - 1 ];
-							if ( $lastComment.offsetHeight ) {
-								$( 'html, body' ).animate({
-		        					scrollTop: $lastComment.offsetHeight
-		    					}, 1500 );
-							}
-						}
+						// // scroll to latest comment
+						// var $commentsList = $comments.find( '.comment' );
+						// if ( $commentsList.length ) {
+						// 	var $lastComment = $commentsList[ $commentsList.length - 1 ];
+						// 	if ( $lastComment.offsetHeight ) {
+						// 		$( 'html, body' ).animate({
+						// 			scrollTop: $lastComment.offsetHeight
+						// 		}, 1500 );
+						// 	}
+						// }
 					}
 				})
 				.fail( function( data ){
 					cl( 'fail' );
 					cl( data );
 				});
-			}
-		});
-
-
-		tcp.RespondView = Backbone.View.extend({
-			events: {
-				'click a#cancel-comment-reply-link' : 'resetEditors',
-			},
-
-			resetEditors: function() {
-				tcp.resetEditors();
 			}
 		});
 
@@ -213,10 +210,6 @@ var tcp = {};
 
 		new tcp.CommentsView({
 			el: $tcpCommentsList
-		});
-
-		new tcp.SubmitCommentView({
-			el: $tcpCommentForm
 		});
 
 		new tcp.RespondView({
