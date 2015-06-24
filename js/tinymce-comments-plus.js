@@ -201,7 +201,6 @@ var tcp = {};
 			$( 'div.mce-inline-toolbar-grp' ).remove();
 			// Recreate new tinyMCE editor at new #comment textarea position
 			tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-			cl('reset');
 		};
 
 
