@@ -105,6 +105,7 @@ class TinyMCECommentsPlus {
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 11 );
+		add_filter( 'comments_array', array( $this, 'filter_comments_array' ), 11 );
 		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
@@ -285,12 +286,13 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function action_comment_form( $post_id ) {
-		// may be redundant
-
 		// marker for comment form
-		// $nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
-		//
-		// echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
+		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
+
+		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
+
+		// enable tinymce editor on comment form
+		$this->filter_tinymce_editor();
 	}
 
 
@@ -415,15 +417,27 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
+	public function filter_comments_array( $comments ) {
+		echo '<span style="display:none;" id="tcpCommentsListSpan"></span>';
+
+		return $comments;
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
 	public function filter_comment_form_defaults( $defaults ) {
-		global $post;
-		$nonce = wp_create_nonce( ajax_action_add_comment . $post->ID );
+		// !unused, tcpCommentFormSpan moved to comment_form filter
 
-		$comment_form_id = $defaults[ 'id_form' ];
-
-		$tcp_form_id_span = '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
-		echo $tcp_form_id_span;
-		return $defaults;
+		// global $post;
+		// $nonce = wp_create_nonce( ajax_action_add_comment . $post->ID );
+		//
+		// $comment_form_id = $defaults[ 'id_form' ];
+		//
+		// $tcp_form_id_span = '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
+		// echo $tcp_form_id_span;
+		//
+		// return $defaults;
 	}
 
 	/**
@@ -446,6 +460,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function filter_comment_reply_link( $link, $args, $comment ) {
+		// !unused, edit link added to comment_reply_link args
 		// if ( ! $this->user_can_edit( $post->user_id ) ) { return $link; }
 		//
 		// $post_id = $comment->comment_post_ID;

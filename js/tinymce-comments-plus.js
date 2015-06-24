@@ -117,9 +117,9 @@ var tcp = {};
 				event.preventDefault();
 
 				$.ajax({
-					url: this.$commentForm.attr( 'action' ),
+					url: $tcpCommentForm.attr( 'action' ),
 					type: 'post',
-					data: this.$commentForm.serialize()
+					data: $tcpCommentForm.serialize()
 				})
 				.done( function( data ){
 					var comments = $( data ).find( '#comments' );
@@ -176,9 +176,8 @@ var tcp = {};
 		}); /* /tc.CommentsView */
 
 		var
-			$tcpSpan = $( '#tcpCommentFormSpan' ),
-			$tcpCommentForm = $tcpSpan.parent(),
-			$tcpCommentsList = $tcpSpan.parent().parent()
+			$tcpCommentForm = $( '#tcpCommentFormSpan' ).parent(),
+			$tcpCommentsList = $( '#tcpCommentsListSpan' ).next();
 		;
 
 		new tcp.CommentsView({
