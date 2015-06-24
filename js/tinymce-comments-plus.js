@@ -41,8 +41,8 @@ var tcp = {};
 			},
 
 			template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-			'<a href="javascript:void(0);" class="tcp-submit-edit">Submit Edit</a> | ' +
-			'<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel Edit</a>'),
+			'<div class="reply"><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
+			'<a href="javascript:void(0);" class="tcp-cancel-edit comment-reply-link">Cancel</a></div>'),
 
 			render: function() {
 				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
@@ -65,7 +65,7 @@ var tcp = {};
 					$content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
 
 				this.model.set( 'content', tinymceContent );
-				this.model.set( 'action', 'update_comment' );
+				this.model.set( 'action', tcpGlobals.updateCommentAction );
 
 				var $commentPost = $.ajax({
 					url: tcpGlobals.ajaxUrl,

@@ -334,7 +334,7 @@ class TinyMCECommentsPlus {
 
 		$update = array(
 			'comment_ID' => $comment_id,
-			'comment_content' => $content
+			'comment_content' => stripslashes( $content )
 		);
 
 		if ( wp_update_comment( $update ) ) {
@@ -388,7 +388,7 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_tinymce_editor() { echo 'wtf';
+	public function filter_tinymce_editor() {
 	  ob_start();
 
 	  wp_editor( '', 'comment',
