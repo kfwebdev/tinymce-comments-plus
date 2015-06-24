@@ -138,7 +138,18 @@ var tcp = {};
 					cl( 'fail' );
 					cl( data );
 				});
+			}
+		});
+
+
+		tcp.RespondView = Backbone.View.extend({
+			events: {
+				'click a#cancel-comment-reply-link' : 'resetEditors',
 			},
+
+			resetEditors: function() {
+				tcp.resetEditors();
+			}
 		});
 
 
@@ -193,9 +204,11 @@ var tcp = {};
 			cl('reset');
 		};
 
+
 		var
 			$tcpCommentForm = $( '#tcpCommentFormSpan' ).parent(),
 			$tcpCommentTextArea = $tcpCommentForm.find( 'textarea' ),
+			$tcpCommentRespond = $tcpCommentForm.parent(),
 			$tcpCommentsList = $( '#comments' );
 		;
 
@@ -205,6 +218,10 @@ var tcp = {};
 
 		new tcp.SubmitCommentView({
 			el: $tcpCommentForm
+		});
+
+		new tcp.RespondView({
+			el: $tcpCommentRespond
 		});
 
 
