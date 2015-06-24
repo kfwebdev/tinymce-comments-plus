@@ -158,13 +158,13 @@ var tcp = {};
 									security: nonce,
 									postId: postId,
 									commentId: commentId
-								}),
+							}),
 							editView = new tcp.EditView({
 								el: '#' + editElement,
 								model: editModel
-							});
+						});
 
-						$( '#comment-' + commentId + ' .tcp-comment-content' ).after( editView.render().el );
+						$( '#comment-' + commentId + ' .tcp-comment-content[data-tcp-comment-id=' + commentId + ']' ).after( editView.render().el );
 						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' + commentId );
 						$editLink.hide();
 					}
