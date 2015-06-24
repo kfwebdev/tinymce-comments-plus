@@ -121,6 +121,7 @@ var tcp = {};
 				.done( function( data ){
 					self.$el.find( 'a#cancel-comment-reply-link' ).click();
 					tinyMCE.activeEditor.setContent('');
+					tcp.resetEditors();
 
 					var $comments = $( data ).find( $tcpCommentsList.selector );
 					if ( $comments.length ) {
