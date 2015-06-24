@@ -95,22 +95,18 @@ var tcp = {};
 		}); /* /tcp.EditView */
 
 
-		tcp.CommentsView = Backbone.View.extend({
-
-			events: function() {
-				var _events = {
-					'click a.comment-reply-link' : 'resetEditors',
-					'click a#cancel-comment-reply-link' : 'resetEditors',
-					'click a.tcp-edit-comment' : 'editComment'
-				};
-				_events['submit #' + $tcpCommentForm.attr( 'id' ) ] = 'submitForm';
-				return _events;
+		tcp.SubmitCommentView = Backbone.View.extend({
+			events: {
+				'submit': 'submitForm'
 			},
 
 			submitForm: function( event ) {
-				var self = this;
-
 				event.preventDefault();
+
+				var self = this,
+				content = tinyMCE.activeEditor.getContent();
+
+				$tcpCommentTextArea.html( content );
 
 				$.ajax({
 					url: $tcpCommentForm.attr( 'action' ),
@@ -118,12 +114,24 @@ var tcp = {};
 					data: $tcpCommentForm.serialize()
 				})
 				.done( function( data ){
-					var comments = $( data ).find( '#comments' );
-					if ( comments.length ) {
+					var $comments = $( data ).find( $tcpCommentsList.selector );
+					if ( $comments.length ) {
+
 						// replace #comments element with data response #comments element
-						$( '#comments' ).replaceWith( comments );
+						$tcpCommentsList.replaceWith( $comments );
 						// restore tinymce editor to refreshed reply form
-						self.resetEditors();
+						tcp.resetEditors();
+
+						// scroll to latest comment
+						var $commentsList = $comments.find( '.comment' );
+						if ( $commentsList.length ) {
+							var $lastComment = $commentsList[ $commentsList.length - 1 ];
+							if ( $lastComment.offsetHeight ) {
+								$( 'html, body' ).animate({
+		        					scrollTop: $lastComment.offsetHeight
+		    					}, 1500 );
+							}
+						}
 					}
 				})
 				.fail( function( data ){
@@ -131,14 +139,18 @@ var tcp = {};
 					cl( data );
 				});
 			},
+		});
+
+
+		tcp.CommentsView = Backbone.View.extend({
+			events: {
+				'click a.comment-reply-link' : 'resetEditors',
+				'click a#cancel-comment-reply-link' : 'resetEditors',
+				'click a.tcp-edit-comment' : 'editComment'
+			},
 
 			resetEditors: function() {
-				// Remove old textarea tinyMCE editor instance
-				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
-				// Remove old inline toolbar created by old tinyMCE editor instance
-				$( 'div.mce-inline-toolbar-grp' ).remove();
-				// Recreate new tinyMCE editor at new #comment textarea position
-				tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+				tcp.resetEditors();
 			},
 
 			editComment: function( event ) {
@@ -171,14 +183,30 @@ var tcp = {};
 			}
 		}); /* /tc.CommentsView */
 
+		tcp.resetEditors = function() {
+			// Remove old textarea tinyMCE editor instance
+			tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
+			// Remove old inline toolbar created by old tinyMCE editor instance
+			$( 'div.mce-inline-toolbar-grp' ).remove();
+			// Recreate new tinyMCE editor at new #comment textarea position
+			tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+			cl('reset');
+		};
+
 		var
 			$tcpCommentForm = $( '#tcpCommentFormSpan' ).parent(),
+			$tcpCommentTextArea = $tcpCommentForm.find( 'textarea' ),
 			$tcpCommentsList = $( '#comments' );
 		;
 
 		new tcp.CommentsView({
 			el: $tcpCommentsList
 		});
+
+		new tcp.SubmitCommentView({
+			el: $tcpCommentForm
+		});
+
 
 	});
 }( jQuery ) );
