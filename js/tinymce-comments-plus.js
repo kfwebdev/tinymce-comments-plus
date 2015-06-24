@@ -36,8 +36,8 @@ var tcp = {};
 			},
 
 			events: {
-				'click .tcp-submit-edit' : 'submitEdit',
-				'click .tcp-cancel-edit' : 'cancelEdit'
+				'click a.tcp-submit-edit' : 'submitEdit',
+				'click a.tcp-cancel-edit' : 'cancelEdit'
 			},
 
 			template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
@@ -96,22 +96,13 @@ var tcp = {};
 
 
 		tcp.CommentsView = Backbone.View.extend({
-			initialize: function() {
-				// store reply comment form marker span
-				this.$tcpSpan = this.$el.find('#tcpCommentFormSpan');
-				// store reply comment form element
-				this.$commentForm = this.$el.find('#tcpCommentFormSpan').parent();
-			},
-
-			el: '#comments',
-
 			events: function() {
 				var _events = {
-					'click .comment-reply-link' : 'resetEditors',
-					'click #cancel-comment-reply-link' : 'resetEditors',
-					'click .tcp-edit-comment' : 'editComment'
+					'click a.comment-reply-link' : 'resetEditors',
+					'click a#cancel-comment-reply-link' : 'resetEditors',
+					'click a.tcp-edit-comment' : 'editComment'
 				};
-				_events['submit #' + this.$commentForm.attr( 'id' ) ] = 'submitForm';
+				_events['submit #' + $tcpCommentForm.attr( 'id' ) ] = 'submitForm';
 				return _events;
 			},
 
@@ -179,7 +170,15 @@ var tcp = {};
 			}
 		}); /* /tc.CommentsView */
 
-		new tcp.CommentsView();
+		var
+			$tcpSpan = $( '#tcpCommentFormSpan' ),
+			$tcpCommentForm = $tcpSpan.parent(),
+			$tcpCommentsList = $tcpSpan.parent().parent()
+		;
+
+		new tcp.CommentsView({
+			el: $tcpCommentsList
+		});
 
 	});
 }( jQuery ) );

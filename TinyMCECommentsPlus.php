@@ -285,10 +285,12 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function action_comment_form( $post_id ) {
+		// may be redundant
+		
 		// marker for comment form
-		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
-
-		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
+		// $nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
+		//
+		// echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
 	}
 
 
@@ -419,7 +421,7 @@ class TinyMCECommentsPlus {
 
 		$comment_form_id = $defaults[ 'id_form' ];
 
-		$tcp_form_id_span = '<span style="display:none;" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
+		$tcp_form_id_span = '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
 		echo $tcp_form_id_span;
 		return $defaults;
 	}
