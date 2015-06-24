@@ -41,8 +41,8 @@ var tcp = {};
 			},
 
 			template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-			'<div class="reply"><a href="javascript:void(0);" class="tcp-submit-edit">Submit</a> ' +
-			'<a href="javascript:void(0);" class="tcp-cancel-edit">Cancel</a></div>'),
+			'<div class="reply"><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
+			'<a href="javascript:void(0);" class="tcp-cancel-edit comment-reply-link">Cancel</a></div>'),
 
 			render: function() {
 				var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
@@ -96,6 +96,11 @@ var tcp = {};
 
 
 		tcp.CommentsView = Backbone.View.extend({
+
+			initialize: function() {
+					cl (this.el);
+			},
+
 			events: function() {
 				var _events = {
 					'click a.comment-reply-link' : 'resetEditors',
