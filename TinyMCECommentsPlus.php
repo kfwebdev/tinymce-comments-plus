@@ -462,7 +462,7 @@ class TinyMCECommentsPlus {
 	public function filter_comment_reply_link_args( $args, $comment, $post ) {
 		$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
 
-		$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment comment-reply-link" data-tcp-post-id="' . $post->ID. '" ';
+		$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post->ID. '" ';
 		$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
 
 		$args[ 'before' ] .= $tcp_reply_link;
