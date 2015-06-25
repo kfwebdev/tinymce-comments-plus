@@ -105,9 +105,6 @@ class TinyMCECommentsPlus {
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 11 );
-		// !disabled, overrides form submit button
-		//add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
-		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
 	}
@@ -417,23 +414,6 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_comment_form_defaults( $defaults ) {
-		// !unused, tcpCommentFormSpan moved to comment_form filter
-
-		// global $post;
-		// $nonce = wp_create_nonce( ajax_action_add_comment . $post->ID );
-		//
-		// $comment_form_id = $defaults[ 'id_form' ];
-		//
-		// $tcp_form_id_span = '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-comment-form-id="' . $comment_form_id . '" data-tcp-post-id="' . $post->ID. '" data-tcp-nc="' . $nonce . '"></span>';
-		// echo $tcp_form_id_span;
-		//
-		// return $defaults;
-	}
-
-	/**
-	 * @since    1.0.0
-	 */
 	public function filter_comment_editing( $content, $comment ) {
 
 		if ( ! $this->user_can_edit( $comment->user_id ) ) { return $content; }
@@ -450,30 +430,19 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_comment_reply_link( $link, $args, $comment ) {
-		// !unused, edit link added to comment_reply_link args
-		// if ( ! $this->user_can_edit( $post->user_id ) ) { return $link; }
-		//
-		// $post_id = $comment->comment_post_ID;
-		// $comment_id = $comment->comment_ID;
-		// $nonce = wp_create_nonce( ajax_action_update_comment . $comment_id );
-		//
-		// $tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment" data-tcp-post-id="' . $post_id. '" ';
-		// $tcp_reply_link .= 'data-tcp-comment-id="' . $comment_id . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
-
-		return $link;
-	}
-
-	/**
-	 * @since    1.0.0
-	 */
 	public function filter_comment_reply_link_args( $args, $comment, $post ) {
-		$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
+		global $current_user;
 
-		$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment comment-reply-link" data-tcp-post-id="' . $post->ID. '" ';
-		$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
+		if ( ( is_user_logged_in() &&
+			$comment->user_id == $current_user->ID ) ||
+			current_user_can( 'administrator' ) ) {
+			$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
 
-		$args[ 'before' ] .= $tcp_reply_link;
+			$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment comment-reply-link" data-tcp-post-id="' . $post->ID. '" ';
+			$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-author="' . $comment->comment_author . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
+
+			$args[ 'before' ] .= $tcp_reply_link;
+		}
 
 		return $args;
 	}
