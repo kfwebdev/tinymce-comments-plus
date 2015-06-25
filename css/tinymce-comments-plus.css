@@ -18,3 +18,14 @@
 .tcp-edit-comment.comment-reply-link {
     position: relative;
 }
+
+.tcp-reply-container .spinner {
+    display: none;
+    top: 2px;
+    margin-right: 5px;
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url( '../../../../wp-admin/images/wpspin_light.gif' ) no-repeat;
+}

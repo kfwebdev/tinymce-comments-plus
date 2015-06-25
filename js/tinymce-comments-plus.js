@@ -36,12 +36,12 @@ var tcp = {};
 			},
 
 			events: {
-				'click a.tcp-submit-edit' : 'submitEdit',
-				'click a.tcp-cancel-edit' : 'cancelEdit'
+				'click .tcp-submit-edit' : 'submitEdit',
+				'click .tcp-cancel-edit' : 'cancelEdit'
 			},
 
 			template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-			'<div class="reply tcp-reply-container"><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
+			'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
 			'<a href="javascript:void(0);" class="tcp-cancel-edit comment-reply-link">Cancel</a></div>'),
 
 			render: function() {
@@ -61,23 +61,36 @@ var tcp = {};
 
 			submitEdit: function() {
 				var self = this,
+					$spinner = this.$el.find( '.spinner' ),
+					$editLink = this.$el.find( '.tcp-submit-edit' ),
 					tinymceContent = tinymce.get( 'tcpCommentEditor' + this.commentId ).getContent(),
 					$content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
 
 				this.model.set( 'content', tinymceContent );
 				this.model.set( 'action', tcpGlobals.updateCommentAction );
 
+				$spinner.show();
+				$editLink.text( 'Submitting' );
+				this.events[ 'click .tcp-submit-edit' ] = undefined;
+				this.delegateEvents( this.events );
+
 				var $commentPost = $.ajax({
 					url: tcpGlobals.ajaxUrl,
 					type: 'post',
 					data: this.model.toJSON()
 				})
-					.done( function( data ){
-						$content.html( data.comment_content );
-						self.cancelEdit();
-					})
-					.fail( function( data ){
-						cl('fail'); cl(data);
+				.done( function( data ){
+					$content.html( data.comment_content );
+					self.cancelEdit();
+				})
+				.fail( function( data ){
+					cl('fail');
+					cl(data);
+				})
+				.then( function(){
+					$spinner.hide();
+					self.events[ 'click .tcp-submit-edit' ] = 'submitEdit';
+					self.delegateEvents( this.events );
 				});
 			},
 
@@ -119,7 +132,7 @@ var tcp = {};
 					data: $tcpCommentForm.serialize()
 				})
 				.done( function( data ){
-					self.$el.find( 'a#cancel-comment-reply-link' ).click();
+					self.$el.find( '#cancel-comment-reply-link' ).click();
 					tinyMCE.activeEditor.setContent('');
 					tcp.resetEditors();
 
@@ -153,9 +166,9 @@ var tcp = {};
 
 		tcp.CommentsView = Backbone.View.extend({
 			events: {
-				'click a.comment-reply-link' : 'resetEditors',
-				'click a#cancel-comment-reply-link' : 'resetEditors',
-				'click a.tcp-edit-comment' : 'editComment'
+				'click .comment-reply-link' : 'resetEditors',
+				'click #cancel-comment-reply-link' : 'resetEditors',
+				'click .tcp-edit-comment' : 'editComment'
 			},
 
 			resetEditors: function() {
