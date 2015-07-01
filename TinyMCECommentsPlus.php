@@ -420,9 +420,8 @@ class TinyMCECommentsPlus {
 
 		$comment_id = $comment->comment_ID;
 		$post_id = $comment->comment_post_ID;
-		$original_content = $content;
 
-		$tcp_content = sprintf( '<div class="tcp-comment-content" data-tcp-post-id="%d" data-tcp-comment-id="%d">' . $content . '</div>', $post_id, $comment_id );
+		$tcp_content = sprintf( '<div class="tcp-comment-content" data-tcp-post-id="%d" data-tcp-comment-id="%d">%s</div>', $post_id, $comment_id, $content );
 
 		return $tcp_content;
 	}
