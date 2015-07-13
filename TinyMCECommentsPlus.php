@@ -103,7 +103,9 @@ class TinyMCECommentsPlus {
 		add_action( 'comment_form', array( $this, 'action_comment_form' ), 11 );
 
 		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
+		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 11 );
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
+		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
 		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 11 );
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
@@ -177,8 +179,8 @@ class TinyMCECommentsPlus {
 
 		$screen = get_current_screen();
 		if ($screen->id == $this->plugin_screen_hook_suffix) {
-			wp_enqueue_style($this->plugin_slug . "-admin-styles", plugins_url("css/admin.css", __FILE__), array(),
-				$this->version);
+			//wp_enqueue_style($this->plugin_slug . "-admin-styles", plugins_url("css/admin.css", __FILE__), array(),	$this->version);
+			wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(), $this->version);
 		}
 
 	}
@@ -198,6 +200,8 @@ class TinyMCECommentsPlus {
 
 		$screen = get_current_screen();
 		if ($screen->id == $this->plugin_screen_hook_suffix) {
+			wp_enqueue_script( $this->plugin_slug . "-react", "https://fb.me/react-0.13.3.js", array(),	$this->version );
+			wp_enqueue_script( $this->plugin_slug . "-react-jsx", "https://fb.me/JSXTransformer-0.13.3.js", array(  $this->plugin_slug . "-react" ), $this->version );
 			wp_enqueue_script($this->plugin_slug . "-admin-script", plugins_url("js/tinymce-comments-plus-admin.js", __FILE__),
 				array("jquery"), $this->version);
 		}
@@ -210,8 +214,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(),
-			$this->version);
+		wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(), $this->version);
 	}
 
 	/**
@@ -220,8 +223,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),
-			$this->version );
+		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
 
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_javascript_globals ) );
 	}
@@ -386,6 +388,46 @@ class TinyMCECommentsPlus {
 	}
 
 
+
+
+
+	/**
+	 * @since    1.0.0
+	 */
+	 public function filter_format_tinymce( $args ) {
+	 	$args['remove_linebreaks'] = false;
+	 	$args['gecko_spellcheck'] = true;
+	 	$args['keep_styles'] = true;
+	 	$args['accessibility_focus'] = true;
+	 	$args['tabfocus_elements'] = 'major-publishing-actions';
+	 	$args['media_strict'] = false;
+	 	$args['paste_remove_styles'] = false;
+	 	$args['paste_remove_spans'] = false;
+	 	$args['paste_strip_class_attributes'] = 'none';
+	 	$args['paste_text_use_dialog'] = true;
+	 	$args['wpeditimage_disable_captions'] = true;
+	 	$args['plugins'] = 'tabfocus,paste,fullscreen,wordpress,wplink,wpdialogs,wpfullscreen';
+	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
+	 	$args['wpautop'] = true;
+	 	$args['apply_source_formatting'] = false;
+	    $args['block_formats'] = "Paragraph=p; Heading 3=h3; Heading 4=h4";
+	 	$args['toolbar1'] = 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_fullscreen,wp_adv ';
+	 	$args['toolbar2'] = 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ';
+	 	$args['toolbar3'] = '';
+	 	$args['toolbar4'] = '';
+
+	 	return $args;
+	 }
+
+	/**
+	 * @since    1.0.0
+	 */
+	public function filter_comment_form_defaults( $args ) {
+		$args['comment_field'] = $this->filter_tinymce_editor();
+
+		return $args;
+	}
+
 	/**
 	 * @since    1.0.0
 	 */
@@ -394,6 +436,7 @@ class TinyMCECommentsPlus {
 
 	  wp_editor( '', 'comment',
 			array(
+				'skin' => 'wp_theme',
 			    'textarea_rows' => 12,
 			    'teeny' => false,
 			    'quicktags' => false,
