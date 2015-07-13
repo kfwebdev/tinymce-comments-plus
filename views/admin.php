@@ -16,6 +16,10 @@
 
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
-	<!-- TODO: Provide markup for your options page here. -->
+	<div class="container">
+        <div id="todoExample"></div>
+    </div>
+
+	<script src="<?php echo plugins_url("../js/todo-app.jsx", __FILE__ ); ?>" type="text/jsx"></script>
 
 </div>

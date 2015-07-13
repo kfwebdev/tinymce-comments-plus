@@ -202,7 +202,7 @@ class TinyMCECommentsPlus {
 		if ($screen->id == $this->plugin_screen_hook_suffix) {
 			wp_enqueue_script( $this->plugin_slug . "-react", "https://fb.me/react-0.13.3.js", array(),	$this->version );
 			wp_enqueue_script( $this->plugin_slug . "-react-jsx", "https://fb.me/JSXTransformer-0.13.3.js", array(  $this->plugin_slug . "-react" ), $this->version );
-			wp_enqueue_script($this->plugin_slug . "-admin-script", plugins_url("js/tinymce-comments-plus-admin.js", __FILE__),
+			wp_enqueue_script($this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__),
 				array("jquery"), $this->version);
 		}
 
