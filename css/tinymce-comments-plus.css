@@ -1,33 +1,35 @@
-.container{max-width: 960px; margin: 0 auto; }
+body h1 {
+  text-transform: lowercase; }
 
-.form-allowed-tags { display: none; }
+.container {
+  max-width: 960px;
+  margin: 0 auto; }
+
+.form-allowed-tags {
+  display: none; }
+
 .wp-editor-wrap {
-    border: 1px solid #eee;
-    margin-bottom: 1.25em;
-}
+  border: 1px solid #eee;
+  margin-bottom: 1.25em; }
 
 .tcp-reply-container {
-    margin-bottom: 1rem;
-}
+  margin-bottom: 1rem; }
 
 .tcp-submit-edit.comment-reply-link,
 .tcp-edit-comment.comment-reply-link {
-    margin-right: 1rem;
-}
+  margin-right: 1rem; }
 
 .tcp-submit-edit.comment-reply-link,
 .tcp-cancel-edit.comment-reply-link,
 .tcp-edit-comment.comment-reply-link {
-    position: relative;
-}
+  position: relative; }
 
 .tcp-reply-container .spinner {
-    display: none;
-    top: 2px;
-    margin-right: 5px;
-    position: relative;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    background: url( '../images/wpspin.gif' ) no-repeat;
-}
+  display: none;
+  top: 2px;
+  margin-right: 5px;
+  position: relative;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: url("../images/wpspin.gif") no-repeat; }

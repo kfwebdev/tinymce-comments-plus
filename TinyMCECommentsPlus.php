@@ -201,7 +201,7 @@ class TinyMCECommentsPlus {
 		$screen = get_current_screen();
 		if ($screen->id == $this->plugin_screen_hook_suffix) {
 			wp_enqueue_script( $this->plugin_slug . "-react", "https://fb.me/react-0.13.3.js", array(),	$this->version );
-			wp_enqueue_script( $this->plugin_slug . "-react-jsx", "https://fb.me/JSXTransformer-0.13.3.js", array(  $this->plugin_slug . "-react" ), $this->version );
+			wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array(),	$this->version );
 			wp_enqueue_script($this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__),
 				array("jquery"), $this->version);
 		}
@@ -223,6 +223,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
+		wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array(),	$this->version );
 		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
 
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_javascript_globals ) );

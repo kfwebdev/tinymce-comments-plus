@@ -20,6 +20,4 @@
         <div id="todoExample"></div>
     </div>
 
-	<script src="<?php echo plugins_url("../js/todo-app.jsx", __FILE__ ); ?>" type="text/jsx"></script>
-
 </div>
