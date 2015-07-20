@@ -440,6 +440,11 @@ class TinyMCECommentsPlus {
 				'skin' => 'wp_theme',
 			    'textarea_rows' => 12,
 			    'teeny' => false,
+				'tinymce' => array(
+					'plugins' => 'inlinepopups, wordpress, wplink, wpdialogs',
+					'theme_advanced_buttons1' => 'bold, italic, underline, strikethrough, forecolor, separator, bullist, numlist, separator, link, unlink, image',
+            		'theme_advanced_buttons2' => ''
+				),
 			    'quicktags' => false,
 			    'media_buttons' => false
 	  		)
