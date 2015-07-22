@@ -454,9 +454,6 @@ class TinyMCECommentsPlus {
 
 	  ob_end_clean();
 
-	  //make sure comment media is attached to parent post
-	  //$editor = str_replace( 'post_id=0', 'post_id='.get_the_ID(), $editor );
-
 	  return $editor;
 	}
 
