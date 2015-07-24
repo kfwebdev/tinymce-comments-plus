@@ -214,7 +214,8 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_styles() {
-		wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(), $this->version);
+		wp_enqueue_style( $this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(), $this->version);
+		wp_enqueue_style( $this->plugin_slug . "-editor-buttons-css", includes_url("css/editor.min.css", __FILE__), array(), $this->version );
 	}
 
 	/**
