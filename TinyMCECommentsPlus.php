@@ -213,8 +213,9 @@ class TinyMCECommentsPlus {
 	 */
 	public function enqueue_styles() {
 		global $wp_version;
-		wp_enqueue_style( $this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__) );
-		wp_enqueue_style( $this->plugin_slug . "-editor-buttons-css", includes_url("css/editor.min.css", __FILE__) );
+		wp_enqueue_style( $this->plugin_slug . "-plugin-styles", plugins_url( "css/" . $this->plugin_slug . ".css", __FILE__ ) );
+		wp_enqueue_style( $this->plugin_slug . "-dashicons-css", includes_url( "css/dashicons.min.css", __FILE__ ) );
+		wp_enqueue_style( $this->plugin_slug . "-editor-buttons-css", includes_url( "css/editor.min.css", __FILE__ ) );
 	}
 
 	/**
