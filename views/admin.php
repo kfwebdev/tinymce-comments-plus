@@ -16,42 +16,58 @@
 
 	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
 
-	<div className="tcp-option">
-		<h3>
-			TinyMCE Comments Plus Plugin
-			<input type="checkbox" />
-		</h3>
-		<p>Enable / Disable entire plugin.</p>
-	</div>
-	<div className="tcp-option">
-		<h4>
-			Comment Editing
-			<input type="checkbox" checked="checked" />
-		</h4>
-		<p>Enable / Disable comment editing.</p>
-	</div>
-	<div className="tcp-option">
-		<h4>
-			Comment Edit Duration
-			<input type="range" />
-		</h4>
-		<p>Configure how long comments can be edited.</p>
-	</div>
-	<div className="tcp-option">
-		<h4>
-			Custom Classes
-			<input type="button" value="Enable" />
-		</h4>
-		<p>Define custom classes for tinymce comments plus elements.</p>
-	</div>
-	<div className="tcp-option">
-		<h4>
-			Configure WordPress Comment IDs
-			<input type="button" value="Enable" />
-		</h4>
-		<p>Specify element IDs if your theme uses non-standard IDs for WordPress comment forms.</p>
-	</div>
+	<div class="tcp-settings">
+		<div class="tcp-option">
+			<fieldset class="comment-editing">
+				<legend>Comment editing</legend>
+				<h4>Comment Editing</h4>
+				<?php
+					$nonce = wp_create_nonce( ajax_action_toggle_editing );
+					$option = get_option( ajax_action_toggle_editing );
+				?>
+				<input type="checkbox" <?php if ( $option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
+			</fieldset>
+			<fieldset class="comment-expiration">
+				<legend>Comment Edit Expiration</legend>
+				<h4>Expire Comments</h4>
+				<input type="datetime" />
+				<input type="range" />
+			</fieldset>
+		</div>
+		<div class="tcp-option">
+			<fieldset class="custom-classes">
+				<legend>Custom Classes</legend>
+				<h4>Custom Classes</h4>
+				<input type="button" value="Expand" />
 
-	<script src="<?php echo plugins_url("../js/admin-settings.js", __FILE__ ); ?>"></script>
+				<div class="box">
+					<label>Comments List <input type="text" /></label>
+				</div>
+
+			</fieldset>
+			<fieldset class="wordpress-ids">
+				<legend>WordPress IDs</legend>
+				<h4>Configure WordPress Comment IDs</h4>
+				<input type="button" value="Expand" />
+
+				<div class="box">
+					<label>Comments List <input type="text" /></label>
+				</div>
+
+			</fieldset>
+		</div>
+		<div class="tcp-option">
+			<fieldset class="toggle-plugin">
+				<legend>Enable / Disable Plugin</legend>
+				<h4>TinyMCE Comments Plus Plugin</h4>
+				<input type="checkbox" />
+			</fieldset>
+			<fieldset>
+				<legend>Enable / Disable Plugin</legend>
+				<h4>TinyMCE Comments Plus Plugin</h4>
+				<input type="checkbox" />
+		</fieldset>
+		</div>
+	</div>
 
 </div>

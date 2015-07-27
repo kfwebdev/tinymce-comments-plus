@@ -13,6 +13,12 @@
     margin-bottom: 1rem;
 }
 
+.tcp-comment-editor {
+    & > .mce-container {
+        border: 1px solid #eaeaea;
+    }
+}
+
 .tcp-submit-edit.comment-reply-link,
 .tcp-edit-comment.comment-reply-link {
     margin-right: 1rem;
@@ -36,7 +42,13 @@
 }
 
 .tcp-option {
+    display: inline-block;
+    
     input {
         margin-left: 10px;
+    }
+    fieldset {
+        background: #f0f0f0;
+        border: 1px solid #eee;
     }
 }

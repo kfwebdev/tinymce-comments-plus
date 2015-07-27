@@ -12,6 +12,9 @@
 .tcp-reply-container {
   margin-bottom: 1rem; }
 
+.tcp-comment-editor > .mce-container {
+  border: 1px solid #eaeaea; }
+
 .tcp-submit-edit.comment-reply-link,
 .tcp-edit-comment.comment-reply-link {
   margin-right: 1rem; }
@@ -31,5 +34,10 @@
   height: 16px;
   background: url("../images/wpspin.gif") no-repeat; }
 
-.tcp-option input {
-  margin-left: 10px; }
+.tcp-option {
+  display: inline-block; }
+  .tcp-option input {
+    margin-left: 10px; }
+  .tcp-option fieldset {
+    background: #f0f0f0;
+    border: 1px solid #eee; }

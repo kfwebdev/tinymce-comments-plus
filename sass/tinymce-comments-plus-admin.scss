@@ -1,0 +1,100 @@
+.tcp-settings {
+    .tcp-option {
+
+        fieldset {
+            width: 48%;
+            display: inline-block;
+            margin: 10px 1% 0 0;
+            padding: 15px;
+            vertical-align: top;
+            background: #fafafa;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+
+            h3, h4 {
+                display: inline-block;
+                margin: 0 20px 0 0;
+            }
+
+            & > input {
+                float: right;
+                margin-right: 10px;
+
+                &[type=range],
+                &[type=button],
+                &[type=datetime] {
+                    position: relative;
+                }
+
+                &[type=datetime],
+                &[type=range] {
+                    top: -5px;
+                }
+
+                &[type=button] {
+                    top: -8px;
+                }
+            }
+
+            legend {
+                padding: 5px 10px;
+                font-weight: bold;
+                border-top: 1px solid #eee;
+                border-radius: 5px;
+                background: white;
+                box-shadow: 3px 3px 3px #f0f0f0;
+            }
+
+            .box {
+                display: none;
+                margin-top: 20px;
+                padding: 15px;
+                border: 1px solid #ddd;
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: 1139px) {
+    .tcp-settings {
+        .tcp-option {
+            fieldset {
+                width: 100%;
+                display: block;
+                margin: 10px 0 0;
+            }
+        }
+    }
+}
+
+
+@media only screen and (max-width: 480px) {
+    .tcp-settings {
+        .tcp-option {
+            fieldset {
+                width: 100%;
+                display: block;
+                margin: 10px 0 0;
+
+                &.custom-classes,
+                &.wordpress-ids,
+                &.comment-expiration {
+                    h4 {
+                        display: block;
+                    }
+
+                    input {
+                        &[type=range],
+                        &[type=button],
+                        &[type=datetime] {
+                            float: none;
+                            top: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

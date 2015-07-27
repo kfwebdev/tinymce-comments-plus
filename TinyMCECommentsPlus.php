@@ -74,12 +74,23 @@ class TinyMCECommentsPlus {
 		define( 'tcp_javascript_globals', 'tcpGlobals' );
 		define( 'ajax_action_add_comment', 'add_comment' );
 		define( 'ajax_action_update_comment', 'update_comment' );
+		define( 'ajax_action_toggle_editing', 'toggle_editing' );
 
-		$this->tcp_javascript_globals = array(
+		define( 'tcp_buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
+		define( 'tcp_buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
+
+
+		$this->tcp_admin_javascript_globals = array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'toggleEditingAction' => ajax_action_toggle_editing
+		);
+
+		$this->tcp_plugin_javascript_globals = array(
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'addCommentAction' => ajax_action_add_comment,
 			'updateCommentAction' => ajax_action_update_comment,
-			'ajaxUrl' => admin_url( 'admin-ajax.php' )
 		);
+
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
@@ -99,6 +110,8 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_ajax_' . ajax_action_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . ajax_action_toggle_editing, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_toggle_editing, array( $this, 'action_ajax_request' ) );
 
 		add_action( 'comment_form', array( $this, 'action_comment_form' ), 11 );
 
@@ -179,8 +192,7 @@ class TinyMCECommentsPlus {
 
 		$screen = get_current_screen();
 		if ($screen->id == $this->plugin_screen_hook_suffix) {
-			//wp_enqueue_style($this->plugin_slug . "-admin-styles", plugins_url("css/admin.css", __FILE__), array(),	$this->version);
-			wp_enqueue_style($this->plugin_slug . "-plugin-styles", plugins_url("css/" . $this->plugin_slug . ".css", __FILE__), array(), $this->version);
+			wp_enqueue_style( $this->plugin_slug . "-admin-styles", plugins_url( "css/" . $this->plugin_slug . "-admin.css", __FILE__), array(), $this->version );
 		}
 
 	}
@@ -199,9 +211,11 @@ class TinyMCECommentsPlus {
 		}
 
 		$screen = get_current_screen();
-		if ($screen->id == $this->plugin_screen_hook_suffix) {
+		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array() );
-			wp_enqueue_script($this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone' ),	$this->version );
+			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version, true );
+
+			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 		}
 
 	}
@@ -227,7 +241,7 @@ class TinyMCECommentsPlus {
 		wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array() );
 		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
 
-		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_javascript_globals ) );
+		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
 	}
 
 	/**
@@ -352,6 +366,16 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
+	public function tcp_save_option( $option, $value ) {
+
+		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error( 'permission denied' ); }
+
+		return update_option( $option, $value );
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
 	public function action_ajax_request() {
 		global $allowedtags;
 		// add additional tags to allowed tags in comments
@@ -360,29 +384,39 @@ class TinyMCECommentsPlus {
 		// validate ajax request variables
 		$result = false;
 		$action = sanitize_key( $_REQUEST[ 'action' ] );
-		$post_id = intval( $_REQUEST[ 'postId'] );
-		$comment_id = intval( $_REQUEST[ 'commentId' ] );
-		$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
 		$security = sanitize_text_field( $_REQUEST[ 'security' ] );
 
 		// check for valid ajax request variables
 		if ( ! $action ||
-			 ! $post_id ||
 			 ! $security ) { wp_send_json_error( 'bad request' ); }
 
 		switch ( $action ) {
 			case ajax_action_add_comment:
+				$post_id = intval( $_REQUEST[ 'postId' ] );
+				$comment_id = intval( $_REQUEST[ 'commentId' ] );
+				$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
 				// check ajax referer's security nonce
 				check_ajax_referer( ajax_action_add_comment . $post_id, 'security' );
 
 				$result = $this->tcp_add_comment( $post_id, $content );
 			break;
+
 			case ajax_action_update_comment:
+				$post_id = intval( $_REQUEST[ 'postId' ] );
+				$comment_id = intval( $_REQUEST[ 'commentId' ] );
+				$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
 				if ( ! $comment_id ) { wp_send_json_error( 'bad request' ); }
 				// check ajax referer's security nonce
 				check_ajax_referer( ajax_action_update_comment . $comment_id, 'security' );
 
 				$result = $this->tcp_update_comment( $post_id, $comment_id, $content );
+			break;
+
+			case ajax_action_toggle_editing:
+				check_ajax_referer( ajax_action_toggle_editing, 'security' );
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+
+				$result = $this->tcp_save_option( ajax_action_toggle_editing, $content );
 			break;
 		}
 
@@ -413,8 +447,8 @@ class TinyMCECommentsPlus {
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
 	    $args['block_formats'] = "Paragraph=p; Heading 3=h3; Heading 4=h4";
-	 	$args['toolbar1'] = 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_fullscreen,wp_adv ';
-	 	$args['toolbar2'] = 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ';
+	 	$args['toolbar1'] = tcp_buttons1;
+	 	$args['toolbar2'] = tcp_buttons2;
 	 	$args['toolbar3'] = '';
 	 	$args['toolbar4'] = '';
 
@@ -443,8 +477,8 @@ class TinyMCECommentsPlus {
 			    'teeny' => false,
 				'tinymce' => array(
 					'plugins' => 'inlinepopups, wordpress, wplink, wpdialogs',
-					'theme_advanced_buttons1' => 'bold, italic, underline, strikethrough, forecolor, separator, bullist, numlist, separator, link, unlink, image',
-            		'theme_advanced_buttons2' => ''
+					'theme_advanced_buttons1' => tcp_buttons1,
+            		'theme_advanced_buttons2' => tcp_buttons2
 				),
 			    'quicktags' => false,
 			    'media_buttons' => false
