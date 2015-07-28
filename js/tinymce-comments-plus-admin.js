@@ -36,9 +36,6 @@ var tcp = tcp || {};
 			'click input[type="checkbox"]': 'toggleEditing'
 		},
 
-		initialize: function() {
-		},
-
 		toggleEditing: function( event ) {
 			var $input = this.$el.find( 'input[type="checkbox"]' ),
 				nonce = $input.data( 'tcp-nc' ),
@@ -63,8 +60,43 @@ var tcp = tcp || {};
 		}
 	});
 
+	tcp.adjustExpiration = Backbone.View.extend({
+		events: {
+			'change input[type="range"]': 'changeExpiration'
+		},
+
+		changeExpiration: function( event ) {
+			// var $input = this.$el.find( 'input[type="checkbox"]' ),
+			// 	nonce = $input.data( 'tcp-nc' ),
+			// 	checkValue = ( $input.is( ':checked' ) ? 'on' : 'off' );
+			//
+			// this.model.set( 'security', nonce );
+			// this.model.set( 'action', tcpGlobals.toggleEditingAction );
+			// this.model.set( 'content', checkValue );
+			//
+			// $.ajax({
+			// 	url: tcpGlobals.ajaxUrl,
+			// 	type: 'post',
+			// 	data: this.model.toJSON()
+			// })
+			// .fail( function( data ){
+			// 	cl( 'fail' );
+			// 	cl( data );
+			// })
+			// .then( function( data ){
+			//
+			// });
+			this.$el.find( 'output' ).val( event.currentTarget.value );
+		}
+	});
+
 	new tcp.toggleEditing({
 		el: $( '.tcp-option .comment-editing' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.adjustExpiration({
+		el: $( '.tcp-option .comment-expiration' ),
 		model: new tcp.ajaxModel
 	});
 

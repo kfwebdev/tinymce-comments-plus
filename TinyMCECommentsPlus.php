@@ -214,6 +214,7 @@ class TinyMCECommentsPlus {
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array() );
 			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_slug . "-moment", plugins_url( "js/moment.js", __FILE__), array(), $this->version );
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 		}

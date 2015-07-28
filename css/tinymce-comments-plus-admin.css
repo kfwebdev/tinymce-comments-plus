@@ -11,16 +11,23 @@
   .tcp-settings .tcp-option fieldset h3, .tcp-settings .tcp-option fieldset h4 {
     display: inline-block;
     margin: 0 20px 0 0; }
+  .tcp-settings .tcp-option fieldset > output,
   .tcp-settings .tcp-option fieldset > input {
     float: right;
     margin-right: 10px; }
+    .tcp-settings .tcp-option fieldset > output[type=range],
+    .tcp-settings .tcp-option fieldset > output[type=button],
+    .tcp-settings .tcp-option fieldset > output[type=datetime],
     .tcp-settings .tcp-option fieldset > input[type=range],
     .tcp-settings .tcp-option fieldset > input[type=button],
     .tcp-settings .tcp-option fieldset > input[type=datetime] {
       position: relative; }
+    .tcp-settings .tcp-option fieldset > output[type=datetime],
+    .tcp-settings .tcp-option fieldset > output[type=range],
     .tcp-settings .tcp-option fieldset > input[type=datetime],
     .tcp-settings .tcp-option fieldset > input[type=range] {
       top: -5px; }
+    .tcp-settings .tcp-option fieldset > output[type=button],
     .tcp-settings .tcp-option fieldset > input[type=button] {
       top: -8px; }
   .tcp-settings .tcp-option fieldset legend {

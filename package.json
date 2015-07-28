@@ -1,7 +1,9 @@
 {
   "name": "tinymce-comments-plus",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "moment": "^2.10.6"
+  },
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-livereload": "^3.8.0",
