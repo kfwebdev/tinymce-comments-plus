@@ -30,8 +30,8 @@
 			<fieldset class="comment-expiration">
 				<legend>Comment Edit Expiration</legend>
 				<h4>Expire Comments</h4>
-				<input type="range" step="1" min="0" max="3600" />
 				<output></output>
+				<input type="range" step="1" min="0" max="3600" />
 			</fieldset>
 		</div>
 		<div class="tcp-option">

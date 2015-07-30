@@ -66,10 +66,18 @@ var tcp = tcp || {};
 			'mousemove input[type="range"]': 'changeExpiration'
 		},
 
+		initialize: function() {
+				this.$input = this.$el.find( 'input[type="range"]');
+				this.$output = this.$el.find( 'output');
+				this.updateExpiration( this.$input.val() );
+		},
+
 		changeExpiration: function( event ) {
-			var expiration = event.currentTarget.value;
-			this.$el.find( 'output' ).val( expiration );
-			cl( expiration );
+			this.updateExpiration( event.currentTarget.value );
+		},
+
+		updateExpiration: function( expiration ) {
+			this.$output.val( expiration );
 		}
 	});
 
