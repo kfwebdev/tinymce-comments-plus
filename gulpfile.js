@@ -5,6 +5,8 @@ var gulp = require( 'gulp' ),
     livereload = require( 'gulp-livereload' );
 
 gulp.task( 'html', function () {
+    gulp.src( './js/*.js' )
+        .pipe( livereload() );
     gulp.src( './*.php' )
         .pipe( livereload() );
     gulp.src( './views/*.php' )
@@ -20,6 +22,7 @@ gulp.task( 'sass', function () {
 
 gulp.task( 'watch', function() {
     livereload.listen();
+    gulp.watch( 'js/*.js', [ 'html' ] );
     gulp.watch( '*.php', [ 'html' ] );
     gulp.watch( 'views/*.php', [ 'html' ] );
     gulp.watch( 'sass/*.scss', [ 'sass' ] );

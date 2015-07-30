@@ -31,7 +31,7 @@
 				<legend>Comment Edit Expiration</legend>
 				<h4>Expire Comments</h4>
 				<input type="range" step="1" min="0" max="3600" />
-				<output for="expirationRange"></output>
+				<output></output>
 			</fieldset>
 		</div>
 		<div class="tcp-option">
