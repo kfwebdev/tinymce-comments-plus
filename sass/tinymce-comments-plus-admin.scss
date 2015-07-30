@@ -38,6 +38,10 @@
                 }
             }
 
+            & > output {
+                min-width: 3em;
+            }
+
             legend {
                 padding: 5px 10px;
                 font-weight: bold;

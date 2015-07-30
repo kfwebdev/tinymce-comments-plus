@@ -81,6 +81,10 @@ var tcp = tcp || {};
 		}
 	});
 
+	tcp.ajaxSaveOption = function( security, data, action, content ) {
+
+	};
+
 	new tcp.toggleEditing({
 		el: $( '.tcp-option .comment-editing' ),
 		model: new tcp.ajaxModel

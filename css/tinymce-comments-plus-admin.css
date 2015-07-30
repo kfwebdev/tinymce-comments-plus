@@ -30,6 +30,8 @@
     .tcp-settings .tcp-option fieldset > output[type=button],
     .tcp-settings .tcp-option fieldset > input[type=button] {
       top: -8px; }
+  .tcp-settings .tcp-option fieldset > output {
+    min-width: 3em; }
   .tcp-settings .tcp-option fieldset legend {
     padding: 5px 10px;
     font-weight: bold;
