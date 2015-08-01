@@ -67,9 +67,34 @@ var tcp = tcp || {};
 		},
 
 		initialize: function() {
-				this.$input = this.$el.find( 'input[type="range"]');
-				this.$output = this.$el.find( 'output');
+				this.$input = this.$el.find( 'input');
 				this.updateExpiration( this.$input.val() );
+				this.$el.find( 'input' ).spinner({
+		         spin: function (event, ui) {
+		             if (ui.value >= 60) {
+		                 $(this).spinner('value', ui.value - 60);
+		                 $('#minutes').spinner('stepUp');
+		                 return false;
+		             } else if (ui.value < 0) {
+		                 $(this).spinner('value', ui.value + 60);
+		                 $('#minutes').spinner('stepDown');
+		                 return false;
+		             }
+		         }
+		     });
+		     $('#minutes').spinner({
+		         spin: function (event, ui) {
+		             if (ui.value >= 60) {
+		                 $(this).spinner('value', ui.value - 60);
+		                 $('#hours').spinner('stepUp');
+		                 return false;
+		             } else if (ui.value < 0) {
+		                 $(this).spinner('value', ui.value + 60);
+		                 $('#hours').spinner('stepDown');
+		                 return false;
+		             }
+		         }
+		     });
 		},
 
 		changeExpiration: function( event ) {
@@ -77,7 +102,10 @@ var tcp = tcp || {};
 		},
 
 		updateExpiration: function( expiration ) {
-			this.$output.val( expiration );
+			var expire = moment.duration({
+				hours: expiration
+			});
+			//this.$output.val( expire.humanize() );
 		}
 	});
 

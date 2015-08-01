@@ -30,8 +30,20 @@
 			<fieldset class="comment-expiration">
 				<legend>Comment Edit Expiration</legend>
 				<h4>Expire Comments</h4>
-				<output></output>
-				<input type="range" step="1" min="0" max="3600" />
+				<div class="spinners">
+					<label>Years</label>
+					<input class="years" size="4">
+					<label>Months</label>
+					<input class="months" size="2">
+					<label>Days</label>
+					<input class="days" size="2">
+					<label>Hours</label>
+					<input class="hours" size="2">
+					<label>Minutes</label>
+					<input class="minutes" size="2">
+					<label>Seconds</label>
+					<input class="seconds" size="2">
+				</div>
 			</fieldset>
 		</div>
 		<div class="tcp-option">

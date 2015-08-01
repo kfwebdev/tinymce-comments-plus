@@ -17,29 +17,12 @@
                 margin: 0 20px 0 0;
             }
 
-            & > output,
             & > input {
                 float: right;
                 margin-right: 10px;
 
-                &[type=range],
-                &[type=button],
-                &[type=datetime] {
-                    position: relative;
-                }
-
-                &[type=datetime],
-                &[type=range] {
-                    top: -5px;
-                }
-
-                &[type=button] {
-                    top: -8px;
-                }
-            }
-
-            & > output {
-                min-width: 3em;
+                position: relative;
+                // top: -5px;
             }
 
             legend {
@@ -56,6 +39,10 @@
                 margin-top: 20px;
                 padding: 15px;
                 border: 1px solid #ddd;
+            }
+
+            .spinners {
+                float: right;
             }
         }
     }
