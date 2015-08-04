@@ -2,7 +2,7 @@
   "name": "tinymce-comments-plus",
   "version": "1.0.0",
   "dependencies": {
-    "moment": "^2.10.6"
+    "numeral": "^1.5.3"
   },
   "devDependencies": {
     "gulp": "^3.8.11",

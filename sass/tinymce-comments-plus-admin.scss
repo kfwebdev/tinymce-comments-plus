@@ -25,6 +25,10 @@
                 // top: -5px;
             }
 
+            & > output {
+                width: 6em;
+            }
+
             legend {
                 padding: 5px 10px;
                 font-weight: bold;
@@ -41,8 +45,14 @@
                 border: 1px solid #ddd;
             }
 
-            .spinners {
+            .expiration-control {
                 float: right;
+
+                & > output {
+                    display: inline-block;
+                    min-width: 7em;
+                    text-align: center;
+                }
             }
         }
     }

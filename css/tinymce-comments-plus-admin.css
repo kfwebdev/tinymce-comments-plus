@@ -15,6 +15,8 @@
     float: right;
     margin-right: 10px;
     position: relative; }
+  .tcp-settings .tcp-option fieldset > output {
+    width: 6em; }
   .tcp-settings .tcp-option fieldset legend {
     padding: 5px 10px;
     font-weight: bold;
@@ -27,8 +29,12 @@
     margin-top: 20px;
     padding: 15px;
     border: 1px solid #ddd; }
-  .tcp-settings .tcp-option fieldset .spinners {
+  .tcp-settings .tcp-option fieldset .expiration-control {
     float: right; }
+    .tcp-settings .tcp-option fieldset .expiration-control > output {
+      display: inline-block;
+      min-width: 7em;
+      text-align: center; }
 
 @media only screen and (max-width: 1139px) {
   .tcp-settings .tcp-option fieldset {

@@ -30,19 +30,10 @@
 			<fieldset class="comment-expiration">
 				<legend>Comment Edit Expiration</legend>
 				<h4>Expire Comments</h4>
-				<div class="spinners">
-					<label>Years</label>
-					<input class="years" size="4">
-					<label>Months</label>
-					<input class="months" size="2">
-					<label>Days</label>
-					<input class="days" size="2">
-					<label>Hours</label>
-					<input class="hours" size="2">
-					<label>Minutes</label>
-					<input class="minutes" size="2">
+				<div class="expiration-control">
 					<label>Seconds</label>
-					<input class="seconds" size="2">
+					<input class="years" type="range" min="0" max="168">
+					<output></output>
 				</div>
 			</fieldset>
 		</div>
