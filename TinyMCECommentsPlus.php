@@ -71,10 +71,12 @@ class TinyMCECommentsPlus {
 	 */
 	private function __construct() {
 
+		define( 'tcp_prefix', 'tcp_' );
 		define( 'tcp_javascript_globals', 'tcpGlobals' );
-		define( 'ajax_action_add_comment', 'add_comment' );
-		define( 'ajax_action_update_comment', 'update_comment' );
-		define( 'ajax_action_toggle_editing', 'toggle_editing' );
+		define( 'ajax_action_add_comment', tcp_prefix . 'add_comment' );
+		define( 'ajax_action_update_comment', tcp_prefix . 'update_comment' );
+		define( 'ajax_action_toggle_editing', tcp_prefix . 'toggle_editing' );
+		define( 'ajax_action_update_expiration', tcp_prefix . 'update_expiration' );
 
 		define( 'tcp_buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
 		define( 'tcp_buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
@@ -82,7 +84,8 @@ class TinyMCECommentsPlus {
 
 		$this->tcp_admin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'toggleEditingAction' => ajax_action_toggle_editing
+			'toggleEditingAction' => ajax_action_toggle_editing,
+			'updateExpiration' => ajax_action_update_expiration
 		);
 
 		$this->tcp_plugin_javascript_globals = array(
@@ -214,7 +217,7 @@ class TinyMCECommentsPlus {
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
-			wp_enqueue_script( $this->plugin_slug . "-moment", plugins_url( "js/moment.js", __FILE__) );
+			wp_enqueue_script( $this->plugin_slug . "-humanize-duration", plugins_url( "js/humanize-duration.js", __FILE__) );
 			wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js" );
 			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version, true );
 
@@ -370,9 +373,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function tcp_save_option( $option, $value ) {
-
 		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error( 'permission denied' ); }
-
 		return update_option( $option, $value );
 	}
 
@@ -418,8 +419,13 @@ class TinyMCECommentsPlus {
 			case ajax_action_toggle_editing:
 				check_ajax_referer( ajax_action_toggle_editing, 'security' );
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
-
 				$result = $this->tcp_save_option( ajax_action_toggle_editing, $content );
+			break;
+
+			case ajax_action_update_expiration:
+				check_ajax_referer( ajax_action_update_expiration, 'security' );
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->tcp_save_option( ajax_action_update_expiration, $content );
 			break;
 		}
 

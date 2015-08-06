@@ -19,28 +19,31 @@
 	<div class="tcp-settings">
 		<div class="tcp-option">
 			<fieldset class="comment-editing">
-				<legend>Comment editing</legend>
-				<h4>Comment Editing</h4>
 				<?php
 					$nonce = wp_create_nonce( ajax_action_toggle_editing );
 					$option = get_option( ajax_action_toggle_editing );
 				?>
+				<legend>Comment editing</legend>
+				<p>Comment Editing</p>
 				<input type="checkbox" <?php if ( $option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
 			</fieldset>
 			<fieldset class="comment-expiration">
+				<?php
+					$nonce = wp_create_nonce( ajax_action_update_expiration );
+					$option = get_option( ajax_action_update_expiration ); echo $option . 'wtf';
+				?>
 				<legend>Comment Edit Expiration</legend>
-				<h4>Expire Comments</h4>
+				<p>Expire Comments</p>
 				<div class="expiration-control">
-					<label>Seconds</label>
-					<input class="years" type="range" min="0" max="168">
 					<output></output>
+					<input class="years" type="range" step="1" min="0" max="28" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $option . "\"" ?> />
 				</div>
 			</fieldset>
 		</div>
 		<div class="tcp-option">
 			<fieldset class="custom-classes">
 				<legend>Custom Classes</legend>
-				<h4>Custom Classes</h4>
+				<p>Custom Classes</p>
 				<input type="button" value="Expand" />
 
 				<div class="box">
@@ -50,7 +53,7 @@
 			</fieldset>
 			<fieldset class="wordpress-ids">
 				<legend>WordPress IDs</legend>
-				<h4>Configure WordPress Comment IDs</h4>
+				<p>Configure WordPress Comment IDs</p>
 				<input type="button" value="Expand" />
 
 				<div class="box">
@@ -62,12 +65,12 @@
 		<div class="tcp-option">
 			<fieldset class="toggle-plugin">
 				<legend>Enable / Disable Plugin</legend>
-				<h4>TinyMCE Comments Plus Plugin</h4>
+				<p>TinyMCE Comments Plus Plugin</p>
 				<input type="checkbox" />
 			</fieldset>
 			<fieldset>
 				<legend>Enable / Disable Plugin</legend>
-				<h4>TinyMCE Comments Plus Plugin</h4>
+				<p>TinyMCE Comments Plus Plugin</p>
 				<input type="checkbox" />
 		</fieldset>
 		</div>

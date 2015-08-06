@@ -1,5 +1,6 @@
 .tcp-settings {
     .tcp-option {
+        font-size: 1.25em;
 
         fieldset {
             width: 48%;
@@ -12,21 +13,20 @@
             border: 1px solid #ddd;
             border-radius: 5px;
 
-            h3, h4 {
+            p {
                 display: inline-block;
                 margin: 0 20px 0 0;
+                font-size: 1.05em;
+                font-weight: normal;
+            }
+
+            input {
+                position: relative;
             }
 
             & > input {
                 float: right;
-                margin-right: 10px;
-
-                position: relative;
-                // top: -5px;
-            }
-
-            & > output {
-                width: 6em;
+                margin-right: 1em;
             }
 
             legend {
@@ -48,10 +48,19 @@
             .expiration-control {
                 float: right;
 
+                & > input {
+                    // top: -5px;
+                }
+
+                & > label,
                 & > output {
+                    margin-top: .35em;
+                    vertical-align: top;
+                }
+
+                & > output {
+                    margin-right: 1em;
                     display: inline-block;
-                    min-width: 7em;
-                    text-align: center;
                 }
             }
         }
@@ -83,8 +92,15 @@
                 &.custom-classes,
                 &.wordpress-ids,
                 &.comment-expiration {
-                    h4 {
+                    .expiration-control,
+                    p {
                         display: block;
+                        float: none;
+
+                        output,
+                        input {
+                            display: block;
+                        }
                     }
 
                     input {
