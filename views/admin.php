@@ -30,7 +30,7 @@
 			<fieldset class="comment-expiration">
 				<?php
 					$nonce = wp_create_nonce( ajax_action_update_expiration );
-					$option = get_option( ajax_action_update_expiration ); echo $option . 'wtf';
+					$option = get_option( ajax_action_update_expiration );
 				?>
 				<legend>Comment Edit Expiration</legend>
 				<p>Expire Comments</p>
