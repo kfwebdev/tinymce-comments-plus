@@ -43,8 +43,13 @@
                 margin-top: 20px;
                 padding: 15px;
                 border: 1px solid #ddd;
+
+                &.show {
+                    display: block;
+                }
             }
 
+            .editing-control,
             .expiration-control {
                 float: right;
 
@@ -54,13 +59,22 @@
 
                 & > label,
                 & > output {
-                    margin-top: .35em;
                     vertical-align: top;
                 }
 
+                & > label {
+                    margin-top: .35em;
+                }
+
                 & > output {
-                    margin-right: 1em;
+                    margin: .35em 1em 0 0;
                     display: inline-block;
+                }
+            }
+
+            .editing-control {
+                & > output {
+                    margin-top: 0;
                 }
             }
         }
@@ -68,7 +82,7 @@
 }
 
 
-@media only screen and (max-width: 1139px) {
+@media only screen and (max-width: 1224px) {
     .tcp-settings {
         .tcp-option {
             fieldset {
@@ -81,7 +95,7 @@
 }
 
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
     .tcp-settings {
         .tcp-option {
             fieldset {
@@ -89,6 +103,7 @@
                 display: block;
                 margin: 10px 0 0;
 
+                &.comment-editing,
                 &.custom-classes,
                 &.wordpress-ids,
                 &.comment-expiration {
@@ -101,6 +116,11 @@
                         input {
                             display: block;
                         }
+                    }
+
+                    .editing-control {
+                        margin-top: .75em;
+                        float: none;
                     }
 
                     input {

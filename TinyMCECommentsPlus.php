@@ -73,10 +73,13 @@ class TinyMCECommentsPlus {
 
 		define( 'tcp_prefix', 'tcp_' );
 		define( 'tcp_javascript_globals', 'tcpGlobals' );
+		define( 'ajax_action_option_update_delay', 2000 );
 		define( 'ajax_action_add_comment', tcp_prefix . 'add_comment' );
 		define( 'ajax_action_update_comment', tcp_prefix . 'update_comment' );
-		define( 'ajax_action_toggle_editing', tcp_prefix . 'toggle_editing' );
-		define( 'ajax_action_update_expiration', tcp_prefix . 'update_expiration' );
+		define( 'ajax_action_editing_enabled', tcp_prefix . 'editing_enabled' );
+		define( 'ajax_action_editing_expiration', tcp_prefix . 'editing_expiration' );
+		define( 'ajax_action_custom_classes_open', tcp_prefix . 'custom_classes_open' );
+		define( 'ajax_action_wordpress_ids_open', tcp_prefix . 'wordpress_ids_open' );
 
 		define( 'tcp_buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
 		define( 'tcp_buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
@@ -84,12 +87,16 @@ class TinyMCECommentsPlus {
 
 		$this->tcp_admin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'toggleEditingAction' => ajax_action_toggle_editing,
-			'updateExpiration' => ajax_action_update_expiration
+			'optionUpdateDelay' => ajax_action_option_update_delay,
+			'editingEnabledAction' => ajax_action_editing_enabled,
+			'editingExpirationAction' => ajax_action_editing_expiration,
+			'customClassesOpenAction' => ajax_action_custom_classes_open,
+			'wordpressIdsOpenAction' => ajax_action_wordpress_ids_open
 		);
 
 		$this->tcp_plugin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'optionUpdateDelay' => ajax_action_option_update_delay,
 			'addCommentAction' => ajax_action_add_comment,
 			'updateCommentAction' => ajax_action_update_comment,
 		);
@@ -113,8 +120,14 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_ajax_' . ajax_action_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . ajax_action_toggle_editing, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . ajax_action_toggle_editing, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . ajax_action_editing_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_editing_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . ajax_action_editing_expiration, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_editing_expiration, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . ajax_action_custom_classes_open, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_custom_classes_open, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . ajax_action_wordpress_ids_open, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . ajax_action_wordpress_ids_open, array( $this, 'action_ajax_request' ) );
 
 		add_action( 'comment_form', array( $this, 'action_comment_form' ), 11 );
 
@@ -381,10 +394,6 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function action_ajax_request() {
-		global $allowedtags;
-		// add additional tags to allowed tags in comments
-		$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
-
 		// validate ajax request variables
 		$result = false;
 		$action = sanitize_key( $_REQUEST[ 'action' ] );
@@ -393,6 +402,10 @@ class TinyMCECommentsPlus {
 		// check for valid ajax request variables
 		if ( ! $action ||
 			 ! $security ) { wp_send_json_error( 'bad request' ); }
+
+		global $allowedtags;
+ 		// add additional tags to allowed tags in comments
+ 		$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
 
 		switch ( $action ) {
 			case ajax_action_add_comment:
@@ -416,16 +429,28 @@ class TinyMCECommentsPlus {
 				$result = $this->tcp_update_comment( $post_id, $comment_id, $content );
 			break;
 
-			case ajax_action_toggle_editing:
-				check_ajax_referer( ajax_action_toggle_editing, 'security' );
+			case ajax_action_editing_enabled:
+				check_ajax_referer( ajax_action_editing_enabled, 'security' );
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
-				$result = $this->tcp_save_option( ajax_action_toggle_editing, $content );
+				$result = $this->tcp_save_option( ajax_action_editing_enabled, $content );
 			break;
 
-			case ajax_action_update_expiration:
-				check_ajax_referer( ajax_action_update_expiration, 'security' );
+			case ajax_action_editing_expiration:
+				check_ajax_referer( ajax_action_editing_expiration, 'security' );
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
-				$result = $this->tcp_save_option( ajax_action_update_expiration, $content );
+				$result = $this->tcp_save_option( ajax_action_editing_expiration, $content );
+			break;
+
+			case ajax_action_custom_classes_open:
+				check_ajax_referer( ajax_action_custom_classes_open, 'security' );
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->tcp_save_option( ajax_action_custom_classes_open, $content );
+			break;
+
+			case ajax_action_wordpress_ids_open:
+				check_ajax_referer( ajax_action_wordpress_ids_open, 'security' );
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->tcp_save_option( ajax_action_wordpress_ids_open, $content );
 			break;
 		}
 

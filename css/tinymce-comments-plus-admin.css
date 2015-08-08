@@ -32,27 +32,39 @@
       margin-top: 20px;
       padding: 15px;
       border: 1px solid #ddd; }
+      .tcp-settings .tcp-option fieldset .box.show {
+        display: block; }
+    .tcp-settings .tcp-option fieldset .editing-control,
     .tcp-settings .tcp-option fieldset .expiration-control {
       float: right; }
+      .tcp-settings .tcp-option fieldset .editing-control > label,
+      .tcp-settings .tcp-option fieldset .editing-control > output,
       .tcp-settings .tcp-option fieldset .expiration-control > label,
       .tcp-settings .tcp-option fieldset .expiration-control > output {
-        margin-top: .35em;
         vertical-align: top; }
+      .tcp-settings .tcp-option fieldset .editing-control > label,
+      .tcp-settings .tcp-option fieldset .expiration-control > label {
+        margin-top: .35em; }
+      .tcp-settings .tcp-option fieldset .editing-control > output,
       .tcp-settings .tcp-option fieldset .expiration-control > output {
-        margin-right: 1em;
+        margin: 0.35em 1em 0 0;
         display: inline-block; }
+    .tcp-settings .tcp-option fieldset .editing-control > output {
+      margin-top: 0; }
 
-@media only screen and (max-width: 1139px) {
+@media only screen and (max-width: 1224px) {
   .tcp-settings .tcp-option fieldset {
     width: 100%;
     display: block;
     margin: 10px 0 0; } }
 
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 768px) {
   .tcp-settings .tcp-option fieldset {
     width: 100%;
     display: block;
     margin: 10px 0 0; }
+    .tcp-settings .tcp-option fieldset.comment-editing .expiration-control,
+    .tcp-settings .tcp-option fieldset.comment-editing p,
     .tcp-settings .tcp-option fieldset.custom-classes .expiration-control,
     .tcp-settings .tcp-option fieldset.custom-classes p,
     .tcp-settings .tcp-option fieldset.wordpress-ids .expiration-control,
@@ -61,6 +73,10 @@
     .tcp-settings .tcp-option fieldset.comment-expiration p {
       display: block;
       float: none; }
+      .tcp-settings .tcp-option fieldset.comment-editing .expiration-control output,
+      .tcp-settings .tcp-option fieldset.comment-editing .expiration-control input,
+      .tcp-settings .tcp-option fieldset.comment-editing p output,
+      .tcp-settings .tcp-option fieldset.comment-editing p input,
       .tcp-settings .tcp-option fieldset.custom-classes .expiration-control output,
       .tcp-settings .tcp-option fieldset.custom-classes .expiration-control input,
       .tcp-settings .tcp-option fieldset.custom-classes p output,
@@ -74,6 +90,15 @@
       .tcp-settings .tcp-option fieldset.comment-expiration p output,
       .tcp-settings .tcp-option fieldset.comment-expiration p input {
         display: block; }
+    .tcp-settings .tcp-option fieldset.comment-editing .editing-control,
+    .tcp-settings .tcp-option fieldset.custom-classes .editing-control,
+    .tcp-settings .tcp-option fieldset.wordpress-ids .editing-control,
+    .tcp-settings .tcp-option fieldset.comment-expiration .editing-control {
+      margin-top: .75em;
+      float: none; }
+    .tcp-settings .tcp-option fieldset.comment-editing input[type=range],
+    .tcp-settings .tcp-option fieldset.comment-editing input[type=button],
+    .tcp-settings .tcp-option fieldset.comment-editing input[type=datetime],
     .tcp-settings .tcp-option fieldset.custom-classes input[type=range],
     .tcp-settings .tcp-option fieldset.custom-classes input[type=button],
     .tcp-settings .tcp-option fieldset.custom-classes input[type=datetime],

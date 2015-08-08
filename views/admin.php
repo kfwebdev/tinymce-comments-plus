@@ -20,59 +20,61 @@
 		<div class="tcp-option">
 			<fieldset class="comment-editing">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_toggle_editing );
-					$option = get_option( ajax_action_toggle_editing );
+					$nonce = wp_create_nonce( ajax_action_editing_enabled );
+					$editing_option = get_option( ajax_action_editing_enabled );
 				?>
-				<legend>Comment editing</legend>
-				<p>Comment Editing</p>
-				<input type="checkbox" <?php if ( $option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
+				<legend>Comment Editing</legend>
+				<p>Allow users to edit comments after they post.</p>
+				<div class="editing-control">
+					<output><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></output>
+					<input type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
+				</div>
 			</fieldset>
 			<fieldset class="comment-expiration">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_update_expiration );
-					$option = get_option( ajax_action_update_expiration );
+					$nonce = wp_create_nonce( ajax_action_editing_expiration );
+					$expiration_option = get_option( ajax_action_editing_expiration );
 				?>
-				<legend>Comment Edit Expiration</legend>
-				<p>Expire Comments</p>
+				<legend>Comment Editing Period</legend>
+				<p>Allow comment edits after posting.</p>
 				<div class="expiration-control">
 					<output></output>
-					<input class="years" type="range" step="1" min="0" max="28" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $option . "\"" ?> />
+					<input class="years" type="range" step="1" min="1" max="20160" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
 				</div>
 			</fieldset>
 		</div>
 		<div class="tcp-option">
 			<fieldset class="custom-classes">
+				<?php
+					$nonce = wp_create_nonce( ajax_action_custom_classes_open );
+					$classes_option = get_option( ajax_action_custom_classes_open );
+				?>
 				<legend>Custom Classes</legend>
-				<p>Custom Classes</p>
-				<input type="button" value="Expand" />
+				<p>Configure custom CSS classes for buttons and inputs.</p>
+				<input type="button" value="<?php if ( $classes_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
 
-				<div class="box">
+				<div class="box <?php if ( $classes_option == 'yes' ) { ?>show<?php } ?>">
+					<label>Comments List <input type="text" /></label>
 					<label>Comments List <input type="text" /></label>
 				</div>
 
 			</fieldset>
 			<fieldset class="wordpress-ids">
+				<?php
+					$nonce = wp_create_nonce( ajax_action_wordpress_ids_open );
+					$ids_option = get_option( ajax_action_wordpress_ids_open );
+				?>
 				<legend>WordPress IDs</legend>
-				<p>Configure WordPress Comment IDs</p>
-				<input type="button" value="Expand" />
+				<p>Some themes may use different element IDs for comments.</p>
+				<input type="button" value="<?php if ( $ids_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
 
 				<div class="box">
+					<label>Comments List <input type="text" /></label>
+					<label>Comments List <input type="text" /></label>
 					<label>Comments List <input type="text" /></label>
 				</div>
 
 			</fieldset>
-		</div>
-		<div class="tcp-option">
-			<fieldset class="toggle-plugin">
-				<legend>Enable / Disable Plugin</legend>
-				<p>TinyMCE Comments Plus Plugin</p>
-				<input type="checkbox" />
-			</fieldset>
-			<fieldset>
-				<legend>Enable / Disable Plugin</legend>
-				<p>TinyMCE Comments Plus Plugin</p>
-				<input type="checkbox" />
-		</fieldset>
 		</div>
 	</div>
 

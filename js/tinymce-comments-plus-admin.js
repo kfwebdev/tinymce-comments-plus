@@ -36,84 +36,149 @@ var tcp = tcp || {};
 	});
 
 
-	tcp.toggleEditing = Backbone.View.extend({
+	tcp.ajaxSaveOption = function( data ) {
+		return $.ajax({
+			url: tcpGlobals.ajaxUrl,
+			type: 'post',
+			data: data
+		});
+	};
+
+
+	tcp.editingEnabled = Backbone.View.extend({
 		events: {
-			'click input[type="checkbox"]': 'toggleEditing'
+			'click input[type="checkbox"]': 'editingEnabled'
 		},
 
-		toggleEditing: function( event ) {
+		editingEnabled: function( event ) {
+			var self = this;
 			this.$input = this.$el.find( 'input[type=checkbox]' );
+			this.$output = this.$el.find( 'output' );
+			this.$p = this.$el.find( 'p' );
 			this.nonce = this.$input.data( 'tcp-nc' ),
 			this.checkValue = ( this.$input.is( ':checked' ) ? 'on' : 'off' );
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.toggleEditingAction );
+			this.model.set( 'action', tcpGlobals.editingEnabledAction );
 			this.model.set( 'content', this.checkValue );
 
-			tcp.ajaxSaveOption( this.model.toJSON() );
+			tcp.ajaxSaveOption( this.model.toJSON() )
+			.done( function( response ) {
+				self.$output.text( ( self.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
+			});
 		}
 	});
+
 
 	tcp.adjustExpiration = Backbone.View.extend({
 		events: {
 			'change input[type="range"]': 'changeExpiration',
 			'mousemove input[type="range"]': 'changeExpiration',
-			'mouseup input[type="range"]': 'updateExpiration',
+			'touchmove input[type="range"]': 'changeExpiration',
+			'mouseup input[type="range"]': 'editingExpiration',
+			'touchend input[type="range"]': 'editingExpiration'
 		},
 
 		initialize: function() {
-			this.$input = this.$el.find( 'input[type=range]');
-			this.$output = this.$el.find( 'output');
+			this.$input = this.$el.find( 'input[type=range]' );
+			this.$output = this.$el.find( 'output' );
 			this.nonce = this.$input.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
+			this.changeExpiration( false );
 		},
 
 		changeExpiration: function( event ) {
-			this.expiration = event.currentTarget.value;
-			if ( ! isNumber( this.expiration ) ) { this.expiration = 0; } // overwrite invalid inputs
+			if ( event ) { this.expiration = event.currentTarget.value; }
+			else { this.expiration = this.$input.val(); }
+			if ( ! isNumber( this.expiration ) ) { this.expiration = 1; } // overwrite invalid inputs
 
-			var expire = this.expiration * 3600000 * 12; // 3600000 == 1 hour in ms
-			if ( expire > 0 ) { this.$output.val( 'in ' + humanizeDuration( expire ) ); }
-			else { this.$output.val( 'Never' ); }
+			var expire = this.expiration * 1000 * 60;
+			if ( this.expiration == this.$input.attr( 'max' ) ) { this.$output.val( 'Always' ); }
+			else { this.$output.text( humanizeDuration( expire ) ); }
 		},
 
-		updateExpiration: function( event ) {
+		editingExpiration: function( event ) {
 			var self = this;
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.updateExpiration );
+			this.model.set( 'action', tcpGlobals.editingExpirationAction );
 			this.model.set( 'content', this.expiration );
 
 			clearTimeout( this.timeoutUpdate );
 			this.timeoutUpdate = setTimeout( function(){
 				tcp.ajaxSaveOption( self.model.toJSON() );
 				clearTimeout( this.timeoutUpdate );
-			}, 3000 );
+			}, tcpGlobals.optionUpdateDelay );
 		}
 	});
 
-	tcp.ajaxSaveOption = function( data ) {
-		$.ajax({
-			url: tcpGlobals.ajaxUrl,
-			type: 'post',
-			data: data
-		})
-		.fail( function( response ){
-			cl( 'failed' );
-			cl( response );
-		})
-		.then( function( response ){
-			cl( 'done' );
-			return response;
-		});
-	};
+	tcp.customClasses = Backbone.View.extend({
+		events: {
+			'click input[type="button"]': 'toggleList'
+		},
 
-	new tcp.toggleEditing({
+		toggleList: function() {
+			this.$input = this.$el.find( 'input[type=button]' );
+			this.$box = this.$el.find( '.box' );
+			this.nonce = this.$input.data( 'tcp-nc' );
+			this.listOpen = ( this.$box.is( ':visible' ) ? 'no' : 'yes' );
+			this.$box.slideToggle();
+
+			this.model.set( 'security', this.nonce );
+			this.model.set( 'action', tcpGlobals.customClassesOpenAction );
+			this.model.set( 'content', this.listOpen );
+
+			tcp.ajaxSaveOption( this.model.toJSON() )
+			.done( function( response ) {
+				self.$input.val( ( this.listOpen == 'no' ? 'Show' : 'Hide' ) );
+			});
+
+		}
+	});
+
+	tcp.wordpressIds = Backbone.View.extend({
+		events: {
+			'click input[type="button"]': 'toggleList'
+		},
+
+		toggleList: function() {
+			var self = this;
+			this.$input = this.$el.find( 'input[type=button]' );
+			this.$box = this.$el.find( '.box' );
+			this.nonce = this.$input.data( 'tcp-nc' );
+			this.listOpen = ( this.$box.is( ':visible' ) ? 'no' : 'yes' );
+			this.$box.slideToggle();
+			this.$input.val( ( this.listOpen == 'no' ? 'Show' : 'Hide' ) );
+
+			this.model.set( 'security', this.nonce );
+			this.model.set( 'action', tcpGlobals.wordpressIdsOpenAction );
+			this.model.set( 'content', this.listOpen );
+
+			tcp.ajaxSaveOption( this.model.toJSON() )
+			.done( function( response ) {
+				self.$input.val( ( this.listOpen == 'no' ? 'Show' : 'Hide' ) );
+			});
+
+		}
+	});
+
+
+	new tcp.editingEnabled({
 		el: $( '.tcp-option .comment-editing' ),
 		model: new tcp.ajaxModel
 	});
 
 	new tcp.adjustExpiration({
 		el: $( '.tcp-option .comment-expiration' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.customClasses({
+		el: $( '.tcp-option .custom-classes' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.wordpressIds({
+		el: $( '.tcp-option .wordpress-ids' ),
 		model: new tcp.ajaxModel
 	});
 
