@@ -83,8 +83,8 @@ var tcp = tcp || {};
 		},
 
 		changeExpiration: function( event ) {
-			if ( event ) { this.expiration = event.currentTarget.value; }
-			else { this.expiration = this.$input.val(); }
+			if ( ! event ) { this.expiration = parseInt( this.$input.val() ); }
+			else { this.expiration = parseInt( event.currentTarget.value ); }
 			if ( ! _.isNumber( this.expiration ) ) { this.expiration = 1; } // overwrite invalid inputs
 
 			var expire = this.expiration * 1000 * 60;
