@@ -68,7 +68,7 @@
 				<p>Some themes may use different element IDs for comments.</p>
 				<input type="button" value="<?php if ( $ids_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
 
-				<div class="box">
+				<div class="box <?php if ( $ids_option == 'yes' ) { ?>show<?php } ?>">
 					<label>Comments List <input type="text" /></label>
 					<label>Comments List <input type="text" /></label>
 					<label>Comments List <input type="text" /></label>

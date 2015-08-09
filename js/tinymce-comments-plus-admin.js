@@ -18,11 +18,6 @@ var tcp = tcp || {};
 
 	window.cl = console.dir.bind( console );
 
-	function isNumber( str ) {
-	    var n = ~~Number( str );
-	    return String( n ) === str && n >= 0;
-	}
-
 	if ( typeof tcpGlobals != 'undefined' ) {
 		tcpGlobals = JSON.parse( tcpGlobals );
 	}
@@ -84,16 +79,18 @@ var tcp = tcp || {};
 			this.$output = this.$el.find( 'output' );
 			this.nonce = this.$input.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
-			this.changeExpiration( false );
+			this.trigger( 'changeExpiration', false );
 		},
 
 		changeExpiration: function( event ) {
 			if ( event ) { this.expiration = event.currentTarget.value; }
 			else { this.expiration = this.$input.val(); }
-			if ( ! isNumber( this.expiration ) ) { this.expiration = 1; } // overwrite invalid inputs
+			if ( ! _.isNumber( this.expiration ) ) { this.expiration = 1; } // overwrite invalid inputs
 
 			var expire = this.expiration * 1000 * 60;
-			if ( this.expiration == this.$input.attr( 'max' ) ) { this.$output.val( 'Always' ); }
+			if ( this.expiration == this.$input.attr( 'max' ) ) {
+				this.$output.text( 'Always' );
+			}
 			else { this.$output.text( humanizeDuration( expire ) ); }
 		},
 
@@ -116,22 +113,23 @@ var tcp = tcp || {};
 			'click input[type="button"]': 'toggleList'
 		},
 
-		toggleList: function() {
+		initialize: function() {
 			this.$input = this.$el.find( 'input[type=button]' );
 			this.$box = this.$el.find( '.box' );
 			this.nonce = this.$input.data( 'tcp-nc' );
-			this.listOpen = ( this.$box.is( ':visible' ) ? 'no' : 'yes' );
+			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
+		},
+
+		toggleList: function() {
+			this.listOpen = ( this.listOpen == 'yes' ? 'no' : 'yes' );
+			this.$input.val( ( this.listOpen == 'yes' ? 'Hide' : 'Show' ) );
 			this.$box.slideToggle();
 
 			this.model.set( 'security', this.nonce );
 			this.model.set( 'action', tcpGlobals.customClassesOpenAction );
 			this.model.set( 'content', this.listOpen );
 
-			tcp.ajaxSaveOption( this.model.toJSON() )
-			.done( function( response ) {
-				self.$input.val( ( this.listOpen == 'no' ? 'Show' : 'Hide' ) );
-			});
-
+			tcp.ajaxSaveOption( this.model.toJSON() );
 		}
 	});
 
@@ -140,24 +138,23 @@ var tcp = tcp || {};
 			'click input[type="button"]': 'toggleList'
 		},
 
-		toggleList: function() {
-			var self = this;
+		initialize: function() {
 			this.$input = this.$el.find( 'input[type=button]' );
 			this.$box = this.$el.find( '.box' );
 			this.nonce = this.$input.data( 'tcp-nc' );
-			this.listOpen = ( this.$box.is( ':visible' ) ? 'no' : 'yes' );
+			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
+		},
+
+		toggleList: function() {
+			this.listOpen = ( this.listOpen == 'yes' ? 'no' : 'yes' );
+			this.$input.val( ( this.listOpen == 'yes' ? 'Hide' : 'Show' ) );
 			this.$box.slideToggle();
-			this.$input.val( ( this.listOpen == 'no' ? 'Show' : 'Hide' ) );
 
 			this.model.set( 'security', this.nonce );
 			this.model.set( 'action', tcpGlobals.wordpressIdsOpenAction );
 			this.model.set( 'content', this.listOpen );
 
-			tcp.ajaxSaveOption( this.model.toJSON() )
-			.done( function( response ) {
-				self.$input.val( ( this.listOpen == 'no' ? 'Show' : 'Hide' ) );
-			});
-
+			tcp.ajaxSaveOption( this.model.toJSON() );
 		}
 	});
 
