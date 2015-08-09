@@ -4,7 +4,7 @@
     width: 48%;
     display: inline-block;
     margin: 10px 1% 0 0;
-    padding: 15px;
+    padding: 1em;
     vertical-align: top;
     background: #fafafa;
     box-sizing: border-box;
@@ -12,7 +12,7 @@
     border-radius: 5px; }
     .tcp-settings .tcp-option fieldset p {
       display: inline-block;
-      margin: 0 20px 0 0;
+      margin: 0 1em 0 0;
       font-size: 1.05em;
       font-weight: normal; }
     .tcp-settings .tcp-option fieldset input {
@@ -49,8 +49,13 @@
       .tcp-settings .tcp-option fieldset .expiration-control > output {
         margin: 0.35em 1em 0 0;
         display: inline-block; }
-    .tcp-settings .tcp-option fieldset .editing-control > output {
-      margin-top: 0; }
+      .tcp-settings .tcp-option fieldset .editing-control > label,
+      .tcp-settings .tcp-option fieldset .expiration-control > label {
+        margin-right: 1em; }
+    .tcp-settings .tcp-option fieldset .editing-control {
+      margin-top: .25em; }
+      .tcp-settings .tcp-option fieldset .editing-control > output {
+        margin-top: 0; }
 
 @media only screen and (max-width: 1224px) {
   .tcp-settings .tcp-option fieldset {

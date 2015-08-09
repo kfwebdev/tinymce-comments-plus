@@ -42,15 +42,21 @@ var tcp = tcp || {};
 
 	tcp.editingEnabled = Backbone.View.extend({
 		events: {
-			'click input[type="checkbox"]': 'editingEnabled'
+			'click input[type="checkbox"]': 'editingEnabled',
+			'click label': 'editingEnabled'
 		},
 
 		editingEnabled: function( event ) {
 			var self = this;
 			this.$input = this.$el.find( 'input[type=checkbox]' );
-			this.$output = this.$el.find( 'output' );
-			this.$p = this.$el.find( 'p' );
-			this.nonce = this.$input.data( 'tcp-nc' ),
+			this.$label = this.$el.find( 'label' );
+			this.nonce = this.$input.data( 'tcp-nc' );
+
+			// Toggle check box if click element is label
+			if ( event.currentTarget == this.$label[0] ) {
+				this.$input.prop( 'checked', ( this.$input.is( ':checked' ) ? false : true ) );
+			}
+
 			this.checkValue = ( this.$input.is( ':checked' ) ? 'on' : 'off' );
 
 			this.model.set( 'security', this.nonce );
@@ -59,7 +65,7 @@ var tcp = tcp || {};
 
 			tcp.ajaxSaveOption( this.model.toJSON() )
 			.done( function( response ) {
-				self.$output.text( ( self.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
+				self.$label.text( ( self.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
 			});
 		}
 	});
@@ -88,7 +94,7 @@ var tcp = tcp || {};
 			if ( ! _.isNumber( this.expiration ) ) { this.expiration = 1; } // overwrite invalid inputs
 
 			var expire = this.expiration * 1000 * 60;
-			if ( this.expiration == this.$input.attr( 'max' ) ) {
+			if ( this.expiration == this.$input.prop( 'max' ) ) {
 				this.$output.text( 'Always' );
 			}
 			else { this.$output.text( humanizeDuration( expire ) ); }

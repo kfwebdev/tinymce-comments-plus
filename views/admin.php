@@ -26,8 +26,8 @@
 				<legend>Comment Editing</legend>
 				<p>Allow users to edit comments after they post.</p>
 				<div class="editing-control">
-					<output><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></output>
-					<input type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
+					<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
+					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
 				</div>
 			</fieldset>
 			<fieldset class="comment-expiration">

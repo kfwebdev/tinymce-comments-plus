@@ -6,7 +6,7 @@
             width: 48%;
             display: inline-block;
             margin: 10px 1% 0 0;
-            padding: 15px;
+            padding: 1em;
             vertical-align: top;
             background: #fafafa;
             box-sizing: border-box;
@@ -15,7 +15,7 @@
 
             p {
                 display: inline-block;
-                margin: 0 20px 0 0;
+                margin: 0 1em 0 0;
                 font-size: 1.05em;
                 font-weight: normal;
             }
@@ -70,9 +70,15 @@
                     margin: .35em 1em 0 0;
                     display: inline-block;
                 }
+
+                & > label {
+                    margin-right: 1em;
+                }
             }
 
             .editing-control {
+                margin-top: .25em;
+
                 & > output {
                     margin-top: 0;
                 }
