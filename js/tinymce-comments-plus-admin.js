@@ -79,7 +79,7 @@ var tcp = tcp || {};
 			this.$output = this.$el.find( 'output' );
 			this.nonce = this.$input.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
-			this.trigger( 'changeExpiration', false );
+			this.changeExpiration( false );
 		},
 
 		changeExpiration: function( event ) {
