@@ -44,6 +44,39 @@
 			</fieldset>
 		</div>
 		<div class="tcp-option">
+			<fieldset class="customize-buttons">
+				<?php
+					$nonce = wp_create_nonce( ajax_action_custom_classes_open );
+					$classes_option = get_option( ajax_action_custom_classes_open );
+				?>
+				<legend>Customize TinyMCE Buttons</legend>
+				<p>Configure buttons on TinyMCE toolbar rows.</p>
+
+				<div>
+					<div>Toolbar row 1</div>
+					<div>Toolbar row 2</div>
+					<div>Toolbar row 3</div>
+					<div>Toolbar row 4</div>
+				</div>
+			</fieldset>
+			<fieldset class="wordpress-ids">
+				<?php
+					$nonce = wp_create_nonce( ajax_action_wordpress_ids_open );
+					$ids_option = get_option( ajax_action_wordpress_ids_open );
+				?>
+				<legend>WordPress IDs</legend>
+				<p>Some themes may use different element IDs for comments.</p>
+				<input type="button" value="<?php if ( $ids_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
+
+				<div class="box <?php if ( $ids_option == 'yes' ) { ?>show<?php } ?>">
+					<label>Comments List <input type="text" /></label>
+					<label>Comments List <input type="text" /></label>
+					<label>Comments List <input type="text" /></label>
+				</div>
+
+			</fieldset>
+		</div>
+		<div class="tcp-option">
 			<fieldset class="custom-classes">
 				<?php
 					$nonce = wp_create_nonce( ajax_action_custom_classes_open );
