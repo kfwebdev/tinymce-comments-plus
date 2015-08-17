@@ -85,6 +85,17 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
 		define( tcp_prefix . 'buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
 
+		// CSS Classes
+		define( 'tcp_css_prefix', tcp_prefix . 'css_' );
+		define( 'tcp_id_prefix', tcp_prefix . 'id_' );
+		define( tcp_css_prefix . 'button_class', 'tcp-button' );
+		define( tcp_css_prefix . 'edit_button_class', 'tcp-edit-comment' );
+		define( tcp_css_prefix . 'reply_button_class', 'tcp-reply-comment' );
+		define( tcp_css_prefix . 'submit_button_class', 'tcp-submit-comment' );
+		define( tcp_css_prefix . 'submit_edit_button_class', 'tcp-submit-edit' );
+		define( tcp_css_prefix . 'cancel_edit_button_class', 'tcp-cancel-edit' );
+		define( tcp_css_prefix . 'comment_reply_button_class', 'comment-reply-link' );
+		define( tcp_id_prefix . 'cancel_comment_reply_id', 'cancel-comment-reply-link' );
 
 		$this->tcp_admin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
@@ -100,10 +111,22 @@ class TinyMCECommentsPlus {
 			'optionUpdateDelay' => ajax_action_option_update_delay,
 			'addCommentAction' => ajax_action_add_comment,
 			'updateCommentAction' => ajax_action_update_comment,
+
+			// Classes
+			'cssButton' => tcp_css_button_class,
+			'cssEditButton' => tcp_css_edit_button_class,
+			'cssReplyButton' => tcp_css_reply_button_class,
+			'cssSubmitButton' => tcp_css_submit_button_class,
+			'cssSubmitEditButton' => tcp_css_submit_edit_button_class,
+			'cssCancelEditButton' => tcp_css_cancel_edit_button_class,
+			'cssCancelEditButton' => tcp_css_cancel_edit_button_class,
+			'cssCommentReplyButton' => tcp_css_comment_reply_button_class,
+			// IDs
+			'idCancelCommentReply' => tcp_id_cancel_comment_reply_id,
 		);
 
-		$this->tcp_plugin_javascript_globals['commentFormSpan'] = '#tcpCommentFormSpan';
-		$this->tcp_plugin_javascript_globals['commentsList'] = '#comments';
+		$this->tcp_plugin_javascript_globals[ 'commentFormSpan' ] = '#tcpCommentFormSpan';
+		$this->tcp_plugin_javascript_globals[ 'commentsList' ] = '#comments';
 
 
 		// Load plugin text domain
@@ -562,7 +585,7 @@ class TinyMCECommentsPlus {
 			current_user_can( 'administrator' ) ) {
 			$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
 
-			$tcp_reply_link = '<a href="javascript:void(0);" class="tcp-edit-comment comment-reply-link" data-tcp-post-id="' . $post->ID. '" ';
+			$tcp_reply_link = '<a href="javascript:void(0);" class="' . tcp_css_button_class . ' ' . tcp_css_edit_button_class . '" data-tcp-post-id="' . $post->ID. '" ';
 			$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
 
 			$args[ 'before' ] .= $tcp_reply_link;

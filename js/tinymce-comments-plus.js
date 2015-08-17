@@ -35,14 +35,17 @@ var tcp = tcp || {};
 			this.commentId = this.model.get( 'commentId' );
 		},
 
-		events: {
-			'click .tcp-submit-edit' : 'submitEdit',
-			'click .tcp-cancel-edit' : 'cancelEdit'
+		events: function() {
+			var _events = {};
+			_events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = 'submitEdit';
+			_events[ 'click .' + tcpGlobals.cssCancelEditButton ] = 'cancelEdit';
+
+			return _events;
 		},
 
 		template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-		'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="tcp-submit-edit comment-reply-link">Submit</a> ' +
-		'<a href="javascript:void(0);" class="tcp-cancel-edit comment-reply-link">Cancel</a></div>'),
+		'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssEditButton + '">Submit</a> ' +
+		'<a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssCancelEditButton + '">Cancel</a></div>'),
 
 		render: function() {
 			var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
@@ -62,7 +65,7 @@ var tcp = tcp || {};
 		submitEdit: function() {
 			var self = this,
 				$spinner = this.$el.find( '.spinner' ),
-				$editLink = this.$el.find( '.tcp-submit-edit' ),
+				$editLink = this.$el.find( '.' + tcpGlobals.cssSubmitEditButton ),
 				tinymceContent = tinymce.get( 'tcpCommentEditor' + this.commentId ).getContent(),
 				$content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
 
@@ -71,7 +74,7 @@ var tcp = tcp || {};
 
 			$spinner.show();
 			$editLink.text( 'Submitting' );
-			this.events[ 'click .tcp-submit-edit' ] = undefined;
+			this.events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = undefined;
 			this.delegateEvents( this.events );
 
 			var $commentPost = $.ajax({
@@ -89,7 +92,7 @@ var tcp = tcp || {};
 			})
 			.then( function(){
 				$spinner.hide();
-				self.events[ 'click .tcp-submit-edit' ] = 'submitEdit';
+				self.events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = 'submitEdit';
 				self.delegateEvents( this.events );
 			});
 		},
@@ -109,9 +112,13 @@ var tcp = tcp || {};
 
 
 	tcp.RespondView = Backbone.View.extend({
-		events: {
-			'click a#cancel-comment-reply-link' : 'resetEditors',
-			'submit': 'submitForm'
+		events: function() {
+			var _events = {};
+
+			_events[ 'click #' + tcpGlobals.idCancelCommentReply ] = 'resetEditors';
+			_events[ 'submit' ] = 'submitForm';
+
+			return _events;
 		},
 
 		initialize: function() {
@@ -138,7 +145,7 @@ var tcp = tcp || {};
 				data: this.$commentForm.serialize()
 			})
 			.done( function( data ){
-				self.$el.find( '#cancel-comment-reply-link' ).click();
+				self.$el.find( '#' + tcpGlobals.idCancelCommentReply ).click();
 				tinyMCE.activeEditor.setContent('');
 				tcp.resetEditors();
 
@@ -180,10 +187,17 @@ var tcp = tcp || {};
 
 
 	tcp.CommentsView = Backbone.View.extend({
-		events: {
-			'click .comment-reply-link' : 'resetEditors',
-			'click #cancel-comment-reply-link' : 'resetEditors',
-			'click .tcp-edit-comment' : 'editComment'
+		events: function() {
+			var _events = {};
+			_events[ 'click .' + tcpGlobals.cssEditButton ] = 'resetEditors';
+			_events[ 'click #' + tcpGlobals.idCancelCommentReply ] = 'resetEditors';
+			_events[ 'click .' + tcpGlobals.cssEditButton ] = 'editComment';
+
+			return _events;
+		},
+
+		initialize: function() {
+			this.$el.find( '.' + tcpGlobals.cssCommentReplyButton ).addClass( tcpGlobals.cssButton );
 		},
 
 		resetEditors: function() {
@@ -191,32 +205,32 @@ var tcp = tcp || {};
 		},
 
 		editComment: function( event ) {
-				var $editLink = $( event.currentTarget ),
-					postId = $editLink.attr( 'data-tcp-post-id' ),
-					commentId = $editLink.attr( 'data-tcp-comment-id' ),
-					editElement = 'tcpEditComment' + commentId,
-					nonce = $editLink.attr( 'data-tcp-nc' );
+			var $editLink = $( event.currentTarget ),
+				postId = $editLink.attr( 'data-tcp-post-id' ),
+				commentId = $editLink.attr( 'data-tcp-comment-id' ),
+				editElement = 'tcpEditComment' + commentId,
+				nonce = $editLink.attr( 'data-tcp-nc' );
 
-				if ( $editLink.length &&
-					 parseInt( postId ) > 0 &&
-					 parseInt( commentId ) > 0 ) {
-					$editLink.before('<div id="' + editElement + '" class="tcp-comment-editor"></div>');
+			if ( $editLink.length &&
+				 parseInt( postId ) > 0 &&
+				 parseInt( commentId ) > 0 ) {
+				$editLink.before('<div id="' + editElement + '" class="tcp-comment-editor"></div>');
 
-					var	editModel = new tcp.EditModel({
-								action: tcpGlobals.updateCommentAction,
-								security: nonce,
-								postId: postId,
-								commentId: commentId
-						}),
-						editView = new tcp.EditView({
-							el: '#' + editElement,
-							model: editModel
-					});
+				var	editModel = new tcp.EditModel({
+						action: tcpGlobals.updateCommentAction,
+						security: nonce,
+						postId: postId,
+						commentId: commentId
+					}),
+					editView = new tcp.EditView({
+						el: '#' + editElement,
+						model: editModel
+				});
 
-					$( '#comment-' + commentId + ' .tcp-comment-content[data-tcp-comment-id=' + commentId + ']' ).after( editView.render().el );
-					tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' + commentId );
-					$editLink.hide();
-				}
+				$( '#comment-' + commentId + ' .tcp-comment-content[data-tcp-comment-id=' + commentId + ']' ).after( editView.render().el );
+				tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' + commentId );
+				$editLink.hide();
+			}
 		}
 	}); /* /tcp.CommentsView */
 
