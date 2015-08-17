@@ -53,10 +53,10 @@
 				<p>Configure buttons on TinyMCE toolbar rows.</p>
 
 				<div>
-					<div>Toolbar row 1</div>
-					<div>Toolbar row 2</div>
-					<div>Toolbar row 3</div>
-					<div>Toolbar row 4</div>
+					<div>Toolbar row 1 <input type="text"></div>
+					<div>Toolbar row 2 <input type="text"></div>
+					<div>Toolbar row 3 <input type="text"></div>
+					<div>Toolbar row 4 <input type="text"></div>
 				</div>
 			</fieldset>
 			<fieldset class="wordpress-ids">

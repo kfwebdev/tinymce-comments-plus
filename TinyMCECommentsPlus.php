@@ -157,15 +157,17 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_ajax_nopriv_' . ajax_action_wordpress_ids_open, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . ajax_action_wordpress_ids_open, array( $this, 'action_ajax_request' ) );
 
-		add_action( 'comment_form', array( $this, 'action_comment_form' ), 11 );
+		add_action( 'comment_form', array( $this, 'action_comment_form' ), 999 );
 
 		// Define custom functionality.
-		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 11 );
-		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
-		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
-		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 11 );
-		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
-		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 11, 2 );
+		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 999 );
+		add_filter( 'mce_buttons', array( $this, 'filter_tinymce_buttons_1' ), 999, 2 );
+		add_filter( 'mce_buttons_2', array( $this, 'filter_tinymce_buttons_2' ), 999 );
+		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 999 );
+		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 999 );
+		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 999 );
+		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 999, 3 );
+		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 999, 2 );
 	}
 
 	/**
@@ -486,8 +488,51 @@ class TinyMCECommentsPlus {
 	}
 
 
+	/**
+	 * @since    1.0.0
+	 */
+	 public function filter_tinymce_buttons_1( $buttons, $editor_id ) {
+	 	$buttons = array();
+		$buttons[] = 'bold';
+		$buttons[] = 'italic';
+		$buttons[] = 'strikethrough';
+		$buttons[] = 'bullist';
+		$buttons[] = 'numlist';
+		$buttons[] = 'blockquote';
+		$buttons[] = 'hr';
+		$buttons[] = 'alignleft';
+		$buttons[] = 'aligncenter';
+		$buttons[] = 'alignright';
+		$buttons[] = 'image';
+		$buttons[] = 'link';
+		$buttons[] = 'unlink';
+		$buttons[] = 'wp_more';
+		$buttons[] = 'spellchecker';
+		$buttons[] = 'wp_adv';
 
+	 	return $buttons;
+	 }
 
+	/**
+	 * @since    1.0.0
+	 */
+	 public function filter_tinymce_buttons_2( $buttons ) {
+	 	$buttons = array();
+		$buttons[] = 'formatselect';
+		$buttons[] = 'underline';
+		$buttons[] = 'alignjustify';
+		$buttons[] = 'forecolor';
+		$buttons[] = 'pastetext';
+		$buttons[] = 'removeformat';
+		$buttons[] = 'charmap';
+		$buttons[] = 'outdent';
+		$buttons[] = 'indent';
+		$buttons[] = 'undo';
+		$buttons[] = 'redo';
+		$buttons[] = 'wp_help';
+
+	 	return $buttons;
+	 }
 
 	/**
 	 * @since    1.0.0
@@ -499,6 +544,7 @@ class TinyMCECommentsPlus {
 	 	$args['accessibility_focus'] = true;
 	 	$args['tabfocus_elements'] = 'major-publishing-actions';
 	 	$args['media_strict'] = false;
+	 	$args['paste_data_images'] = true;
 	 	$args['paste_remove_styles'] = false;
 	 	$args['paste_remove_spans'] = false;
 	 	$args['paste_strip_class_attributes'] = 'none';
