@@ -9,6 +9,7 @@
 
 var tcp = tcp || {};
 
+
 ( function ( $ ) {
 	'use strict';
 
@@ -113,6 +114,12 @@ var tcp = tcp || {};
 			'submit': 'submitForm'
 		},
 
+		initialize: function() {
+			this.$commentForm = this.$el.find( 'form' );
+			this.$textArea = this.$el.find( 'textarea' );
+			tcp.resetEditors();
+		},
+
 		resetEditors: function() {
 			tcp.resetEditors();
 		},
@@ -123,23 +130,32 @@ var tcp = tcp || {};
 			var self = this,
 			content = tinyMCE.activeEditor.getContent();
 
-			$tcpCommentTextArea.html( content );
+			this.$textArea.html( content );
 
 			$.ajax({
-				url: $tcpCommentForm.attr( 'action' ),
+				url: this.$commentForm.attr( 'action' ),
 				type: 'post',
-				data: $tcpCommentForm.serialize()
+				data: this.$commentForm.serialize()
 			})
 			.done( function( data ){
 				self.$el.find( '#cancel-comment-reply-link' ).click();
 				tinyMCE.activeEditor.setContent('');
 				tcp.resetEditors();
 
-				var $comments = $( data ).find( $tcpCommentsList.selector );
+				var
+					$commentData = $( data ).find( tcpGlobals.commentsList )
+					$commentsList = $( tcpGlobals.commentsList );
+				;
+
 				if ( $comments.length ) {
 
 					// replace #comments element with data response #comments element
-					$tcpCommentsList.replaceWith( $comments );
+					$commentsList.replaceWith( $commentData );
+
+					tcp.views.comments = new tcp.CommentsView({
+						el: $( tcpGlobals.commentsList )
+					});
+
 					// restore tinymce editor to refreshed reply form
 					tcp.resetEditors();
 
@@ -204,6 +220,8 @@ var tcp = tcp || {};
 		}
 	}); /* /tcp.CommentsView */
 
+
+	// Reset tinymce editors
 	tcp.resetEditors = function() {
 		// Remove old textarea tinyMCE editor instance
 		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
@@ -214,20 +232,17 @@ var tcp = tcp || {};
 	};
 
 
-	var
-		$tcpCommentForm = $( '#tcpCommentFormSpan' ).parent(),
-		$tcpCommentTextArea = $tcpCommentForm.find( 'textarea' ),
-		$tcpCommentRespond = $tcpCommentForm.parent(),
-		$tcpCommentsList = $( '#comments' );
-	;
+	// Instantiate views on document ready
+	$( function() {
+		tcp.views = {};
 
-	new tcp.CommentsView({
-		el: $tcpCommentsList
-	});
+		tcp.views.comments = new tcp.CommentsView({
+			el: $( tcpGlobals.commentsList )
+		});
 
-	new tcp.RespondView({
-		el: $tcpCommentRespond
-	});
-
+		tcp.views.respond = new tcp.RespondView({
+			el: $( tcpGlobals.commentFormSpan ).parent().parent()
+		});
+	} );
 
 }( jQuery ) );

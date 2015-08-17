@@ -72,17 +72,18 @@ class TinyMCECommentsPlus {
 	private function __construct() {
 
 		define( 'tcp_prefix', 'tcp_' );
-		define( 'tcp_javascript_globals', 'tcpGlobals' );
-		define( 'ajax_action_option_update_delay', 2000 );
-		define( 'ajax_action_add_comment', tcp_prefix . 'add_comment' );
-		define( 'ajax_action_update_comment', tcp_prefix . 'update_comment' );
-		define( 'ajax_action_editing_enabled', tcp_prefix . 'editing_enabled' );
-		define( 'ajax_action_editing_expiration', tcp_prefix . 'editing_expiration' );
-		define( 'ajax_action_custom_classes_open', tcp_prefix . 'custom_classes_open' );
-		define( 'ajax_action_wordpress_ids_open', tcp_prefix . 'wordpress_ids_open' );
+		define( tcp_prefix . 'javascript_globals', 'tcpGlobals' );
+		define( tcp_prefix . 'ajax_action_prefix', 'ajax_action_' );
+		define( tcp_ajax_action_prefix . 'option_update_delay', 2000 );
+		define( tcp_ajax_action_prefix . 'add_comment', tcp_prefix . 'add_comment' );
+		define( tcp_ajax_action_prefix . 'update_comment', tcp_prefix . 'update_comment' );
+		define( tcp_ajax_action_prefix . 'editing_enabled', tcp_prefix . 'editing_enabled' );
+		define( tcp_ajax_action_prefix . 'editing_expiration', tcp_prefix . 'editing_expiration' );
+		define( tcp_ajax_action_prefix . 'custom_classes_open', tcp_prefix . 'custom_classes_open' );
+		define( tcp_ajax_action_prefix . 'wordpress_ids_open', tcp_prefix . 'wordpress_ids_open' );
 
-		define( 'tcp_buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
-		define( 'tcp_buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
+		define( tcp_prefix . 'buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
+		define( tcp_prefix . 'buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
 
 
 		$this->tcp_admin_javascript_globals = array(
@@ -101,6 +102,9 @@ class TinyMCECommentsPlus {
 			'updateCommentAction' => ajax_action_update_comment,
 		);
 
+		$this->tcp_plugin_javascript_globals['commentFormSpan'] = '#tcpCommentFormSpan';
+		$this->tcp_plugin_javascript_globals['commentsList'] = '#comments';
+
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
@@ -116,6 +120,7 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+		// Ajax methods
 		add_action( 'wp_ajax_nopriv_' . ajax_action_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . ajax_action_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . ajax_action_update_comment, array( $this, 'action_ajax_request' ) );
@@ -131,7 +136,7 @@ class TinyMCECommentsPlus {
 
 		add_action( 'comment_form', array( $this, 'action_comment_form' ), 11 );
 
-		// Define custom functionality. Read more about actions and filters: http://codex.wordpress.org/Plugin_API#Hooks.2C_Actions_and_Filters
+		// Define custom functionality.
 		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 11 );
 		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 11 );
 		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 11 );
@@ -232,7 +237,7 @@ class TinyMCECommentsPlus {
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
 			wp_enqueue_script( $this->plugin_slug . "-humanize-duration", plugins_url( "js/humanize-duration.js", __FILE__) );
 			wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js" );
-			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 		}
@@ -258,8 +263,8 @@ class TinyMCECommentsPlus {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array() );
-		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
-
+		// wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
+		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
 	}
 
@@ -269,8 +274,8 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function add_plugin_admin_menu() {
-		$this->plugin_screen_hook_suffix = add_options_page(__("TinyMCE Comments Plus - Settings", $this->plugin_slug),
-			__("TinyMCE Comments Plus", $this->plugin_slug), "read", $this->plugin_slug, array($this, "display_plugin_admin_page"));
+		$this->plugin_screen_hook_suffix = add_options_page( __( "TinyMCE Comments Plus - Settings", $this->plugin_slug ),
+			__( "TinyMCE Comments Plus", $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
 	}
 
 	/**
@@ -536,7 +541,12 @@ class TinyMCECommentsPlus {
 		$comment_id = $comment->comment_ID;
 		$post_id = $comment->comment_post_ID;
 
-		$tcp_content = sprintf( '<div class="tcp-comment-content" data-tcp-post-id="%d" data-tcp-comment-id="%d">%s</div>', $post_id, $comment_id, $content );
+		$tcp_content = sprintf(
+			'<div class="tcp-comment-content" data-tcp-post-id="%d" data-tcp-comment-id="%d">%s</div>',
+			$post_id,
+			$comment_id,
+			$content
+		);
 
 		return $tcp_content;
 	}
