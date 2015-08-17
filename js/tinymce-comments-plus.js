@@ -124,6 +124,7 @@ var tcp = tcp || {};
 		initialize: function() {
 			this.$commentForm = this.$el.find( 'form' );
 			this.$textArea = this.$el.find( 'textarea' );
+			this.$commentForm.find( 'input[type=submit]' ).addClass( tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitButton )
 			tcp.resetEditors();
 		},
 
