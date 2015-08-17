@@ -164,25 +164,26 @@ var tcp = tcp || {};
 		}
 	});
 
+	$( function() {
+		new tcp.editingEnabled({
+			el: $( '.tcp-option .comment-editing' ),
+			model: new tcp.ajaxModel
+		});
 
-	new tcp.editingEnabled({
-		el: $( '.tcp-option .comment-editing' ),
-		model: new tcp.ajaxModel
-	});
+		new tcp.adjustExpiration({
+			el: $( '.tcp-option .comment-expiration' ),
+			model: new tcp.ajaxModel
+		});
 
-	new tcp.adjustExpiration({
-		el: $( '.tcp-option .comment-expiration' ),
-		model: new tcp.ajaxModel
-	});
+		new tcp.customClasses({
+			el: $( '.tcp-option .custom-classes' ),
+			model: new tcp.ajaxModel
+		});
 
-	new tcp.customClasses({
-		el: $( '.tcp-option .custom-classes' ),
-		model: new tcp.ajaxModel
-	});
-
-	new tcp.wordpressIds({
-		el: $( '.tcp-option .wordpress-ids' ),
-		model: new tcp.ajaxModel
-	});
+		new tcp.wordpressIds({
+			el: $( '.tcp-option .wordpress-ids' ),
+			model: new tcp.ajaxModel
+		});
+	} );
 
 }( jQuery ) );
