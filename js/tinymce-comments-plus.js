@@ -151,11 +151,11 @@ var tcp = tcp || {};
 				tcp.resetEditors();
 
 				var
-					$commentData = $( data ).find( tcpGlobals.commentsList )
-					$commentsList = $( tcpGlobals.commentsList );
+					$commentData = $( data ).find( tcpGlobals.commentsList ),
+					$commentsList = $( tcpGlobals.commentsList )
 				;
 
-				if ( $comments.length ) {
+				if ( $commentData.length ) {
 
 					// replace #comments element with data response #comments element
 					$commentsList.replaceWith( $commentData );
