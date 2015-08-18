@@ -125,7 +125,7 @@ var tcp = tcp || {};
 			this.$commentForm = this.$el.find( 'form' );
 			this.$textArea = this.$el.find( 'textarea' );
 			this.$commentForm.find( 'input[type=submit]' ).addClass( tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitButton )
-			tcp.resetEditors();
+			// tcp.resetEditors();
 		},
 
 		resetEditors: function() {
@@ -191,7 +191,7 @@ var tcp = tcp || {};
 		events: function() {
 			var _events = {};
 			_events[ 'click .' + tcpGlobals.cssEditButton ] = 'resetEditors';
-			_events[ 'click #' + tcpGlobals.idCancelCommentReply ] = 'resetEditors';
+			_events[ 'click .' + tcpGlobals.cssCommentReplyButton ] = 'resetEditors';
 			_events[ 'click .' + tcpGlobals.cssEditButton ] = 'editComment';
 
 			return _events;
