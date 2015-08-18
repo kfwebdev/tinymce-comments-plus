@@ -47,6 +47,10 @@
                 &.show {
                     display: block;
                 }
+
+                & > label {
+                    display: block;
+                }
             }
 
             .editing-control,

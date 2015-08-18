@@ -44,7 +44,7 @@ var tcp = tcp || {};
 		},
 
 		template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-		'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssEditButton + '">Submit</a> ' +
+		'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitEditButton + '">Submit</a> ' +
 		'<a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssCancelEditButton + '">Cancel</a></div>'),
 
 		render: function() {

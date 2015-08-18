@@ -59,14 +59,14 @@
 					<div>Toolbar row 4 <input type="text"></div>
 				</div>
 			</fieldset>
-			<fieldset class="wordpress-ids">
+			<fieldset class="empty">
 				<?php
 					$nonce = wp_create_nonce( ajax_action_wordpress_ids_open );
-					$ids_option = get_option( ajax_action_wordpress_ids_open );
+					$empty_option = get_option( ajax_action_wordpress_ids_open );
 				?>
-				<legend>WordPress IDs</legend>
-				<p>Some themes may use different element IDs for comments.</p>
-				<input type="button" value="<?php if ( $ids_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
+				<legend>Empty</legend>
+				<p>Empty Description.</p>
+				<input type="button" value="<?php if ( $empty_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
 
 				<div class="box <?php if ( $ids_option == 'yes' ) { ?>show<?php } ?>">
 					<label>Comments List <input type="text" /></label>
@@ -87,8 +87,11 @@
 				<input type="button" value="<?php if ( $classes_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
 
 				<div class="box <?php if ( $classes_option == 'yes' ) { ?>show<?php } ?>">
-					<label>Comments List <input type="text" /></label>
-					<label>Comments List <input type="text" /></label>
+					<label>TCP Button .tcp-button <input type="text" /></label>
+					<label>TCP Edit Button .tcp-edit-comment <input type="text" /></label>
+					<label>Reply Button .comment-reply-link <input type="text" /></label>
+					<label>TCP Submit Edit .tcp-submit-edit <input type="text" /></label>
+					<label>TCP Cancel Edit .tcp-cancel-edit <input type="text" /></label>
 				</div>
 
 			</fieldset>
@@ -103,8 +106,13 @@
 
 				<div class="box <?php if ( $ids_option == 'yes' ) { ?>show<?php } ?>">
 					<label>Comments List <input type="text" /></label>
-					<label>Comments List <input type="text" /></label>
-					<label>Comments List <input type="text" /></label>
+					<label>Comment ID Prefix <input type="text" /></label>
+					<label>Comment <input type="text" /></label>
+					<label>Respond <input type="text" /></label>
+					<label>Comment Form <input type="text" /></label>
+					<label>Comment Reply Link <input type="text" /></label>
+					<label>Cancel Comment Reply Link <input type="text" /></label>
+					<label>Submit Comment <input type="text" /></label>
 				</div>
 
 			</fieldset>
