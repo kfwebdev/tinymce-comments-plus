@@ -82,8 +82,9 @@ class TinyMCECommentsPlus {
 		define( tcp_ajax_action_prefix . 'custom_classes_open', tcp_prefix . 'custom_classes_open' );
 		define( tcp_ajax_action_prefix . 'wordpress_ids_open', tcp_prefix . 'wordpress_ids_open' );
 
-		define( tcp_prefix . 'buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv ' );
-		define( tcp_prefix . 'buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help ' );
+		define( tcp_prefix . 'buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv' );
+		define( tcp_prefix . 'buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help' );
+		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wptextpattern,wpview' );
 
 		// CSS Classes
 		define( 'tcp_css_prefix', tcp_prefix . 'css_' );
@@ -243,6 +244,7 @@ class TinyMCECommentsPlus {
 
 	}
 
+
 	/**
 	 * Register and enqueue admin-specific JavaScript.
 	 *
@@ -287,7 +289,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js", array() );
+		wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js" );
 		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
 		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
@@ -550,7 +552,7 @@ class TinyMCECommentsPlus {
 	 	$args['paste_strip_class_attributes'] = 'none';
 	 	$args['paste_text_use_dialog'] = true;
 	 	$args['wpeditimage_disable_captions'] = true;
-	 	$args['plugins'] = 'tabfocus,paste,fullscreen,wordpress,wplink,wpdialogs,wpfullscreen';
+		$args['plugins'] = tcp_plugins;
 	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
