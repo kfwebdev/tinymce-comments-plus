@@ -65,7 +65,7 @@ var tcp = tcp || {};
 		submitEdit: function() {
 			var self = this,
 				$spinner = this.$el.find( '.spinner' ),
-				$editLink = this.$el.find( '.' + tcpGlobals.cssSubmitEditButton ),
+				$submitEdit = this.$el.find( '.' + tcpGlobals.cssSubmitEditButton ),
 				tinymceContent = tinymce.get( 'tcpCommentEditor' + this.commentId ).getContent(),
 				$content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
 
@@ -73,7 +73,8 @@ var tcp = tcp || {};
 			this.model.set( 'action', tcpGlobals.updateCommentAction );
 
 			$spinner.show();
-			$editLink.text( 'Submitting' );
+			$submitEdit.attr( 'disabled', true );
+			$submitEdit.text( 'Submitting' );
 			this.events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = undefined;
 			this.delegateEvents( this.events );
 
@@ -83,6 +84,8 @@ var tcp = tcp || {};
 				data: this.model.toJSON()
 			})
 			.done( function( data ){
+				$submitEdit.attr( 'disabled', false );
+				$submitEdit.text( 'Submitted' );
 				$content.html( data.comment_content );
 				self.cancelEdit();
 			})
@@ -124,7 +127,8 @@ var tcp = tcp || {};
 		initialize: function() {
 			this.$commentForm = this.$el.find( 'form' );
 			this.$textArea = this.$el.find( 'textarea' );
-			this.$commentForm.find( 'input[type=submit]' ).addClass( tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitButton )
+			this.$submitButton = this.$commentForm.find( 'input[type=submit]' );
+			this.$submitButton.addClass( tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitButton )
 			// tcp.resetEditors();
 		},
 
@@ -136,9 +140,12 @@ var tcp = tcp || {};
 			event.preventDefault();
 
 			var self = this,
-			content = tinyMCE.activeEditor.getContent();
+				content = tinyMCE.activeEditor.getContent(),
+				submitText = this.$submitButton.val();
 
 			this.$textArea.html( content );
+			this.$submitButton.val( 'Posting...' );
+			this.$submitButton.attr( 'disabled', true );
 
 			$.ajax({
 				url: this.$commentForm.attr( 'action' ),
@@ -147,6 +154,8 @@ var tcp = tcp || {};
 			})
 			.done( function( data ){
 				self.$el.find( '#' + tcpGlobals.idCancelCommentReply ).click();
+				self.$submitButton.attr( 'disabled', false );
+				self.$submitButton.val( submitText );
 				tinyMCE.activeEditor.setContent('');
 				tcp.resetEditors();
 
