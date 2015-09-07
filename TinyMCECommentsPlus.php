@@ -244,6 +244,17 @@ class TinyMCECommentsPlus {
 
 	}
 
+	/**
+	 * Register and enqueue public-facing style sheet.
+	 *
+	 * @since    1.0.0
+	 */
+	public function enqueue_styles() {
+		global $wp_version;
+		wp_enqueue_style( $this->plugin_slug . "-plugin-styles", plugins_url( "css/" . $this->plugin_slug . ".css", __FILE__ ) );
+		wp_enqueue_style( $this->plugin_slug . "-dashicons-css", includes_url( "css/dashicons.min.css", __FILE__ ) );
+		wp_enqueue_style( $this->plugin_slug . "-editor-buttons-css", includes_url( "css/editor.min.css", __FILE__ ) );
+	}
 
 	/**
 	 * Register and enqueue admin-specific JavaScript.
@@ -259,11 +270,14 @@ class TinyMCECommentsPlus {
 		}
 
 		$screen = get_current_screen();
+		$livereload = "http://localhost:35729/livereload.js";
+		$headers = @get_headers( $livereload );
+
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
 			wp_enqueue_script( $this->plugin_slug . "-humanize-duration", plugins_url( "js/humanize-duration.js", __FILE__) );
-			wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js" );
+			if ( strpos( $headers[ 0 ], '200' ) ) { wp_enqueue_script( $this->plugin_slug . "-livereload", $livereload ); }
 			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
@@ -272,24 +286,16 @@ class TinyMCECommentsPlus {
 	}
 
 	/**
-	 * Register and enqueue public-facing style sheet.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
-		global $wp_version;
-		wp_enqueue_style( $this->plugin_slug . "-plugin-styles", plugins_url( "css/" . $this->plugin_slug . ".css", __FILE__ ) );
-		wp_enqueue_style( $this->plugin_slug . "-dashicons-css", includes_url( "css/dashicons.min.css", __FILE__ ) );
-		wp_enqueue_style( $this->plugin_slug . "-editor-buttons-css", includes_url( "css/editor.min.css", __FILE__ ) );
-	}
-
-	/**
 	 * Register and enqueues public-facing JavaScript files.
 	 *
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( $this->plugin_slug . "-livereload", "http://localhost:35729/livereload.js" );
+
+		$livereload = "http://localhost:35729/livereload.js";
+		$headers = @get_headers( $livereload );
+
+		if ( strpos( $headers[ 0 ], '200' ) ) { wp_enqueue_script( $this->plugin_slug . "-livereload", $livereload ); }
 		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
 		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
