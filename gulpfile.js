@@ -1,9 +1,11 @@
 'use strict';
 
 var gulp = require( 'gulp' ),
+    gutil = require( 'gulp-util' ),
     sass = require( 'gulp-sass' ),
     babel = require('gulp-babel'),
-    livereload = require( 'gulp-livereload' );
+    livereload = require( 'gulp-livereload' ),
+    Server = require( 'karma' ).Server;
 
 gulp.task( 'scripts', function () {
     gulp.src( './js/*.js' )
@@ -34,3 +36,26 @@ gulp.task( 'watch', function() {
 
 // Default Task
 gulp.task( 'default', [ 'sass', 'watch' ] );
+
+// Testing Task
+gulp.task( 'test', function ( done ) {
+    var server =  new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    });
+
+    server.on( 'browser_error', function ( browser, err ){
+        gutil.log( 'Karma Run Failed: ' + err.message );
+        throw err;
+    });
+
+    server.on( 'run_complete', function ( browsers, results ){
+        if ( results.failed ) {
+            throw new Error( 'Karma: Tests Failed' );
+        }
+        gutil.log( 'Karma Run Complete: No Failures' );
+        done();
+    });
+
+    server.start();
+});
