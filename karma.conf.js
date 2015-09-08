@@ -2,8 +2,11 @@
 module.exports = function( config ) {
   config.set({
     basePath: '',
-    files: [ '**/*-test.js' ],
+    files: [
+        'js/*-test.js'
+    ],
     frameworks: [ 'mocha' ],
-    browsers: [ 'Chrome' ]
+    browsers: [ 'Chrome' ],
+    logLevel: config.LOG_DEBUG
   });
 };

@@ -1,8 +1,11 @@
 {
   "name": "tinymce-comments-plus",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+      
+  },
   "devDependencies": {
+    "chai": "^3.2.0",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.2.1",
     "gulp-livereload": "^3.8.0",
@@ -10,7 +13,8 @@
     "gulp-util": "^3.0.6",
     "humanize-duration": "^3.3.0",
     "karma": "^0.13.9",
+    "karma-mocha": "^0.2.0",
     "karma-chrome-launcher": "^0.2.0",
-    "karma-mocha": "^0.2.0"
+    "karma-firefox-launcher": "^0.1.6"
   }
 }
