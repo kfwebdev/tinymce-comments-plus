@@ -3,10 +3,10 @@ module.exports = function( config ) {
   config.set({
     basePath: '',
     preprocessors: {
-       'js/*-test.js': [ 'browserify' ]
+       '**/__tests__/*.js': [ 'browserify' ]
     },
     files: [
-        'js/*-test.js'
+        '**/__tests__/*.js'
     ],
     frameworks: [ 'mocha', 'browserify' ],
     browsers: [ 'Chrome' ],
