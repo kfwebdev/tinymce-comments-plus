@@ -29,6 +29,7 @@ gulp.task( 'sass', function () {
 gulp.task( 'watch', function() {
     livereload.listen();
     gulp.watch( 'js/*.js', [ 'scripts' ] );
+    gulp.watch( 'components/**/*.js', [ 'scripts' ] );
     gulp.watch( '*.php', [ 'scripts' ] );
     gulp.watch( 'views/*.php', [ 'scripts' ] );
     gulp.watch( 'sass/*.scss', [ 'sass' ] );
