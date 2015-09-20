@@ -7,8 +7,17 @@ var gulp = require( 'gulp' ),
     livereload = require( 'gulp-livereload' ),
     Server = require( 'karma' ).Server;
 
+
 gulp.task( 'scripts', function () {
     gulp.src( './js/*.js' )
+        .pipe( babel() )
+        .pipe( livereload() );
+
+    gulp.src( './components/**/*.js' )
+        .pipe( babel() )
+        .pipe( livereload() );
+
+    gulp.src( './components/**/*.jsx' )
         .pipe( babel() )
         .pipe( livereload() );
 
@@ -19,6 +28,7 @@ gulp.task( 'scripts', function () {
         .pipe( livereload() );
 });
 
+
 gulp.task( 'sass', function () {
     gulp.src( './sass/*.scss' )
         .pipe( sass().on( 'error', sass.logError ) )
@@ -26,17 +36,17 @@ gulp.task( 'sass', function () {
         .pipe( livereload() );
 });
 
+
 gulp.task( 'watch', function() {
     livereload.listen();
     gulp.watch( 'js/*.js', [ 'scripts' ] );
     gulp.watch( 'components/**/*.js', [ 'scripts' ] );
+    gulp.watch( 'components/**/*.jsx', [ 'scripts' ] );
     gulp.watch( '*.php', [ 'scripts' ] );
     gulp.watch( 'views/*.php', [ 'scripts' ] );
     gulp.watch( 'sass/*.scss', [ 'sass' ] );
 });
 
-// Default Task
-gulp.task( 'default', [ 'sass', 'watch' ] );
 
 // Testing Task
 gulp.task( 'test', function ( done ) {
@@ -45,3 +55,7 @@ gulp.task( 'test', function ( done ) {
     singleRun: true
   }, done ).start();
 });
+
+
+// Default Task
+gulp.task( 'default', [ 'sass', 'watch' ] );
