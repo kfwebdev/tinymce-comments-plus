@@ -9,11 +9,11 @@
 
 var tcp = tcp || {};
 
-
 ( function ( $ ) {
 	'use strict';
 
 	window.cl = console.dir.bind( console );
+
 	if ( tcpGlobals.length ) {
 		tcpGlobals = JSON.parse( tcpGlobals );
 	}
