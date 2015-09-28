@@ -20,6 +20,6 @@
     "scripts": {
         "test": "karma start conf/karma.conf.js --single-run",
         "start": "webpack-dev-server --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./dist",
-        "build": "webpack --config conf/webpack.production.js",
+        "build": "webpack --config conf/webpack.production.js"
     }
 }
