@@ -270,8 +270,6 @@ class TinyMCECommentsPlus {
 		}
 
 		$screen = get_current_screen();
-		$livereload = "http://localhost:35729/livereload.js";
-		$headers = @get_headers( $livereload );
 
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
@@ -290,9 +288,6 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
-		$livereload = "http://localhost:35729/livereload.js";
-		$headers = @get_headers( $livereload );
 
 		wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
 		// Instantiate Javascript Globals for plugin script
