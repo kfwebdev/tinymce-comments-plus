@@ -5,7 +5,7 @@ module.exports = function( options ) {
     return {
         entry: './js/tinymce-comments-plus.js',
         output: {
-            path: __dirname + '/js',
+            path: './js',
             publicPath: 'http://localhost:8080/',
             filename: 'bundle.js'
         },
