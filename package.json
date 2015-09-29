@@ -1,6 +1,7 @@
 {
   "name": "tinymce-comments-plus",
   "version": "1.0.0",
+  "loglevel": "verbose",
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.2.0",
