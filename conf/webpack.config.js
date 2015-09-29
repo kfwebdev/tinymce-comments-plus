@@ -3,10 +3,11 @@ module.exports = function( options ) {
         scssLoaders = cssLoaders + '!sass';
 
     return {
-        entry: "./entry.js",
+        entry: './bundle.js',
         output: {
             path: __dirname + '/dist',
-            filename: "bundle.js"
+            publicPath: '',
+            filename: 'bundle.js'
         },
         module: {
             loaders: [

@@ -15,11 +15,11 @@
     "react-hot-loader": "^1.3.0",
     "style-loader": "^0.12.4",
     "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.11.0"
+    "webpack-dev-server": "^1.12.0"
   },
   "scripts": {
     "test": "karma start conf/karma.conf.js --single-run",
-    "start": "webpack-dev-server --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./dist",
+    "start": "webpack-dev-server --config conf/webpack.config.js --hot --progress --colors --inline",
     "build": "webpack --config conf/webpack.production.js"
   }
 }
