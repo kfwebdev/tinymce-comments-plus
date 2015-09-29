@@ -1,7 +1,7 @@
 {
   "name": "tinymce-comments-plus",
   "version": "1.0.0",
-  "loglevel": "verbose",
+  "loglevel": "silly",
   "dependencies": {},
   "devDependencies": {
     "chai": "^3.2.0",
@@ -21,8 +21,8 @@
     "webpack-dev-server": "^1.12.0"
   },
   "scripts": {
-    "test": "karma start conf/karma.conf.js --single-run",
-    "start": "webpack-dev-server --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./",
-    "build": "webpack --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./"
+    "t": "karma start conf/karma.conf.js --single-run",
+    "s": "webpack-dev-server --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./",
+    "b": "webpack --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./"
   }
 }
