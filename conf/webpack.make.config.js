@@ -5,7 +5,7 @@ module.exports = function( options ) {
     return {
         entry: './js/tinymce-comments-plus.js',
         output: {
-            path: './js',
+            path: __dirname + '/../js',
             publicPath: 'http://localhost:8080/',
             filename: 'bundle.js'
         },
@@ -13,16 +13,18 @@ module.exports = function( options ) {
             loaders: [
                 {
                     test: /\.css$/,
-                    loaders: cssLoaders
+                    exclude: /node_modules/,
+                    loader: cssLoaders
                 },
                 {
                     test: /\.scss$/,
-                    loaders: scssLoaders
+                    exclude: /node_modules/,
+                    loader: scssLoaders
                 }
             ]
         },
         resolve: {
-            extensions: ['', '.js', '.jsx', '.sass', '.scss', '.css'],
+            extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ]
         }
     };
 }
