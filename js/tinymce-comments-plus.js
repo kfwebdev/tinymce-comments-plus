@@ -270,3 +270,16 @@ var tcp = tcp || {};
 	} );
 
 }( jQuery ) );
+
+// import React from 'react';
+// import { Component } from 'react';
+//
+// export default class App extends Component {
+//   render() {
+//     return (
+//       <h1>Hello, world.</h1>
+//     );
+//   }
+// }
+//
+// React.render(<App />, document.getElementById('root'));

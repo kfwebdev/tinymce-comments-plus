@@ -1,8 +1,9 @@
 module.exports = function( options ) {
-    var excludePath = '/node_modules/',
-        cssLoaders = 'style!css',
+
+    var cssLoaders = 'style!css',
         scssLoaders = cssLoaders + '!sass',
-        babelLoader = 'babel-loader',
+        babelLoader = 'react-hot!babel-loader',
+        //webpack = require( 'webpack' ),
         ExtractTextPlugin = require("extract-text-webpack-plugin");
 
     function extractLoaders( loaders ) {
@@ -25,22 +26,22 @@ module.exports = function( options ) {
             loaders: [
                 {
                     test: /\.css$/,
-                    exclude: excludePath,
+                    exclude: /node_modules/,
                     loader: cssLoaders
                 },
                 {
                     test: /\.scss$/,
-                    exclude: excludePath,
+                    exclude: /node_modules/,
                     loader: scssLoaders
                 },
                 {
                     test: /\.js$/,
-                    exclude: excludePath,
+                    exclude: /node_modules/,
                     loader: babelLoader
                 },
                 {
                     test: /\.jsx$/,
-                    exclude: excludePath,
+                    exclude: /node_modules/,
                     loader: babelLoader
                 }
             ]
@@ -49,7 +50,8 @@ module.exports = function( options ) {
             extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ]
         },
         plugins: [
-            new ExtractTextPlugin( './css/[name].css' )
+            new ExtractTextPlugin( './css/[name].css' ),
+            //new webpack.HotModuleReplacementPlugin()
         ]
     };
 }

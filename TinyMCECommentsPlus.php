@@ -290,7 +290,7 @@ class TinyMCECommentsPlus {
 	public function enqueue_scripts() {
 
 		// wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
-		wp_enqueue_script( $this->plugin_slug . "-plugin-script", "http://localhost:8080/tinymce-comments-plus-bundle.js", array( 'jquery', 'backbone', 'underscore' ),	$this->version );
+		wp_enqueue_script( $this->plugin_slug . "-plugin-script", "http://localhost:8080/tinymce-comments-plus-bundle.js", array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
 		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
 	}
@@ -354,6 +354,8 @@ class TinyMCECommentsPlus {
 	public function action_comment_form( $post_id ) {
 		// marker for comment form
 		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
+
+		echo '<div id="root"></div>';
 
 		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
 
