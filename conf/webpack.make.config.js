@@ -1,6 +1,17 @@
 module.exports = function( options ) {
     var cssLoaders = 'style!css',
-        scssLoaders = cssLoaders + '!sass';
+        scssLoaders = cssLoaders + '!sass',
+        babelLoader = 'babel-loader',
+        ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+    function extractLoaders( loaders ) {
+      return ExtractTextPlugin.extract( 'style', loaders.substr( loaders.indexOf( '!' ) ) );
+    }
+
+    if ( options.production ) {
+        cssLoaders = extractLoaders( cssLoaders );
+        scssLoaders = extractLoaders( scssLoaders );
+    }
 
     return {
         entry: './js/tinymce-comments-plus.js',
@@ -24,20 +35,20 @@ module.exports = function( options ) {
                 {
                     test: /\.js$/,
                     exclude: /node_modules/,
-                    loader: babel-loader
+                    loader: babelLoader
                 },
                 {
                     test: /\.jsx$/,
                     exclude: /node_modules/,
-                    loader: babel-loader
+                    loader: babelLoader
                 }
             ]
         },
-        externals: {
-            'jquery': 'jQuery'
-        },
         resolve: {
             extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ]
-        }
+        },
+        plugins: [
+            new ExtractTextPlugin( './css/[name].css' )
+        ]
     };
 }
