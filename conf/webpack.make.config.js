@@ -1,5 +1,6 @@
 module.exports = function( options ) {
-    var cssLoaders = 'style!css',
+    var excludePath = '/node_modules/',
+        cssLoaders = 'style!css',
         scssLoaders = cssLoaders + '!sass',
         babelLoader = 'babel-loader',
         ExtractTextPlugin = require("extract-text-webpack-plugin");
@@ -8,7 +9,7 @@ module.exports = function( options ) {
       return ExtractTextPlugin.extract( 'style', loaders.substr( loaders.indexOf( '!' ) ) );
     }
 
-    if ( options.production ) {
+    if ( options.build ) {
         cssLoaders = extractLoaders( cssLoaders );
         scssLoaders = extractLoaders( scssLoaders );
     }
@@ -18,28 +19,28 @@ module.exports = function( options ) {
         output: {
             path: __dirname + '/../js',
             publicPath: 'http://localhost:8080/',
-            filename: 'bundle.js'
+            filename: 'tinymce-comments-plus-bundle.js'
         },
         module: {
             loaders: [
                 {
                     test: /\.css$/,
-                    exclude: /node_modules/,
+                    exclude: excludePath,
                     loader: cssLoaders
                 },
                 {
                     test: /\.scss$/,
-                    exclude: /node_modules/,
+                    exclude: excludePath,
                     loader: scssLoaders
                 },
                 {
                     test: /\.js$/,
-                    exclude: /node_modules/,
+                    exclude: excludePath,
                     loader: babelLoader
                 },
                 {
                     test: /\.jsx$/,
-                    exclude: /node_modules/,
+                    exclude: excludePath,
                     loader: babelLoader
                 }
             ]
