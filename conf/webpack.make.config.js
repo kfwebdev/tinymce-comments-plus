@@ -20,8 +20,22 @@ module.exports = function( options ) {
                     test: /\.scss$/,
                     exclude: /node_modules/,
                     loader: scssLoaders
+                },
+                {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    loader: babel-loader
+                }
+                },
+                {
+                    test: /\.jsx$/,
+                    exclude: /node_modules/,
+                    loader: babel-loader
                 }
             ]
+        },
+        externals: {
+            'jquery': 'jQuery'
         },
         resolve: {
             extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ]
