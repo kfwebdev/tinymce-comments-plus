@@ -49,8 +49,8 @@ module.exports = function( options ) {
         },
         resolve: {
             root: [
-                path.join(__dirname, "..", "components", "node_modules"),
-                path.join(__dirname, "..", "js", "sass"),
+                path.join( __dirname, '..', 'components' ),
+                path.join( __dirname, '..', 'js', 'sass' )
             ],
             extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ],
         },
