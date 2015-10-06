@@ -1,6 +1,7 @@
 module.exports = function( options ) {
 
-    var cssLoaders = 'style!css',
+    var path = require( 'path' ),
+        cssLoaders = 'style!css',
         scssLoaders = cssLoaders + '!sass',
         babelLoader = 'react-hot!babel-loader',
         //webpack = require( 'webpack' ),
@@ -16,24 +17,22 @@ module.exports = function( options ) {
     }
 
     return {
-        entry: './js/tinymce-comments-plus.js',
+        entry: [ 'webpack/hot/dev-server', './js/tinymce-comments-plus.js' ],
         output: {
             path: __dirname + '/../js',
             publicPath: 'http://localhost:8080/',
             filename: 'tinymce-comments-plus-bundle.js',
-            hot: true,
-            headers: { 'Access-Control-Allow-Origin': '*' }
+            // hot: true,
+            // headers: { 'Access-Control-Allow-Origin': '*' }
         },
         module: {
             loaders: [
                 {
                     test: /\.css$/,
-                    exclude: /node_modules/,
                     loader: cssLoaders
                 },
                 {
                     test: /\.scss$/,
-                    exclude: /node_modules/,
                     loader: scssLoaders
                 },
                 {
@@ -49,7 +48,11 @@ module.exports = function( options ) {
             ]
         },
         resolve: {
-            extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ]
+            root: [
+                path.join(__dirname, "..", "components", "node_modules"),
+                path.join(__dirname, "..", "js", "sass"),
+            ],
+            extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ],
         },
         plugins: [
             new ExtractTextPlugin( './css/[name].css' ),

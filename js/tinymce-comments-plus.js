@@ -283,3 +283,10 @@ var tcp = tcp || {};
 // }
 //
 // React.render(<App />, document.getElementById('root'));
+
+//
+import React from 'react';
+
+var CCComments = require( '../components/comments/comments' );
+
+React.render(<CCComments />, document.getElementById('root'));

@@ -1,14 +1,9 @@
-var Comments = React.createClass({
-  render: function() {
-    return (
-      <div className="comments">
-        So many cool comments!
-      </div>
-    );
-  }
-});
-
-React.render(
-  <Comments />,
-  document.body
-);
+'use strict';
+var React = require('react');
+module.exports = React.createClass({
+    displayName:'CCComments',
+    render: function(){
+        var msg = 'CCComments!';
+        return <div>{msg}</div>
+    }
+})

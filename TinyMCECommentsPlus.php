@@ -356,7 +356,7 @@ class TinyMCECommentsPlus {
 		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
 
 		// react element test
-		//echo '<div id="root"></div>';
+		echo '<div id="root"></div>';
 
 		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
 
