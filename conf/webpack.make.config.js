@@ -20,7 +20,9 @@ module.exports = function( options ) {
         output: {
             path: __dirname + '/../js',
             publicPath: 'http://localhost:8080/',
-            filename: 'tinymce-comments-plus-bundle.js'
+            filename: 'tinymce-comments-plus-bundle.js',
+            hot: true,
+            headers: { 'Access-Control-Allow-Origin': '*' }
         },
         module: {
             loaders: [

@@ -7,13 +7,13 @@
  * @copyright 3-22-2015 Kentaro Fischer
  */
 
+'use strict';
+
+window.cl = console.dir.bind( console );
+
 var tcp = tcp || {};
 
 ( function ( $ ) {
-	'use strict';
-
-	window.cl = console.dir.bind( console );
-
 	if ( tcpGlobals.length ) {
 		tcpGlobals = JSON.parse( tcpGlobals );
 	}
@@ -270,7 +270,7 @@ var tcp = tcp || {};
 	} );
 
 }( jQuery ) );
-
+//
 // import React from 'react';
 // import { Component } from 'react';
 //

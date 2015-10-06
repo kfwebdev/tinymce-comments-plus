@@ -355,7 +355,8 @@ class TinyMCECommentsPlus {
 		// marker for comment form
 		$nonce = wp_create_nonce( ajax_action_add_comment . $post_id );
 
-		echo '<div id="root"></div>';
+		// react element test
+		//echo '<div id="root"></div>';
 
 		echo '<span style="display:none;" id="tcpCommentFormSpan" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
 
