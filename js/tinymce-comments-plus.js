@@ -114,6 +114,9 @@ var tcp = tcp || {};
 	}); /* /tcp.EditView */
 
 
+
+
+
 	tcp.RespondView = Backbone.View.extend({
 		events: function() {
 			var _events = {};
@@ -194,6 +197,9 @@ var tcp = tcp || {};
 			});
 		}
 	});
+
+
+
 
 
 	tcp.CommentsView = Backbone.View.extend({

@@ -4,23 +4,25 @@ module.exports = function( options ) {
         cssLoaders = 'style!css',
         scssLoaders = cssLoaders + '!sass',
         babelLoader = 'react-hot!babel-loader',
-        //webpack = require( 'webpack' ),
-        ExtractTextPlugin = require("extract-text-webpack-plugin");
+        webpack = require( 'webpack' ),
+        ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
-    function extractLoaders( loaders ) {
-      return ExtractTextPlugin.extract( 'style', loaders.substr( loaders.indexOf( '!' ) ) );
+    function extractLoaders( extract, loaders ) {
+      return ExtractTextPlugin.extract( extract, loaders.substr( loaders.indexOf( '!' ) ) );
     }
 
     if ( options.build ) {
-        cssLoaders = extractLoaders( cssLoaders );
-        scssLoaders = extractLoaders( scssLoaders );
+        cssLoaders = extractLoaders( 'style', cssLoaders );
+        scssLoaders = extractLoaders( 'style', scssLoaders );
+        //babelLoader = extractLoaders( 'react-hot', babelLoader );
     }
 
+
     return {
-        entry: [ 'webpack/hot/dev-server', './js/tinymce-comments-plus.js' ],
+        entry: [ './js/tinymce-comments-plus.js' ],
         output: {
             path: __dirname + '/../js',
-            publicPath: 'http://localhost:8080/',
+            publicPath: options.build ? '' : 'http://localhost:8080/',
             filename: 'tinymce-comments-plus-bundle.js',
             // hot: true,
             // headers: { 'Access-Control-Allow-Origin': '*' }
@@ -50,11 +52,22 @@ module.exports = function( options ) {
         resolve: {
             root: [
                 path.join( __dirname, '..', 'components' ),
-                path.join( __dirname, '..', 'js', 'sass' )
+                path.join( __dirname, '..', 'js' ),
+                path.join( __dirname, '..', 'sass' ),
             ],
             extensions: [ '', '.js', '.jsx', '.sass', '.scss', '.css' ],
         },
-        plugins: [
+        plugins: options.build ? [
+            // build plugins
+            new ExtractTextPlugin( './css/[name].css' ),
+            new webpack.optimize.UglifyJsPlugin({
+                compress: {
+                    warnings: false
+                }
+            }),
+            //new webpack.HotModuleReplacementPlugin()
+        ] : [
+            // dev plugins
             new ExtractTextPlugin( './css/[name].css' ),
             //new webpack.HotModuleReplacementPlugin()
         ]
