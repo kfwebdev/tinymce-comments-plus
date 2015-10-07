@@ -251,6 +251,9 @@ var tcp = tcp || {};
 	}); /* /tcp.CommentsView */
 
 
+
+
+
 	// Reset tinymce editors
 	tcp.resetEditors = function() {
 		// Remove old textarea tinyMCE editor instance
@@ -260,6 +263,9 @@ var tcp = tcp || {};
 		// Recreate new tinyMCE editor at new #comment textarea position
 		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
 	};
+
+
+
 
 
 	// Instantiate views on document ready
@@ -290,9 +296,8 @@ var tcp = tcp || {};
 //
 // React.render(<App />, document.getElementById('root'));
 
-//
 import React from 'react';
 
-var CCComments = require( '../components/comments/comments' );
+var Comments = require( '../components/comments/comments' );
 
-React.render(<CCComments />, document.getElementById('root'));
+React.render(<Comments />, document.getElementById('root'));

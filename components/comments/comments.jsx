@@ -1,9 +1,14 @@
 'use strict';
 var React = require('react');
 module.exports = React.createClass({
-    displayName:'CCComments',
-    render: function(){
-        var msg = 'CCComments!';
-        return <div>{msg}</div>
+    displayName:'Comments',
+
+    componentDidMount: function() {
+    },
+
+    render: function() {
+        return(
+                <div>Comments</div>
+        );
     }
 })

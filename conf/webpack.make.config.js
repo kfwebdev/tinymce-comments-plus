@@ -3,7 +3,7 @@ module.exports = function( options ) {
     var path = require( 'path' ),
         cssLoaders = 'style!css',
         scssLoaders = cssLoaders + '!sass',
-        babelLoader = 'react-hot!babel-loader',
+        babelLoader = 'react-hot!babel',
         webpack = require( 'webpack' ),
         ExtractTextPlugin = require( 'extract-text-webpack-plugin' );
 
