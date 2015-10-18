@@ -15,7 +15,7 @@ var tcp = tcp || {};
 
 ( function ( $ ) {
 	if ( tcpGlobals.length ) {
-		tcpGlobals = JSON.parse( tcpGlobals );
+		tcp.globals = JSON.parse( tcpGlobals );
 	}
 
 
@@ -37,15 +37,15 @@ var tcp = tcp || {};
 
 		events: function() {
 			var _events = {};
-			_events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = 'submitEdit';
-			_events[ 'click .' + tcpGlobals.cssCancelEditButton ] = 'cancelEdit';
+			_events[ 'click .' + tcp.globals.cssSubmitEditButton ] = 'submitEdit';
+			_events[ 'click .' + tcp.globals.cssCancelEditButton ] = 'cancelEdit';
 
 			return _events;
 		},
 
 		template: _.template('<textarea id="tcpCommentEditor<%= commentId %>" rows="8"><%= content %></textarea>' +
-		'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitEditButton + '">Submit</a> ' +
-		'<a href="javascript:void(0);" class="' + tcpGlobals.cssButton + ' ' + tcpGlobals.cssCancelEditButton + '">Cancel</a></div>'),
+		'<div class="reply tcp-reply-container"><span class="spinner" style="display:none;"></span><a href="javascript:void(0);" class="' + tcp.globals.cssButton + ' ' + tcp.globals.cssSubmitEditButton + '">Submit</a> ' +
+		'<a href="javascript:void(0);" class="' + tcp.globals.cssButton + ' ' + tcp.globals.cssCancelEditButton + '">Cancel</a></div>'),
 
 		render: function() {
 			var $content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
@@ -65,21 +65,21 @@ var tcp = tcp || {};
 		submitEdit: function() {
 			var self = this,
 				$spinner = this.$el.find( '.spinner' ),
-				$submitEdit = this.$el.find( '.' + tcpGlobals.cssSubmitEditButton ),
+				$submitEdit = this.$el.find( '.' + tcp.globals.cssSubmitEditButton ),
 				tinymceContent = tinymce.get( 'tcpCommentEditor' + this.commentId ).getContent(),
 				$content = $( '.tcp-comment-content[data-tcp-comment-id=' + this.commentId + ']' );
 
 			this.model.set( 'content', tinymceContent );
-			this.model.set( 'action', tcpGlobals.updateCommentAction );
+			this.model.set( 'action', tcp.globals.updateCommentAction );
 
 			$spinner.show();
 			$submitEdit.attr( 'disabled', true );
 			$submitEdit.text( 'Submitting' );
-			this.events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = undefined;
+			this.events[ 'click .' + tcp.globals.cssSubmitEditButton ] = undefined;
 			this.delegateEvents( this.events );
 
 			var $commentPost = $.ajax({
-				url: tcpGlobals.ajaxUrl,
+				url: tcp.globals.ajaxUrl,
 				type: 'post',
 				data: this.model.toJSON()
 			})
@@ -95,7 +95,7 @@ var tcp = tcp || {};
 			})
 			.then( function(){
 				$spinner.hide();
-				self.events[ 'click .' + tcpGlobals.cssSubmitEditButton ] = 'submitEdit';
+				self.events[ 'click .' + tcp.globals.cssSubmitEditButton ] = 'submitEdit';
 				self.delegateEvents( this.events );
 			});
 		},
@@ -121,7 +121,7 @@ var tcp = tcp || {};
 		events: function() {
 			var _events = {};
 
-			_events[ 'click #' + tcpGlobals.idCancelCommentReply ] = 'resetEditors';
+			_events[ 'click #' + tcp.globals.idCancelCommentReply ] = 'resetEditors';
 			_events[ 'submit' ] = 'submitForm';
 
 			return _events;
@@ -131,7 +131,7 @@ var tcp = tcp || {};
 			this.$commentForm = this.$el.find( 'form' );
 			this.$textArea = this.$el.find( 'textarea' );
 			this.$submitButton = this.$commentForm.find( 'input[type=submit]' );
-			this.$submitButton.addClass( tcpGlobals.cssButton + ' ' + tcpGlobals.cssSubmitButton )
+			this.$submitButton.addClass( tcp.globals.cssButton + ' ' + tcp.globals.cssSubmitButton )
 			// tcp.resetEditors();
 		},
 
@@ -156,15 +156,15 @@ var tcp = tcp || {};
 				data: this.$commentForm.serialize()
 			})
 			.done( function( data ){
-				self.$el.find( '#' + tcpGlobals.idCancelCommentReply ).click();
+				self.$el.find( '#' + tcp.globals.idCancelCommentReply ).click();
 				self.$submitButton.attr( 'disabled', false );
 				self.$submitButton.val( submitText );
 				tinyMCE.activeEditor.setContent('');
 				tcp.resetEditors();
 
 				var
-					$commentData = $( data ).find( tcpGlobals.commentsList ),
-					$commentsList = $( tcpGlobals.commentsList )
+					$commentData = $( data ).find( tcp.globals.commentsList ),
+					$commentsList = $( tcp.globals.commentsList )
 				;
 
 				if ( $commentData.length ) {
@@ -173,7 +173,7 @@ var tcp = tcp || {};
 					$commentsList.replaceWith( $commentData );
 
 					tcp.views.comments = new tcp.CommentsView({
-						el: $( tcpGlobals.commentsList )
+						el: $( tcp.globals.commentsList )
 					});
 
 					// restore tinymce editor to refreshed reply form
@@ -205,15 +205,15 @@ var tcp = tcp || {};
 	tcp.CommentsView = Backbone.View.extend({
 		events: function() {
 			var _events = {};
-			_events[ 'click .' + tcpGlobals.cssEditButton ] = 'resetEditors';
-			_events[ 'click .' + tcpGlobals.cssCommentReplyButton ] = 'resetEditors';
-			_events[ 'click .' + tcpGlobals.cssEditButton ] = 'editComment';
+			_events[ 'click .' + tcp.globals.cssEditButton ] = 'resetEditors';
+			_events[ 'click .' + tcp.globals.cssCommentReplyButton ] = 'resetEditors';
+			_events[ 'click .' + tcp.globals.cssEditButton ] = 'editComment';
 
 			return _events;
 		},
 
 		initialize: function() {
-			this.$el.find( '.' + tcpGlobals.cssCommentReplyButton ).addClass( tcpGlobals.cssButton );
+			this.$el.find( '.' + tcp.globals.cssCommentReplyButton ).addClass( tcp.globals.cssButton );
 		},
 
 		resetEditors: function() {
@@ -233,7 +233,7 @@ var tcp = tcp || {};
 				$editLink.before('<div id="' + editElement + '" class="tcp-comment-editor"></div>');
 
 				var	editModel = new tcp.EditModel({
-						action: tcpGlobals.updateCommentAction,
+						action: tcp.globals.updateCommentAction,
 						security: nonce,
 						postId: postId,
 						commentId: commentId
@@ -273,11 +273,11 @@ var tcp = tcp || {};
 		tcp.views = {};
 
 		tcp.views.comments = new tcp.CommentsView({
-			el: $( tcpGlobals.commentsList )
+			el: $( tcp.globals.commentsList )
 		});
 
 		tcp.views.respond = new tcp.RespondView({
-			el: $( tcpGlobals.commentFormSpan ).parent().parent()
+			el: $( tcp.globals.commentFormSpan ).parent().parent()
 		});
 	} );
 
@@ -298,6 +298,9 @@ var tcp = tcp || {};
 
 import React from 'react';
 
-var Comments = require( '../components/comments/comments' );
+var
+	Comments = require( '../components/comments/comments' ),
+	editComment = require( '../components/editComment/editComment' )
+;
 
-React.render(<Comments />, document.getElementById('root'));
+React.render( <Comments />, document.getElementById( 'root' ) );
