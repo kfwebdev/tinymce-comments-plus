@@ -14,7 +14,7 @@ module.exports = function( options ) {
     if ( options.build ) {
         cssLoaders = extractLoaders( 'style', cssLoaders );
         scssLoaders = extractLoaders( 'style', scssLoaders );
-        //babelLoader = extractLoaders( 'react-hot', babelLoader );
+        babelLoader = extractLoaders( 'react-hot', babelLoader );
     }
 
 
@@ -22,7 +22,7 @@ module.exports = function( options ) {
         entry: [ './js/tinymce-comments-plus.js' ],
         output: {
             path: __dirname + '/../js',
-            publicPath: options.build ? '' : 'http://localhost:8080/',
+            publicPath: options.build ? '/dist/' : 'http://localhost:8080/',
             filename: 'tinymce-comments-plus-bundle.js',
             // hot: true,
             // headers: { 'Access-Control-Allow-Origin': '*' }

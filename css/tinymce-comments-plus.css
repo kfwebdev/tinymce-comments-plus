@@ -9,9 +9,16 @@
     border: 1px solid #eee;
     margin-bottom: 1.25em;
 }
+
 .tcp-reply-container {
     margin-bottom: 1rem;
 }
+
+.tcpEdit {
+    display: inline-block;
+    margin-right: 1em;
+}
+
 .tcp-comment-editor > .mce-container {
     border: 1px solid #eaeaea;
 }

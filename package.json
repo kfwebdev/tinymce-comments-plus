@@ -26,6 +26,6 @@
   "scripts": {
     "t": "karma start conf/karma.conf.js --single-run",
     "s": "webpack-dev-server --config conf/webpack.config.js --hot --progress --colors --inline --content-base ./",
-    "b": "webpack --config conf/webpack.build.config.js --progress --colors --display-error-details"
+    "b": "webpack --config conf/webpack.build.config.js --progress --colors --display-error-details --display-modules --display-reasons"
   }
 }
