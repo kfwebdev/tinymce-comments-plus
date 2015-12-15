@@ -298,6 +298,8 @@ var tcp = tcp || {};
 
 import React from 'react';
 
-var Comments = require( '../components/comments/comments' );
+var Edit = require( '../components/edit/edit' );
 
-React.render(<Comments />, document.getElementById('root'));
+jQuery( '.tcpEdit' ).each(function(){
+	React.render(<Edit />, this );
+});

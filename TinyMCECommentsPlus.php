@@ -636,8 +636,9 @@ class TinyMCECommentsPlus {
 			current_user_can( 'administrator' ) ) {
 			$nonce = wp_create_nonce( ajax_action_update_comment . $comment->comment_ID );
 
-			$tcp_reply_link = '<a href="javascript:void(0);" class="' . tcp_css_button_class . ' ' . tcp_css_edit_button_class . '" data-tcp-post-id="' . $post->ID. '" ';
-			$tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
+			// $tcp_reply_link = '<a href="javascript:void(0);" class="' . tcp_css_button_class . ' ' . tcp_css_edit_button_class . '" data-tcp-post-id="' . $post->ID. '" ';
+			// $tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
+			$tcp_reply_link = '<div class="tcpEdit" id="tcpEdit' . $comment->comment_ID . '"></div>';
 
 			$args[ 'before' ] .= $tcp_reply_link;
 		}

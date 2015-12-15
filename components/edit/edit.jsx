@@ -1,14 +1,14 @@
 'use strict';
 var React = require('react');
 module.exports = React.createClass({
-    displayName:'Comments',
+    displayName:'Edit',
 
     componentDidMount: function() {
     },
 
     render: function() {
         return(
-                <div>Comments</div>
+                <a href="#">Edit</a>
         );
     }
 })
