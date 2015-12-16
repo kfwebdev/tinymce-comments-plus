@@ -1,0 +1,7 @@
+{
+  "generator-react-webpack": {
+    "appName": "tcp",
+    "style": "scss",
+    "postcss": false
+  }
+}
