@@ -9,13 +9,21 @@
 
 'use strict';
 
+import jQuery from 'jquery';
+import Backbone from 'backbone';
+import _ from 'underscore';
+// import React from 'react';
+// import ReactDOM from 'react-dom';
+
 window.cl = console.dir.bind( console );
 
 var
-	tcp = tcp || {}
+	tcp = tcp || {},
+	tcpGlobals = tcpGlobals || {},
+	$ = jQuery
 ;
 
-( function ( $ ) {
+tcp.initTcp = function() {
 	if ( tcpGlobals.length ) {
 		tcp.globals = JSON.parse( tcpGlobals );
 	}
@@ -253,7 +261,6 @@ var
 
 
 
-
 	// Reset tinymce editors
 	tcp.resetEditors = function() {
 		// Remove old textarea tinyMCE editor instance
@@ -265,46 +272,21 @@ var
 	};
 
 
-
-
-
 	// Instantiate views on document ready
-	$( function() {
-		tcp.views = {};
+	tcp.views = {};
 
-		tcp.views.comments = new tcp.CommentsView({
-			el: $( tcp.globals.commentsList )
-		});
+	tcp.views.comments = new tcp.CommentsView({
+		el: $( tcp.globals.commentsList )
+	});
 
-		tcp.views.respond = new tcp.RespondView({
-			el: $( tcp.globals.commentFormSpan ).parent().parent()
-		});
-	} );
+	tcp.views.respond = new tcp.RespondView({
+		el: $( tcp.globals.commentFormSpan ).parent().parent()
+	});
 
-}( jQuery ) );
-//
-// import React from 'react';
-// import { Component } from 'react';
-//
-// export default class App extends Component {
-//   render() {
-//     return (
-//       <h1>Hello, world.</h1>
-//     );
-//   }
-// }
-//
-// React.render(<App />, document.getElementById('root'));
+	var Edit = require( '../components/edit/edit' );
 
-import React from 'react';
-import ReactDOM from 'react-dom';
+	$( '.tcpEdit' ).each(function(){
+		React.render(<Edit />, this );
+	});
 
-var Edit = require( '../components/edit/edit' );
-
-jQuery( '.tcpEdit' ).each(function(){
-	React.render(<Edit />, this );
-});
-
-var
-	Edit = require( '../components/edit/edit' )
-;
+};

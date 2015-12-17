@@ -290,9 +290,11 @@ class TinyMCECommentsPlus {
 	public function enqueue_scripts() {
 
 		// wp_enqueue_script( $this->plugin_slug . "-plugin-script", plugins_url( "js/" . $this->plugin_slug . ".js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version );
-		wp_enqueue_script( $this->plugin_slug . "-plugin-script", "http://localhost:8000/assets/app.js", array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
+		wp_register_script( $this->plugin_slug . "-plugin-script", "http://localhost:8000/assets/app.js", array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
 		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
+		wp_enqueue_script( $this->plugin_slug . "-plugin-script" );
+		wp_enqueue_script( $this->plugin_slug . "-plugin-script-start", plugins_url( "src/js/runtcp.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
 	}
 
 	/**
