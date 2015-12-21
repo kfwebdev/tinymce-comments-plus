@@ -1,14 +1,16 @@
 'use strict';
 var React = require('react');
 module.exports = React.createClass({
-    displayName:'Edit',
-
     componentDidMount: function() {
+    },
+
+    onEditClick: function(event) {
+      event.preventDefault();
     },
 
     render: function() {
         return(
-                <a href="#">Edit</a>
+                <a href="#" onClick={this.onEditClick}>Edit</a>
         );
     }
 })
