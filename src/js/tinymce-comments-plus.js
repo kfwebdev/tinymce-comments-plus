@@ -9,23 +9,25 @@
 
 'use strict';
 
-import jQuery from 'jquery';
-import Backbone from 'backbone';
-import _ from 'underscore';
-// import React from 'react';
-// import ReactDOM from 'react-dom';
+// import jQuery from 'jquery';
+// import Backbone from 'backbone';
+// import _ from 'underscore';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 window.cl = console.dir.bind( console );
 
 var
-	tcp = tcp || {},
-	tcpGlobals = tcpGlobals || {},
+	tcp = window.tcp || {},
+	tcpGlobals = window.tcpGlobals || {},
 	$ = jQuery
 ;
 
+window.tcp = tcp;
+
 tcp.initTcp = function() {
 	if ( tcpGlobals.length ) {
-		tcp.globals = JSON.parse( tcpGlobals );
+		window.tcp.globals = JSON.parse( tcpGlobals );
 	}
 
 
@@ -286,7 +288,13 @@ tcp.initTcp = function() {
 	var Edit = require( '../components/edit/edit' );
 
 	$( '.tcpEdit' ).each(function(){
-		React.render(<Edit />, this );
+		ReactDOM.render(<Edit />, this );
 	});
 
 };
+
+( function( $ ){
+   $(function(){
+      tcp.initTcp();
+   });
+})( jQuery );
