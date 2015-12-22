@@ -14,12 +14,14 @@
 }
 
 .tcp-comment-editor {
+  display: none;
+
     & > .mce-container {
         border: 1px solid #eaeaea;
     }
 }
 
-.tcpEdit {
+.tcp-edit {
   display: inline-block;
   margin-right: 1em;
 }
@@ -40,7 +42,6 @@
     top: 2px;
     margin-right: 5px;
     position: relative;
-    display: inline-block;
     width: 16px;
     height: 16px;
     background: url( '../images/wpspin.gif' ) no-repeat;

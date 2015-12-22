@@ -1,16 +1,21 @@
 'use strict';
-var React = require('react');
-module.exports = React.createClass({
-    componentDidMount: function() {
-    },
+import React from 'react';
+class EditComponent extends React.Component {
+    componentDidMount() {
+    }
 
-    onEditClick: function(event) {
+    onEditClick( event ) {
       event.preventDefault();
-    },
+    }
 
-    render: function() {
+    render() {
         return(
                 <a href="#" onClick={this.onEditClick}>Edit</a>
         );
     }
-})
+}
+
+EditComponent.defaultProps = {
+};
+
+module.exports = EditComponent;

@@ -275,21 +275,29 @@ tcp.initTcp = function() {
 
 
 	// Instantiate views on document ready
-	tcp.views = {};
+	// tcp.views = {};
+	//
+	// tcp.views.comments = new tcp.CommentsView({
+	// 	el: $( tcp.globals.commentsList )
+	// });
+	//
+	// tcp.views.respond = new tcp.RespondView({
+	// 	el: $( tcp.globals.commentFormSpan ).parent().parent()
+	// });
 
-	tcp.views.comments = new tcp.CommentsView({
-		el: $( tcp.globals.commentsList )
+
+	tcp.Edit = require( '../components/edit/edit' );
+	tcp.Editor = require( '../components/editor/editor' );
+
+	$( '.tcp-edit' ).each(function(){
+		let commentId = $(this).data('tcp-comment-id'),
+		editorId = 'tcp-editor' + commentId;
+		ReactDOM.render(<tcp.Edit editorId={editorId} />, this );
 	});
 
-	tcp.views.respond = new tcp.RespondView({
-		el: $( tcp.globals.commentFormSpan ).parent().parent()
-	});
-
-	var Edit = require( '../components/edit/edit' );
-
-	$( '.tcpEdit' ).each(function(){
-		ReactDOM.render(<Edit />, this );
-	});
+	// $( '.tcp-editor' ).each(function(){
+	// 	ReactDOM.render(<tcp.Editor	tcpGlobals={tcp.globals} />, this );
+	// });
 
 };
 

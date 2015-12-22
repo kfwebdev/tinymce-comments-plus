@@ -623,7 +623,9 @@ class TinyMCECommentsPlus {
 			$content
 		);
 
-		return $tcp_content;
+		$tcp_editor = '<div class="tcp-editor" id="tcp-editor' . $comment_id . '"></div>';
+
+		return $tcp_editor . $tcp_content;
 	}
 
 	/**
@@ -639,7 +641,7 @@ class TinyMCECommentsPlus {
 
 			// $tcp_reply_link = '<a href="javascript:void(0);" class="' . tcp_css_button_class . ' ' . tcp_css_edit_button_class . '" data-tcp-post-id="' . $post->ID. '" ';
 			// $tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
-			$tcp_reply_link = '<div class="tcpEdit" id="tcpEdit' . $comment->comment_ID . '" data-tcpcommentid="' . $comment->comment_ID . '"></div>' . PHP_EOL;
+			$tcp_reply_link = '<div class="tcp-edit" id="tcp-edit' . $comment->comment_ID . '" data-tcp-comment-id="' . $comment->comment_ID . '"></div>' . PHP_EOL;
 
 			$args[ 'before' ] .= $tcp_reply_link;
 		}
