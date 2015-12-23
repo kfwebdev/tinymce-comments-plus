@@ -14,16 +14,19 @@
 // import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import FBEmitter from 'fbemitter';
 
 window.cl = console.dir.bind( console );
 
 var
 	tcp = window.tcp || {},
 	tcpGlobals = window.tcpGlobals || {},
-	$ = jQuery
+	$ = jQuery,
+	emitter = new FBEmitter.EventEmitter();
 ;
 
 window.tcp = tcp;
+window.tcp.emitter = emitter;
 
 tcp.initTcp = function() {
 	if ( tcpGlobals.length ) {
@@ -295,9 +298,10 @@ tcp.initTcp = function() {
 		ReactDOM.render(<tcp.Edit editorId={editorId} />, this );
 	});
 
-	// $( '.tcp-editor' ).each(function(){
-	// 	ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} showEditor="false" />, this );
-	// });
+	$( '.tcp-editor' ).each(function(){
+		let editorId = $(this).attr('id');
+		ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} editorId={editorId} />, this );
+	});
 
 };
 

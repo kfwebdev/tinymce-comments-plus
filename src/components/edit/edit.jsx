@@ -1,6 +1,8 @@
 'use strict';
 import React from 'react';
-import jQuery from 'jquery';
+import FBEmitter from 'fbemitter';
+
+var emitter = tcp.emitter || new FBEmitter.EventEmitter();
 
 class EditComponent extends React.Component {
    constructor() {
@@ -17,6 +19,7 @@ class EditComponent extends React.Component {
 
    _editClick( event ) {
       event.preventDefault();
+      emitter.emit( 'toggleEditor', this.props.editorId );
    }
 
     render() {
