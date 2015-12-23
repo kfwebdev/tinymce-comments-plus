@@ -5,7 +5,11 @@ import jQuery from 'jquery';
 class EditComponent extends React.Component {
    constructor() {
     super();
-    this. _editClick = this. _editClick.bind(this);
+    this._bind( [ '_editClick' ] );
+   }
+
+   _bind( methods ) {
+      methods.forEach( (method) => this[method] = this[method].bind(this) );
    }
 
    componentDidMount() {
@@ -13,7 +17,6 @@ class EditComponent extends React.Component {
 
    _editClick( event ) {
       event.preventDefault();
-      console.log(this);
    }
 
     render() {
@@ -23,7 +26,6 @@ class EditComponent extends React.Component {
     }
 }
 
-EditComponent.defaultProps = {
-};
+EditComponent.defaultProps = {};
 
 module.exports = EditComponent;
