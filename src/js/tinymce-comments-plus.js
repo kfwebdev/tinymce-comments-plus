@@ -296,7 +296,7 @@ tcp.initTcp = function() {
 	});
 
 	// $( '.tcp-editor' ).each(function(){
-	// 	ReactDOM.render(<tcp.Editor	tcpGlobals={tcp.globals} />, this );
+	// 	ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} showEditor="false" />, this );
 	// });
 
 };

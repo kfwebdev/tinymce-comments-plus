@@ -4,12 +4,8 @@ class EditorComponent extends React.Component {
   componentDidMount() {
   }
 
-  getInitialState() {
-    return { showEditor: false };
-  }
-
-  onEditClick(event) {
-    event.preventDefault();
+  toggleEditor() {
+    this.setState({ showEditor: !this.state.showEditor })
   }
 
   render() {
