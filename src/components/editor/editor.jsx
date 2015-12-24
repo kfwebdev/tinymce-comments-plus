@@ -56,7 +56,10 @@ class EditorComponent extends React.Component {
         plugins: [
           "charmap, colorpicker, fullscreen, lists, paste, tabfocus, textcolor, wordpress, wpdialogs, wpemoji, wplink, wpview"
         ],
-        toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        toolbar: [
+          "bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv",
+          "formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help"
+        ]
     });
     // update tinyMCE content
     tinyMCE.get( this.props.tcpGlobals.tcp_css_editor + this.props.commentId ).setContent( this.state.tinyMCEcontent );
