@@ -14,19 +14,16 @@
 // import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import FBEmitter from 'fbemitter';
 
 window.cl = console.dir.bind( console );
 
 var
 	tcp = window.tcp || {},
 	tcpGlobals = window.tcpGlobals || {},
-	$ = jQuery,
-	emitter = new FBEmitter.EventEmitter();
+	$ = jQuery
 ;
 
 window.tcp = tcp;
-window.tcp.emitter = emitter;
 
 tcp.Edit = require( '../components/edit/edit' );
 tcp.Editor = require( '../components/editor/editor' );
