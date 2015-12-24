@@ -242,6 +242,8 @@ tcp.initTcp = function() {
 		});
 	}
 
+	tcp.resetEditors();
+
 };
 
 ( function( $ ){

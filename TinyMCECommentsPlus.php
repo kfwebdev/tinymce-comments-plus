@@ -114,6 +114,7 @@ class TinyMCECommentsPlus {
 
 		$this->tcp_plugin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'editorStyles' => includes_url( "js/tinymce/skins/wordpress/wp-content.css", __FILE__ ),
 			'optionUpdateDelay' => tcp_ajax_option_update_delay,
 			'addCommentAction' => tcp_ajax_add_comment,
 			'updateCommentAction' => tcp_ajax_update_comment,

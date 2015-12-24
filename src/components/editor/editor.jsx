@@ -59,6 +59,7 @@ class EditorComponent extends React.Component {
     tinymce.init({
         menubar: false,
         selector: "textarea.tinyMCEeditor",
+        content_css: this.props.tcpGlobals.editorStyles,
         setup : function(editor) {
           editor.on('change', function(e) {
             that.setState({ tinyMCEcontent: editor.getContent()});
@@ -74,6 +75,7 @@ class EditorComponent extends React.Component {
     });
     // update tinyMCE content
     tinyMCE.get( this.props.editorId ).setContent( this.state.tinyMCEcontent );
+    cl(tinyMCE.get(this.props.editorId));
   }
 
   submitEdit() {
