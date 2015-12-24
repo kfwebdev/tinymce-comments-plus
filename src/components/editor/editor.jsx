@@ -75,7 +75,6 @@ class EditorComponent extends React.Component {
     });
     // update tinyMCE content
     tinyMCE.get( this.props.editorId ).setContent( this.state.tinyMCEcontent );
-    cl(tinyMCE.get(this.props.editorId));
   }
 
   submitEdit() {

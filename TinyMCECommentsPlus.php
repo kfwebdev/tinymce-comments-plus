@@ -102,6 +102,7 @@ class TinyMCECommentsPlus {
 		define( tcp_css_prefix . 'comment_id', tcp_prefix . 'comment_id' );
 		define( tcp_css_prefix . 'nonce', tcp_prefix . 'nonce' );
 		define( tcp_id_prefix . 'cancel_comment_reply_id', 'cancel-comment-reply-link' );
+		define( tcp_css_prefix . 'submit_edit_button_custom', 'comment-reply-link' );
 
 		$this->tcp_admin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
@@ -140,6 +141,7 @@ class TinyMCECommentsPlus {
 
 		$this->tcp_plugin_javascript_globals[ 'commentFormSpan' ] = '#tcpCommentFormSpan';
 		$this->tcp_plugin_javascript_globals[ 'commentsList' ] = '#comments';
+		$this->tcp_plugin_javascript_globals[ 'tcp_css_submit_edit_button_custom' ] = tcp_css_submit_edit_button_custom;
 
 
 		// Load plugin text domain
