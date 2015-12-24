@@ -18,7 +18,7 @@ class EditComponent extends React.Component {
 
    editClick( event ) {
       event.preventDefault();
-      emitter.emit( 'toggleEditor', this.props.editorId );
+      emitter.emit( 'toggleEditor', this.props.tcpGlobals.tcp_css_editor + this.props.commentId );
    }
 
     render() {

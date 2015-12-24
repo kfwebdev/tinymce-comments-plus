@@ -281,15 +281,14 @@ tcp.initTcp = function() {
 
 
 	tcp.bindEditors = function() {
-		$( '.tcp-edit' ).each(function(){
-			let commentId = $(this).data('tcp-comment-id'),
-			editorId = 'tcp-editor' + commentId;
-			ReactDOM.render(<tcp.Edit editorId={editorId} />, this );
+		$( '.' + tcp.globals.tcp_css_edit ).each(function(){
+			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id );
+			ReactDOM.render(<tcp.Edit tcpGlobals={tcp.globals} commentId={commentId} />, this );
 		});
 
-		$( '.tcp-editor' ).each(function(){
-			let editorId = $(this).data('tcp-editor-id');
-			ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} editorId={editorId} />, this );
+		$( '.' + tcp.globals.tcp_css_editor ).each(function(){
+			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id );
+			ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} commentId={commentId} />, this );
 		});
 	}
 

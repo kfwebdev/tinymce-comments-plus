@@ -87,8 +87,8 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
 
 		// CSS Classes
-		define( 'tcp_css_prefix', tcp_prefix . 'css_' );
-		define( 'tcp_id_prefix', tcp_prefix . 'id_' );
+		define( tcp_prefix . 'css_prefix', tcp_prefix . 'css_' );
+		define( tcp_prefix . 'id_prefix', tcp_prefix . 'id_' );
 		define( tcp_css_prefix . 'button_class', 'tcp-button' );
 		define( tcp_css_prefix . 'edit_button_class', 'tcp-edit-comment' );
 		define( tcp_css_prefix . 'reply_button_class', 'tcp-reply-comment' );
@@ -96,6 +96,11 @@ class TinyMCECommentsPlus {
 		define( tcp_css_prefix . 'submit_edit_button_class', 'tcp-submit-edit' );
 		define( tcp_css_prefix . 'cancel_edit_button_class', 'tcp-cancel-edit' );
 		define( tcp_css_prefix . 'comment_reply_button_class', 'comment-reply-link' );
+		define( tcp_css_prefix . 'comment_content', tcp_prefix . 'comment_content' );
+		define( tcp_css_prefix . 'edit', tcp_prefix . 'edit' );
+		define( tcp_css_prefix . 'editor', tcp_prefix . 'editor' );
+		define( tcp_css_prefix . 'post_id', tcp_prefix . 'post_id' );
+		define( tcp_css_prefix . 'comment_id', tcp_prefix . 'comment_id' );
 		define( tcp_id_prefix . 'cancel_comment_reply_id', 'cancel-comment-reply-link' );
 
 		$this->tcp_admin_javascript_globals = array(
@@ -114,14 +119,19 @@ class TinyMCECommentsPlus {
 			'updateCommentAction' => ajax_update_comment,
 
 			// Classes
-			'cssButton' => tcp_css_button_class,
-			'cssEditButton' => tcp_css_edit_button_class,
-			'cssReplyButton' => tcp_css_reply_button_class,
-			'cssSubmitButton' => tcp_css_submit_button_class,
-			'cssSubmitEditButton' => tcp_css_submit_edit_button_class,
-			'cssCancelEditButton' => tcp_css_cancel_edit_button_class,
-			'cssCancelEditButton' => tcp_css_cancel_edit_button_class,
-			'cssCommentReplyButton' => tcp_css_comment_reply_button_class,
+			tcp_css_prefix . 'button' => tcp_css_button_class,
+			tcp_css_prefix . 'edit_button' => tcp_css_edit_button_class,
+			tcp_css_prefix . 'reply_button' => tcp_css_reply_button_class,
+			tcp_css_prefix . 'submit_button' => tcp_css_submit_button_class,
+			tcp_css_prefix . 'submit_edit_button' => tcp_css_submit_edit_button_class,
+			tcp_css_prefix . 'cancel_edit_button' => tcp_css_cancel_edit_button_class,
+			tcp_css_prefix . 'cancel_edit_button' => tcp_css_cancel_edit_button_class,
+			tcp_css_prefix . 'comment_reply_button' => tcp_css_comment_reply_button_class,
+			tcp_css_prefix . 'edit' => tcp_css_edit,
+			tcp_css_prefix . 'editor' => tcp_css_editor,
+			tcp_css_prefix . 'comment_content' => tcp_css_comment_content,
+			tcp_css_prefix . 'post_id' => tcp_css_comment_id,
+			tcp_css_prefix . 'comment_id' => tcp_css_comment_id,
 			// IDs
 			'idCancelCommentReply' => tcp_id_cancel_comment_reply_id,
 		);
@@ -614,15 +624,19 @@ class TinyMCECommentsPlus {
 		$post_id = $comment->comment_post_ID;
 
 		$tcp_content = sprintf(
-			'<div class="tcp-comment-content" data-tcp-post-id="%d" data-tcp-comment-id="%d">%s</div>',
+			'<div class="' . tcp_css_comment_content . '" id="' . tcp_css_comment_content . '%d" data-' . tcp_css_post_id . '="%d" data-' . tcp_css_comment_id . '="%d">%s</div>',
+			$comment_id,
 			$post_id,
 			$comment_id,
 			$content
 		);
 
-		$tcp_editor = '<div class="tcp-editor" data-tcp-editor-id="tcp-editor' . $comment_id . '"></div>';
+		$tcp_editor = sprintf(
+			'<div class="' . tcp_css_editor . '" data-' . tcp_css_comment_id . '="%d"></div>',
+			$comment_id
+		);
 
-		return $tcp_editor . $tcp_content;
+		return $tcp_content . $tcp_editor;
 	}
 
 	/**
@@ -635,10 +649,7 @@ class TinyMCECommentsPlus {
 			$comment->user_id == $current_user->ID ) ||
 			current_user_can( 'administrator' ) ) {
 			$nonce = wp_create_nonce( ajax_update_comment . $comment->comment_ID );
-
-			// $tcp_reply_link = '<a href="javascript:void(0);" class="' . tcp_css_button_class . ' ' . tcp_css_edit_button_class . '" data-tcp-post-id="' . $post->ID. '" ';
-			// $tcp_reply_link .= 'data-tcp-comment-id="' . $comment->comment_ID . '" data-tcp-nc="' . $nonce .'">Edit</a>' . PHP_EOL;
-			$tcp_reply_link = '<div class="tcp-edit" id="tcp-edit' . $comment->comment_ID . '" data-tcp-comment-id="' . $comment->comment_ID . '"></div>' . PHP_EOL;
+			$tcp_reply_link = '<div class="' . tcp_css_edit . '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
 
 			$args[ 'before' ] .= $tcp_reply_link;
 		}
