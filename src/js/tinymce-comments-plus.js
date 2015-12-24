@@ -278,14 +278,21 @@ tcp.initTcp = function() {
 
 
 	tcp.bindEditors = function() {
+		// bind edit components
 		$( '.' + tcp.globals.tcp_css_edit ).each(function(){
-			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id );
-			ReactDOM.render(<tcp.Edit tcpGlobals={tcp.globals} commentId={commentId} />, this );
+			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id ),
+					editId = tcp.globals.tcp_css_edit + commentId,
+					editorId = tcp.globals.tcp_css_editor + commentId;
+			ReactDOM.render(<tcp.Edit tcpGlobals={ tcp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } />, this );
 		});
 
+		// bind editor components
 		$( '.' + tcp.globals.tcp_css_editor ).each(function(){
-			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id );
-			ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} commentId={commentId} />, this );
+			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id ),
+					editId = tcp.globals.tcp_css_edit + commentId,
+					editorId = tcp.globals.tcp_css_editor + commentId,
+					contentId = tcp.globals.tcp_css_comment_content + commentId;
+			ReactDOM.render(<tcp.Editor tcpGlobals={ tcp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } contentId={ contentId } />, this );
 		});
 	}
 

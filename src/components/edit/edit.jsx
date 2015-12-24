@@ -16,25 +16,28 @@ class EditComponent extends React.Component {
    }
 
    _bind( methods ) {
-      methods.forEach( (method) => this[method] = this[method].bind(this) );
+      methods.forEach( ( method ) => this[ method ] = this[ method ].bind( this ) );
    }
 
    componentDidMount() {
      let that = this;
-     $(window).on( 'toggleEdit', function( editId ) {
-        that.toggleEdit( editId );
+     $( window ).on( 'toggleEdit', function( event ) {
+        that.toggleEdit( event.editId );
      });
    }
 
    toggleEdit( editId ) {
-       if ( this.props.tcpGlobals.tcp_css_edit + this.props.commentId === editId ) {
+       if ( this.props.editId === editId ) {
           this.setState({ hideEdit: !this.state.hideEdit });
        }
    }
 
    editClick( event ) {
       event.preventDefault();
-      $(window).trigger( 'toggleEditor', this.props.tcpGlobals.tcp_css_editor + this.props.commentId );
+      $( window ).trigger({
+        type: 'toggleEditor',
+        editorId: this.props.editorId
+      });
    }
 
     render() {

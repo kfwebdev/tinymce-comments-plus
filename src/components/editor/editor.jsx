@@ -21,29 +21,34 @@ class EditorComponent extends React.Component {
 
    componentDidMount() {
       let that = this,
-          content = $( '#' + this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).html();
-      this.setState({ tinyMCEcontent: content });
-      $(window).on( 'toggleEditor', function( editorId ) {
-         that.toggleEditor( editorId );
+          commentContent = $( '#' + this.props.contentId ).html();
+      this.setState({ tinyMCEcontent: commentContent });
+      $( window ).on( 'toggleEditor', function( event ) {
+         that.toggleEditor( event.editorId );
       });
    }
 
   toggleEditor( editorId ) {
-      if ( this.props.tcpGlobals.tcp_css_editor + this.props.commentId === editorId ) {
+      if ( this.props.editorId === editorId ) {
          this.setState({ showEditor: !this.state.showEditor });
 
          // if showEditor was false (before setState above)
          if ( !this.state.showEditor ) {
-           $( '#' + this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).hide();
-           $(window).trigger( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
+           $( '#' + this.props.contentId ).hide();
+           $( window ).trigger({
+             type: 'toggleEdit',
+             editorId: this.props.editId
+           });
            this.initTinyMCE();
          }
       }
   }
 
   cancelEditor() {
-    $( '#' + this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).show();
-    $(window).trigger( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
+    $( '#' + this.props.contentId ).show();
+    $( window ).trigger( 'toggleEdit', {
+      editorId: this.props.tcpGlobals.tcp_css_edit + this.props.commentId
+    });
     this.setState({ showEditor: false });
     this.removeTinyMCE();
   }
@@ -67,17 +72,17 @@ class EditorComponent extends React.Component {
         ]
     });
     // update tinyMCE content
-    tinyMCE.get( this.props.tcpGlobals.tcp_css_editor + this.props.commentId ).setContent( this.state.tinyMCEcontent );
+    tinyMCE.get( this.props.editorId ).setContent( this.state.tinyMCEcontent );
   }
 
   removeTinyMCE() {
-    tinymce.remove( '#' + this.props.tcpGlobals.tcp_css_editor + this.props.commentId );
+    tinymce.remove( '#' + this.props.editorId );
   }
 
   render() {
       return(
         <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'inline-block' }:{ display:'none' }}>
-          <textarea id={ this.props.tcpGlobals.tcp_css_editor + this.props.commentId } className="tinyMCEeditor" rows="8"></textarea>
+          <textarea id={ this.props.editorId } className="tinyMCEeditor" rows="8"></textarea>
           <div className="reply tcp-reply-container">
             <span className="spinner"></span><a href="javascript:void(0);" className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_submit_edit_button + ' comment-reply-link' }>Submit</a>
             <a href="javascript:void(0);" onClick={ this.cancelEditor } className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_cancel_edit_button + ' comment-reply-link' }>Cancel</a>
