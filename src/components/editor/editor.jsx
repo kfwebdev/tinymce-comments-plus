@@ -77,7 +77,7 @@ class EditorComponent extends React.Component {
   }
 
   removeTinyMCE() {
-    tinymce.remove( '#' + this.props.editorId );
+    tinymce.remove( this.props.editorId );
   }
 
   render() {
