@@ -37,7 +37,7 @@ class EditorComponent extends React.Component {
            $( '#' + this.props.contentId ).hide();
            $( window ).trigger({
              type: 'toggleEdit',
-             editorId: this.props.editId
+             editId: this.props.editId
            });
            this.initTinyMCE();
          }
@@ -46,8 +46,9 @@ class EditorComponent extends React.Component {
 
   cancelEditor() {
     $( '#' + this.props.contentId ).show();
-    $( window ).trigger( 'toggleEdit', {
-      editorId: this.props.tcpGlobals.tcp_css_edit + this.props.commentId
+    $( window ).trigger({
+      type: 'toggleEdit',
+      editId: this.props.editId
     });
     this.setState({ showEditor: false });
     this.removeTinyMCE();
