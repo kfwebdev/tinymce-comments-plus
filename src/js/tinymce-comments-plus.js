@@ -212,60 +212,6 @@ tcp.initTcp = function() {
 	});
 
 
-
-
-
-	tcp.CommentsView = Backbone.View.extend({
-		events: function() {
-			var _events = {};
-			_events[ 'click .' + tcp.globals.cssEditButton ] = 'resetEditors';
-			_events[ 'click .' + tcp.globals.cssCommentReplyButton ] = 'resetEditors';
-			_events[ 'click .' + tcp.globals.cssEditButton ] = 'editComment';
-
-			return _events;
-		},
-
-		initialize: function() {
-			this.$el.find( '.' + tcp.globals.cssCommentReplyButton ).addClass( tcp.globals.cssButton );
-		},
-
-		resetEditors: function() {
-			tcp.resetEditors();
-		},
-
-		editComment: function( event ) {
-			var $editLink = $( event.currentTarget ),
-				postId = $editLink.attr( 'data-tcp-post-id' ),
-				commentId = $editLink.attr( 'data-tcp-comment-id' ),
-				editElement = 'tcpEditComment' + commentId,
-				nonce = $editLink.attr( 'data-tcp-nc' );
-
-			if ( $editLink.length &&
-				 parseInt( postId ) > 0 &&
-				 parseInt( commentId ) > 0 ) {
-				$editLink.before('<div id="' + editElement + '" class="tcp-comment-editor"></div>');
-
-				var	editModel = new tcp.EditModel({
-						action: tcp.globals.updateCommentAction,
-						security: nonce,
-						postId: postId,
-						commentId: commentId
-					}),
-					editView = new tcp.EditView({
-						el: '#' + editElement,
-						model: editModel
-				});
-
-				$( '#comment-' + commentId + ' .tcp-comment-content[data-tcp-comment-id=' + commentId + ']' ).after( editView.render().el );
-				tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'tcpCommentEditor' + commentId );
-				$editLink.hide();
-			}
-		}
-	}); /* /tcp.CommentsView */
-
-
-
-
 	// Reset tinymce editors
 	tcp.resetEditors = function() {
 		// Remove old textarea tinyMCE editor instance

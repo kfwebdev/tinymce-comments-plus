@@ -8,7 +8,7 @@ var
 class EditorComponent extends React.Component {
    constructor() {
       super();
-      this._bind( [ 'componentDidMount', 'toggleEditor', 'cancelEditor', 'initTinyMCE' ] );
+      this._bind( [ 'componentDidMount', 'toggleEditor', 'cancelEditor', 'initTinyMCE', 'submitEdit' ] );
       this.state = {
          showEditor: false,
          tinyMCEcontent: ''
@@ -76,6 +76,48 @@ class EditorComponent extends React.Component {
     tinyMCE.get( this.props.editorId ).setContent( this.state.tinyMCEcontent );
   }
 
+  submitEdit() {
+    let
+      that = this,
+      re_action = /^[a-z_]+$/,
+      $content = $( '#' + this.props.contentId ),
+      postId = $content.data( this.props.tcpGlobals.tcp_css_comment_id ),
+      re_postId = /^[0-9]+$/,
+      re_commentId = /^[0-9]+$/,
+      nonce = $content.data( this.props.tcpGlobals.tcp_css_nonce ),
+      re_nonce = /^[a-zA-Z0-9]+$/,
+      commentEditData = {
+        action: this.props.tcpGlobals.updateCommentAction,
+        security: nonce,
+        postId: postId,
+        commentId: this.props.commentId,
+        content: this.state.tinyMCEcontent
+      }
+    ;
+
+    // validate action
+    if ( ! re_action.test( this.props.tcpGlobals.updateCommentAction ) ) { return false; }
+    // validate postId
+    if ( ! re_postId.test( postId ) ) { return false; }
+    // validate commentId
+    if ( ! re_commentId.test( this.props.commentId ) ) { return false; }
+    // validate nonce
+    if ( ! re_nonce.test( nonce ) ) { return false; }
+
+    $.ajax({
+      url: this.props.tcpGlobals.ajaxUrl,
+      type: 'post',
+      data: $.param( commentEditData )
+    })
+    .done( function( data ){
+      $content.html( data.comment_content );
+      that.cancelEditor();
+    })
+    .fail( function( data ){
+      // error
+    });
+  }
+
   removeTinyMCE() {
     tinymce.remove( this.props.editorId );
   }
@@ -85,7 +127,7 @@ class EditorComponent extends React.Component {
         <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'inline-block' }:{ display:'none' }}>
           <textarea id={ this.props.editorId } className="tinyMCEeditor" rows="8"></textarea>
           <div className="reply tcp-reply-container">
-            <span className="spinner"></span><a href="javascript:void(0);" className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_submit_edit_button + ' comment-reply-link' }>Submit</a>
+            <span className="spinner"></span><a href="javascript:void(0);" onClick={ this.submitEdit } className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_submit_edit_button + ' comment-reply-link' }>Submit</a>
             <a href="javascript:void(0);" onClick={ this.cancelEditor } className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_cancel_edit_button + ' comment-reply-link' }>Cancel</a>
           </div>
         </div>
