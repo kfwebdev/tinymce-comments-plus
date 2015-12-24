@@ -28,6 +28,9 @@ var
 window.tcp = tcp;
 window.tcp.emitter = emitter;
 
+tcp.Edit = require( '../components/edit/edit' );
+tcp.Editor = require( '../components/editor/editor' );
+
 tcp.initTcp = function() {
 	if ( tcpGlobals.length ) {
 		window.tcp.globals = JSON.parse( tcpGlobals );
@@ -277,36 +280,24 @@ tcp.initTcp = function() {
 	};
 
 
-	// Instantiate views on document ready
-	// tcp.views = {};
-	//
-	// tcp.views.comments = new tcp.CommentsView({
-	// 	el: $( tcp.globals.commentsList )
-	// });
-	//
-	// tcp.views.respond = new tcp.RespondView({
-	// 	el: $( tcp.globals.commentFormSpan ).parent().parent()
-	// });
+	tcp.bindEditors = function() {
+		$( '.tcp-edit' ).each(function(){
+			let commentId = $(this).data('tcp-comment-id'),
+			editorId = 'tcp-editor' + commentId;
+			ReactDOM.render(<tcp.Edit editorId={editorId} />, this );
+		});
 
-
-	tcp.Edit = require( '../components/edit/edit' );
-	tcp.Editor = require( '../components/editor/editor' );
-
-	$( '.tcp-edit' ).each(function(){
-		let commentId = $(this).data('tcp-comment-id'),
-		editorId = 'tcp-editor' + commentId;
-		ReactDOM.render(<tcp.Edit editorId={editorId} />, this );
-	});
-
-	$( '.tcp-editor' ).each(function(){
-		let editorId = $(this).attr('id');
-		ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} editorId={editorId} />, this );
-	});
+		$( '.tcp-editor' ).each(function(){
+			let editorId = $(this).data('tcp-editor-id');
+			ReactDOM.render(<tcp.Editor tcpGlobals={tcp.globals} editorId={editorId} />, this );
+		});
+	}
 
 };
 
 ( function( $ ){
    $(function(){
       tcp.initTcp();
+			tcp.bindEditors();
    });
 })( jQuery );

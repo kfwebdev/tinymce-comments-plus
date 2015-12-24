@@ -620,7 +620,7 @@ class TinyMCECommentsPlus {
 			$content
 		);
 
-		$tcp_editor = '<div class="tcp-editor" id="tcp-editor' . $comment_id . '"></div>';
+		$tcp_editor = '<div class="tcp-editor" data-tcp-editor-id="tcp-editor' . $comment_id . '"></div>';
 
 		return $tcp_editor . $tcp_content;
 	}
