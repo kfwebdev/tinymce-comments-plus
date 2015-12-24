@@ -1,7 +1,9 @@
 'use strict';
 import React from 'react';
 
-var emitter = tcp.emitter;
+var
+  $ = jQuery
+;
 
 class EditComponent extends React.Component {
    constructor() {
@@ -19,7 +21,7 @@ class EditComponent extends React.Component {
 
    componentDidMount() {
      let that = this;
-     emitter.addListener( 'toggleEdit', function( editId ) {
+     $(window).on( 'toggleEdit', function( editId ) {
         that.toggleEdit( editId );
      });
    }
@@ -32,7 +34,7 @@ class EditComponent extends React.Component {
 
    editClick( event ) {
       event.preventDefault();
-      emitter.emit( 'toggleEditor', this.props.tcpGlobals.tcp_css_editor + this.props.commentId );
+      $(window).trigger( 'toggleEditor', this.props.tcpGlobals.tcp_css_editor + this.props.commentId );
    }
 
     render() {

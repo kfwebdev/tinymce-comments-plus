@@ -1,8 +1,9 @@
 'use strict';
 import React from 'react';
-import FBEmitter from 'fbemitter';
 
-var emitter = tcp.emitter;
+var
+  $ = jQuery
+;
 
 class EditorComponent extends React.Component {
    constructor() {
@@ -20,9 +21,9 @@ class EditorComponent extends React.Component {
 
    componentDidMount() {
       let that = this,
-          content = document.getElementById( this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).innerHTML;
+          content = $( '#' + this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).html();
       this.setState({ tinyMCEcontent: content });
-      emitter.addListener( 'toggleEditor', function( editorId ) {
+      $(window).on( 'toggleEditor', function( editorId ) {
          that.toggleEditor( editorId );
       });
    }
@@ -33,16 +34,16 @@ class EditorComponent extends React.Component {
 
          // if showEditor was false (before setState above)
          if ( !this.state.showEditor ) {
-           document.getElementById( this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).style.display = 'none';
-           emitter.emit( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
+           $( '#' + this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).hide();
+           $(window).trigger( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
            this.initTinyMCE();
          }
       }
   }
 
   cancelEditor() {
-    document.getElementById( this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).style.display = 'block';
-    emitter.emit( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
+    $( '#' + this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).show();
+    $(window).trigger( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
     this.setState({ showEditor: false });
     this.removeTinyMCE();
   }
