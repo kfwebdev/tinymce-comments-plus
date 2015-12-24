@@ -33,12 +33,16 @@ class EditorComponent extends React.Component {
 
          // if showEditor was false (before setState above)
          if ( !this.state.showEditor ) {
+           document.getElementById( this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).style.display = 'none';
+           emitter.emit( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
            this.initTinyMCE();
          }
       }
   }
 
   cancelEditor() {
+    document.getElementById( this.props.tcpGlobals.tcp_css_comment_content + this.props.commentId ).style.display = 'block';
+    emitter.emit( 'toggleEdit', this.props.tcpGlobals.tcp_css_edit + this.props.commentId );
     this.setState({ showEditor: false });
     this.removeTinyMCE();
   }
@@ -74,8 +78,8 @@ class EditorComponent extends React.Component {
         <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'inline-block' }:{ display:'none' }}>
           <textarea id={ this.props.tcpGlobals.tcp_css_editor + this.props.commentId } className="tinyMCEeditor" rows="8"></textarea>
           <div className="reply tcp-reply-container">
-            <span className="spinner"></span><a href="javascript:void(0);" className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_submit_edit_button }>Submit</a>
-            <a href="javascript:void(0);" onClick={ this.cancelEditor } className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_cancel_edit_button }>Cancel</a>
+            <span className="spinner"></span><a href="javascript:void(0);" className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_submit_edit_button + ' comment-reply-link' }>Submit</a>
+            <a href="javascript:void(0);" onClick={ this.cancelEditor } className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_cancel_edit_button + ' comment-reply-link' }>Cancel</a>
           </div>
         </div>
       );
@@ -87,7 +91,5 @@ class EditorComponent extends React.Component {
     }
   }
 }
-
-// EditorComponent.defaultProps = { showEditor: false };
 
 module.exports = EditorComponent;

@@ -7,6 +7,10 @@ class EditComponent extends React.Component {
    constructor() {
     super();
     this._bind( [ 'editClick' ] );
+    this.state = {
+       hideEdit: false
+    };
+
    }
 
    _bind( methods ) {
@@ -14,6 +18,16 @@ class EditComponent extends React.Component {
    }
 
    componentDidMount() {
+     let that = this;
+     emitter.addListener( 'toggleEdit', function( editId ) {
+        that.toggleEdit( editId );
+     });
+   }
+
+   toggleEdit( editId ) {
+       if ( this.props.tcpGlobals.tcp_css_edit + this.props.commentId === editId ) {
+          this.setState({ hideEdit: !this.state.hideEdit });
+       }
    }
 
    editClick( event ) {
@@ -23,11 +37,9 @@ class EditComponent extends React.Component {
 
     render() {
         return(
-                <a href="#" onClick={this.editClick}>Edit</a>
+                <a href="#" onClick={ this.editClick } style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
         );
     }
 }
-
-EditComponent.defaultProps = {};
 
 module.exports = EditComponent;
