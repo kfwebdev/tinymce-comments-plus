@@ -220,6 +220,7 @@ tcp.initTcp = function() {
 		$( 'div.mce-inline-toolbar-grp' ).remove();
 		// Recreate new tinyMCE editor at new #comment textarea position
 		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+		cl('reset em');
 	};
 
 
@@ -240,9 +241,12 @@ tcp.initTcp = function() {
 					contentId = tcp.globals.tcp_css_comment_content + commentId;
 			ReactDOM.render(<tcp.Editor tcpGlobals={ tcp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } contentId={ contentId } />, this );
 		});
-	}
 
-	tcp.resetEditors();
+		$( '.comment-reply-link' ).on( 'click', function() {
+			tcp.resetEditors();
+			tinyMCE.activeEditor.focus();
+		});
+	}
 
 };
 

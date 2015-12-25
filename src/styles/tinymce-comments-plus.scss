@@ -13,11 +13,10 @@
     margin-bottom: 1rem;
 }
 
-.tcp-comment-editor {
-  display: none;
-
-    & > .mce-container {
+.tcp_editor {
+    .mce-container {
         border: 1px solid #eaeaea;
+        border-top: none;
     }
 }
 
