@@ -27,9 +27,14 @@ class EditComponent extends React.Component {
    }
 
    toggleEdit( editId ) {
-       if ( this.props.editId === editId ) {
-          this.setState({ hideEdit: !this.state.hideEdit });
-       }
+      if ( this.props.editId === editId ) {
+        this.setState({ hideEdit: !this.state.hideEdit });
+
+        $( '#' + this.props.editId )
+        .parent()
+        .siblings()
+        .toggle();
+      }
    }
 
    editClick( event ) {
@@ -42,7 +47,7 @@ class EditComponent extends React.Component {
 
     render() {
         return(
-                <a href="#" className={ this.props.tcpGlobals.tcp_css_submit_edit_button_custom } onClick={ this.editClick } style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
+                <a href="#" className={ this.props.tcpGlobals.tcp_css_submit_edit_button_custom } id={ this.props.editId } onClick={ this.editClick } style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
         );
     }
 }
