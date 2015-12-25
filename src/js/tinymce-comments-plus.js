@@ -220,7 +220,6 @@ tcp.initTcp = function() {
 		$( 'div.mce-inline-toolbar-grp' ).remove();
 		// Recreate new tinyMCE editor at new #comment textarea position
 		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-		cl('reset em');
 	};
 
 
@@ -245,6 +244,10 @@ tcp.initTcp = function() {
 		$( '.comment-reply-link' ).on( 'click', function() {
 			tcp.resetEditors();
 			tinyMCE.activeEditor.focus();
+			$( '#' + tcp.globals.tcp_id_cancel_comment_reply_id ).on( 'click', function() {
+				tcp.resetEditors();
+				tinyMCE.activeEditor.focus();
+			});
 		});
 	}
 

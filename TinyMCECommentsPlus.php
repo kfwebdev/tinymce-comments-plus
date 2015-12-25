@@ -136,7 +136,7 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'comment_id' => tcp_css_comment_id,
 			tcp_css_prefix . 'nonce' => tcp_css_nonce,
 			// IDs
-			'idCancelCommentReply' => tcp_id_cancel_comment_reply_id,
+			tcp_id_prefix . 'cancel_comment_reply_id' => tcp_id_cancel_comment_reply_id,
 		);
 
 		$this->tcp_plugin_javascript_globals[ 'commentFormSpan' ] = '#tcpCommentFormSpan';
