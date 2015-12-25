@@ -9,9 +9,6 @@
 
 'use strict';
 
-// import jQuery from 'jquery';
-// import Backbone from 'backbone';
-// import _ from 'underscore';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
