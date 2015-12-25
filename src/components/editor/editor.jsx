@@ -125,7 +125,7 @@ class EditorComponent extends React.Component {
 
   render() {
       return(
-        <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'inline-block' }:{ display:'none' }}>
+        <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' }}>
           <textarea id={ this.props.editorId } className="tinyMCEeditor" rows="8"></textarea>
           <div className="reply tcp-reply-container">
             <span className="spinner"></span><a href="javascript:void(0);" onClick={ this.submitEdit } className={ this.props.tcpGlobals.tcp_css_button + ' ' + this.props.tcpGlobals.tcp_css_submit_edit_button + ' comment-reply-link' }>Submit</a>
