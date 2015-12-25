@@ -47,7 +47,7 @@ class EditComponent extends React.Component {
 
     render() {
         return(
-                <a href="#" className={ this.props.tcpGlobals.tcp_css_submit_edit_button_custom } id={ this.props.editId } onClick={ this.editClick } style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
+                <a href="javascript:void(0);" className={ this.props.tcpGlobals.tcp_css_submit_edit_button_custom } id={ this.props.editId } onClick={ this.editClick } style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
         );
     }
 }
