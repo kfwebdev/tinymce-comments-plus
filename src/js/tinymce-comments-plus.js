@@ -35,7 +35,7 @@ tcp.initTcp = function() {
 		events: function() {
 			var _events = {};
 
-			_events[ 'click #' + tcp.globals.idCancelCommentReply ] = 'resetEditors';
+			_events[ 'click #' + tcp.globals.idCancelCommentReply ] = 'resetEditor';
 			_events[ 'submit' ] = 'submitForm';
 
 			return _events;
@@ -48,8 +48,8 @@ tcp.initTcp = function() {
 			this.$submitButton.addClass( tcp.globals.cssButton + ' ' + tcp.globals.cssSubmitButton )
 		},
 
-		resetEditors: function() {
-			tcp.resetEditors();
+		resetEditor: function() {
+			tcp.resetEditor();
 		},
 
 		submitForm: function( event ) {
@@ -73,7 +73,7 @@ tcp.initTcp = function() {
 				self.$submitButton.attr( 'disabled', false );
 				self.$submitButton.val( submitText );
 				tinyMCE.activeEditor.setContent('');
-				tcp.resetEditors();
+				tcp.resetEditor();
 
 				var
 					$commentData = $( data ).find( tcp.globals.commentsList ),
@@ -90,7 +90,7 @@ tcp.initTcp = function() {
 					});
 
 					// restore tinymce editor to refreshed reply form
-					tcp.resetEditors();
+					tcp.resetEditor();
 
 					// // scroll to latest comment
 					// var $commentsList = $comments.find( '.comment' );
@@ -112,13 +112,14 @@ tcp.initTcp = function() {
 
 
 	// Reset tinymce editors
-	tcp.resetEditors = function() {
+	tcp.resetEditor = function() {
 		// Remove old textarea tinyMCE editor instance
 		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
 		// Remove old inline toolbar created by old tinyMCE editor instance
-		$( 'div.mce-inline-toolbar-grp' ).remove();
+		// $( 'div.mce-inline-toolbar-grp' ).remove();
 		// Recreate new tinyMCE editor at new #comment textarea position
 		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+		tinymce.activeEditor.focus();
 	};
 
 
@@ -141,11 +142,12 @@ tcp.initTcp = function() {
 		});
 
 		$( '.comment-reply-link' ).on( 'click', function() {
-			tcp.resetEditors();
-			tinyMCE.activeEditor.focus();
+			tcp.resetEditor();
+			$('#comment').change(function(){ cl('changed'); });
+
 			$( '#' + tcp.globals.tcp_id_cancel_comment_reply_id ).on( 'click', function() {
-				tcp.resetEditors();
-				tinyMCE.activeEditor.focus();
+				// reset editor after move
+				setTimeout( function() { tcp.resetEditor(); }, 600 );
 			});
 		});
 	}
