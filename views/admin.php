@@ -20,8 +20,8 @@
 		<div class="tcp-option">
 			<fieldset class="comment-editing">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_editing_enabled );
-					$editing_option = get_option( ajax_action_editing_enabled );
+					$nonce = wp_create_nonce( tcp_ajax_editing_enabled );
+					$editing_option = get_option( tcp_ajax_editing_enabled );
 				?>
 				<legend>Comment Editing</legend>
 				<p>Allow users to edit comments after they post.</p>
@@ -32,8 +32,8 @@
 			</fieldset>
 			<fieldset class="comment-expiration">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_editing_expiration );
-					$expiration_option = get_option( ajax_action_editing_expiration );
+					$nonce = wp_create_nonce( tcp_ajax_editing_expiration );
+					$expiration_option = get_option( tcp_ajax_editing_expiration );
 				?>
 				<legend>Comment Editing Period</legend>
 				<p>Allow comment edits after posting.</p>
@@ -46,8 +46,8 @@
 		<div class="tcp-option">
 			<fieldset class="customize-buttons">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_custom_classes_open );
-					$classes_option = get_option( ajax_action_custom_classes_open );
+					$nonce = wp_create_nonce( tcp_ajax_custom_classes_open );
+					$classes_option = get_option( tcp_ajax_custom_classes_open );
 				?>
 				<legend>Customize TinyMCE Buttons</legend>
 				<p>Configure buttons on TinyMCE toolbar rows.</p>
@@ -61,8 +61,8 @@
 			</fieldset>
 			<fieldset class="empty">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_wordpress_ids_open );
-					$empty_option = get_option( ajax_action_wordpress_ids_open );
+					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids_open );
+					$empty_option = get_option( tcp_ajax_wordpress_ids_open );
 				?>
 				<legend>Empty</legend>
 				<p>Empty Description.</p>
@@ -79,8 +79,8 @@
 		<div class="tcp-option">
 			<fieldset class="custom-classes">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_custom_classes_open );
-					$classes_option = get_option( ajax_action_custom_classes_open );
+					$nonce = wp_create_nonce( tcp_ajax_custom_classes_open );
+					$classes_option = get_option( tcp_ajax_custom_classes_open );
 				?>
 				<legend>Custom Classes</legend>
 				<p>Configure custom CSS classes for buttons and inputs.</p>
@@ -97,8 +97,8 @@
 			</fieldset>
 			<fieldset class="wordpress-ids">
 				<?php
-					$nonce = wp_create_nonce( ajax_action_wordpress_ids_open );
-					$ids_option = get_option( ajax_action_wordpress_ids_open );
+					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids_open );
+					$ids_option = get_option( tcp_ajax_wordpress_ids_open );
 				?>
 				<legend>WordPress IDs</legend>
 				<p>Some themes may use different element IDs for comments.</p>
