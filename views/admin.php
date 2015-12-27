@@ -24,7 +24,7 @@
 					$editing_option = get_option( tcp_ajax_editing_enabled );
 				?>
 				<legend>Comment Editing</legend>
-				<p>Comments are Editable.</p>
+				<p>Comments are Editable</p>
 				<div class="editing-control">
 					<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
 					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
@@ -36,7 +36,7 @@
 					$expiration_option = get_option( tcp_ajax_editing_expiration );
 				?>
 				<legend>Comment Editing Period</legend>
-				<p>Allow comment edits after posting.</p>
+				<p>Comments can be edited for</p>
 				<div class="expiration-control">
 					<output></output>
 					<input class="years" type="range" step="1" min="1" max="20160" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
@@ -49,31 +49,15 @@
 					$nonce = wp_create_nonce( tcp_ajax_custom_classes_open );
 					$classes_option = get_option( tcp_ajax_custom_classes_open );
 				?>
-				<legend>Customize TinyMCE Buttons</legend>
-				<p>Configure buttons on TinyMCE toolbar rows.</p>
+				<legend>Customize TinyMCE Toolbar Buttons</legend>
+				<p>Configure toolbar row buttons in TinyMCE for comments</p>
 
-				<div>
+				<div class="box">
 					<div>Toolbar row 1 <input type="text"></div>
 					<div>Toolbar row 2 <input type="text"></div>
 					<div>Toolbar row 3 <input type="text"></div>
 					<div>Toolbar row 4 <input type="text"></div>
 				</div>
-			</fieldset>
-			<fieldset class="empty">
-				<?php
-					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids_open );
-					$empty_option = get_option( tcp_ajax_wordpress_ids_open );
-				?>
-				<legend>Empty</legend>
-				<p>Empty Description.</p>
-				<input type="button" value="<?php if ( $empty_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
-
-				<div class="box <?php if ( $ids_option == 'yes' ) { ?>show<?php } ?>">
-					<label>Comments List <input type="text" /></label>
-					<label>Comments List <input type="text" /></label>
-					<label>Comments List <input type="text" /></label>
-				</div>
-
 			</fieldset>
 		</div>
 		<div class="tcp-option">
@@ -83,10 +67,9 @@
 					$classes_option = get_option( tcp_ajax_custom_classes_open );
 				?>
 				<legend>Custom Classes</legend>
-				<p>Configure custom CSS classes for buttons and inputs.</p>
-				<input type="button" value="<?php if ( $classes_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
+				<p>Configure custom CSS classes for buttons and inputs</p>
 
-				<div class="box <?php if ( $classes_option == 'yes' ) { ?>show<?php } ?>">
+				<div class="box">
 					<label>TCP Button .tcp-button <input type="text" /></label>
 					<label>TCP Edit Button .tcp-edit-comment <input type="text" /></label>
 					<label>Reply Button .comment-reply-link <input type="text" /></label>
@@ -101,10 +84,9 @@
 					$ids_option = get_option( tcp_ajax_wordpress_ids_open );
 				?>
 				<legend>WordPress IDs</legend>
-				<p>Some themes may use different element IDs for comments.</p>
-				<input type="button" value="<?php if ( $ids_option == 'yes' ) { ?>Hide<?php } else { ?>Show<?php } ?>" data-tcp-nc="<?php echo $nonce ?>" />
+				<p>Some themes may use different element IDs for comments</p>
 
-				<div class="box <?php if ( $ids_option == 'yes' ) { ?>show<?php } ?>">
+				<div class="box">
 					<label>Comments List <input type="text" /></label>
 					<label>Comment ID Prefix <input type="text" /></label>
 					<label>Comment <input type="text" /></label>
@@ -114,7 +96,6 @@
 					<label>Cancel Comment Reply Link <input type="text" /></label>
 					<label>Submit Comment <input type="text" /></label>
 				</div>
-
 			</fieldset>
 		</div>
 	</div>
