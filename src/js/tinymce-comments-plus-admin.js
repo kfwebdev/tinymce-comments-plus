@@ -13,7 +13,7 @@
 
 var tcp = tcp || {};
 
-( function ( $ ) {
+tcp.initAdmin = function() {
 	'use strict';
 
 	window.cl = console.dir.bind( console );
@@ -164,26 +164,32 @@ var tcp = tcp || {};
 		}
 	});
 
+	new tcp.editingEnabled({
+		el: $( '.tcp-option .comment-editing' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.adjustExpiration({
+		el: $( '.tcp-option .comment-expiration' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.customClasses({
+		el: $( '.tcp-option .custom-classes' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.wordpressIds({
+		el: $( '.tcp-option .wordpress-ids' ),
+		model: new tcp.ajaxModel
+	});
+
+};
+
+( function( $ ){
 	$( function() {
-		new tcp.editingEnabled({
-			el: $( '.tcp-option .comment-editing' ),
-			model: new tcp.ajaxModel
-		});
-
-		new tcp.adjustExpiration({
-			el: $( '.tcp-option .comment-expiration' ),
-			model: new tcp.ajaxModel
-		});
-
-		new tcp.customClasses({
-			el: $( '.tcp-option .custom-classes' ),
-			model: new tcp.ajaxModel
-		});
-
-		new tcp.wordpressIds({
-			el: $( '.tcp-option .wordpress-ids' ),
-			model: new tcp.ajaxModel
-		});
-	} );
-
+		if ( $( 'tcp-settings' ).length ) {
+			tcp.initAdmin();
+		}
+	});
 }( jQuery ) );

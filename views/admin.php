@@ -24,7 +24,7 @@
 					$editing_option = get_option( tcp_ajax_editing_enabled );
 				?>
 				<legend>Comment Editing</legend>
-				<p>Allow users to edit comments after they post.</p>
+				<p>Comments are Editable.</p>
 				<div class="editing-control">
 					<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
 					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
