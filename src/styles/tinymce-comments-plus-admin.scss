@@ -25,7 +25,7 @@
             p {
                 display: inline-block;
                 margin: 0 1em 0 0;
-                font-size: 1.05em;
+                font-size: .9em;
                 font-weight: normal;
             }
 
@@ -119,6 +119,8 @@
                 display: block;
                 margin: 10px 0 0;
 
+                &.custom-classes,
+                &.wordpress-ids,
                 &.customize-buttons {
                   input {
                     display: block;
