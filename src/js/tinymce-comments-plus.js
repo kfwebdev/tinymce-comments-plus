@@ -143,7 +143,6 @@ tcp.initTcp = function() {
 
 		$( '.comment-reply-link' ).on( 'click', function() {
 			tcp.resetEditor();
-			$('#comment').change(function(){ cl('changed'); });
 
 			$( '#' + tcp.globals.tcp_id_cancel_comment_reply_id ).on( 'click', function() {
 				// reset editor after move

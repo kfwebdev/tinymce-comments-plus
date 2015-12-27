@@ -575,7 +575,7 @@ class TinyMCECommentsPlus {
 	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
-	    $args['block_formats'] = "Paragraph=p; Heading 3=h3; Heading 4=h4";
+	  $args['block_formats'] = "Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
 	 	$args['toolbar1'] = tcp_buttons1;
 	 	$args['toolbar2'] = tcp_buttons2;
 	 	$args['toolbar3'] = '';
@@ -607,7 +607,7 @@ class TinyMCECommentsPlus {
 				'tinymce' => array(
 					'plugins' => 'inlinepopups, wordpress, wplink, wpdialogs',
 					'theme_advanced_buttons1' => tcp_buttons1,
-            		'theme_advanced_buttons2' => tcp_buttons2
+          'theme_advanced_buttons2' => tcp_buttons2
 				),
 			    'quicktags' => false,
 			    'media_buttons' => false
