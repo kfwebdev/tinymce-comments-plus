@@ -53,10 +53,10 @@
 				<p>Configure toolbar row buttons in TinyMCE for comments</p>
 
 				<div class="box">
-					<div>Toolbar row 1 <input type="text"></div>
-					<div>Toolbar row 2 <input type="text"></div>
-					<div>Toolbar row 3 <input type="text"></div>
-					<div>Toolbar row 4 <input type="text"></div>
+					<label><span>Toolbar row 1</span> <input type="text"></label>
+					<label><span>Toolbar row 2</span> <input type="text"></label>
+					<label><span>Toolbar row 3</span> <input type="text"></label>
+					<label><span>Toolbar row 4</span> <input type="text"></label>
 				</div>
 			</fieldset>
 		</div>
@@ -67,14 +67,14 @@
 					$classes_option = get_option( tcp_ajax_custom_classes_open );
 				?>
 				<legend>Custom Classes</legend>
-				<p>Configure custom CSS classes for buttons and inputs</p>
+				<p>Add additional CSS classes for TinyMCE Comments Plus buttons and inputs</p>
 
 				<div class="box">
-					<label>TCP Button .tcp-button <input type="text" /></label>
-					<label>TCP Edit Button .tcp-edit-comment <input type="text" /></label>
-					<label>Reply Button .comment-reply-link <input type="text" /></label>
-					<label>TCP Submit Edit .tcp-submit-edit <input type="text" /></label>
-					<label>TCP Cancel Edit .tcp-cancel-edit <input type="text" /></label>
+					<label><span>All Buttons</span> <input type="text" /></label>
+					<label><span>Edit Button</span> <input type="text" /></label>
+					<label><span>WordPress Reply Button</span> <input type="text" /></label>
+					<label><span>Submit Edit Button</span> <input type="text" /></label>
+					<label><span>Cancel Edit Button</span> <input type="text" /></label>
 				</div>
 
 			</fieldset>
@@ -87,14 +87,14 @@
 				<p>Some themes may use different element IDs for comments</p>
 
 				<div class="box">
-					<label>Comments List <input type="text" /></label>
-					<label>Comment ID Prefix <input type="text" /></label>
-					<label>Comment <input type="text" /></label>
-					<label>Respond <input type="text" /></label>
-					<label>Comment Form <input type="text" /></label>
-					<label>Comment Reply Link <input type="text" /></label>
-					<label>Cancel Comment Reply Link <input type="text" /></label>
-					<label>Submit Comment <input type="text" /></label>
+					<label><span>Comments List</span> <input type="text" /></label>
+					<label><span>Comment ID Prefix</span> <input type="text" /></label>
+					<label><span>Comment</span> <input type="text" /></label>
+					<label><span>Respond</span> <input type="text" /></label>
+					<label><span>Comment Form</span> <input type="text" /></label>
+					<label><span>Comment Reply Link</span> <input type="text" /></label>
+					<label><span>Cancel Comment Reply Link</span> <input type="text" /></label>
+					<label><span>Submit Comment</span> <input type="text" /></label>
 				</div>
 			</fieldset>
 		</div>

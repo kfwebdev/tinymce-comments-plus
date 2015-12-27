@@ -100,7 +100,7 @@ tcp.initAdmin = function() {
 
 			var expire = this.expiration * 1000 * 60;
 			if ( this.expiration == this.$input.prop( 'max' ) ) {
-				this.$output.text( 'Forever' );
+				this.$output.text( 'Always' );
 			}
 			else { this.$output.text( humanizeDuration( expire ) ); }
 		},

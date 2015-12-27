@@ -11,24 +11,8 @@
             vertical-align: top;
             background: #fafafa;
             box-sizing: border-box;
-            border: 1px solid #ddd;
+            border: 1px solid #eee;
             border-radius: 5px;
-
-            &.customize-buttons {
-              width: 97.3%;
-
-              input {
-                width: 75%;
-              }
-            }
-
-            &.comment-expiration {
-              input {
-                float: none;
-                width: 98%;
-                margin: 0;
-              }
-            }
 
             p {
                 display: inline-block;
@@ -67,13 +51,55 @@
                 }
             }
 
+            &.comment-expiration {
+              input {
+                float: none;
+                width: 98%;
+                margin: 0;
+              }
+            }
+
+            &.customize-buttons,
+            &.custom-classes,
+            &.wordpress-ids {
+              label {
+                width: 100%;
+                display: table;
+                table-layout: fixed;
+                padding: 5px 10px;
+                border-radius: 5px;
+                box-sizing: border-box;
+
+                &:nth-child(even) {
+                  background-color: #fdfdfd;
+                }
+
+                span {
+                  display: table-cell;
+                  text-align: right;
+                  width: 52%;
+                  padding-right: 10px;
+                }
+                input {
+                  display: table-cell;
+                  width: 100%;
+                  margin-bottom: 5px;
+                }
+              }
+            }
+            &.customize-buttons {
+              width: 97.3%;
+
+                label {
+                  span {
+                    width: 17%;
+                  }
+                }
+            }
+
             .editing-control,
             .expiration-control {
                 float: right;
-
-                & > input {
-                    // top: -5px;
-                }
 
                 & > label,
                 & > output {
@@ -100,7 +126,9 @@
                     margin-top: 0;
                 }
             }
-
+            .editing-control {
+              label { margin-right: 0; }
+            }
         }
     }
 }
@@ -113,11 +141,51 @@
                 width: 100%;
                 display: block;
                 margin: 10px 0 0;
+
+                &.customize-buttons,
+                &.custom-classes,
+                &.wordpress-ids {
+                  label {
+                    span {
+                      width: 32%;
+                    }
+                  }
+                }
+
+                &.customize-buttons {
+                  width: 100%;
+                }
             }
         }
     }
 }
 
+
+@media only screen and (max-width: 1024px) {
+  .tcp-settings {
+    .tcp-option {
+      fieldset {
+        &.customize-buttons,
+        &.custom-classes,
+        &.wordpress-ids {
+          label {
+            span {
+              width: 100%;
+              display: block;
+              margin-bottom: 5px;
+              text-align: left;
+            }
+            input {
+              width: 100%;
+              margin: 0 0 15px;
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 
 @media only screen and (max-width: 768px) {
     .tcp-settings {
