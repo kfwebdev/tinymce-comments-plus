@@ -40,7 +40,7 @@
 				<div class="expiration-control">
 					<output></output>
 				</div>
-				<input class="years" type="range" step="1" min="1" max="262801" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
+				<input class="years" type="range" step="1" min="1" max="262981" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
 			</fieldset>
 		</div>
 		<div class="tcp-option">
