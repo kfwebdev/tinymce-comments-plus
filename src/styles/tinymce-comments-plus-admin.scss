@@ -1,4 +1,10 @@
 .tcp-settings {
+  $sea-green: #60B99A;
+  $orange: #F77825;
+  $brown: #554236;
+  $yellow-green: #D3CE3D;
+  $light-yellow: #F1EFA5;
+
     .tcp-option {
         display: block;
         font-size: 1.25em;
@@ -16,7 +22,7 @@
 
             p {
                 display: inline-block;
-                margin: 0 1em 0 0;
+                margin: 0 1em 0;
                 font-size: .9em;
                 font-weight: normal;
             }
@@ -32,6 +38,8 @@
             }
 
             legend {
+                width: 100%;
+                box-sizing: border-box;
                 padding: 5px 10px;
                 font-weight: bold;
                 border-top: 1px solid #eee;
@@ -41,21 +49,44 @@
             }
 
             .box {
-                margin-top: 20px;
+                margin: 20px 1em;
                 padding: 15px;
                 border: 1px solid #ddd;
                 border-radius: 5px;
+
+                .confirmed {
+                  display: none;
+                  margin-bottom: 5px;
+                  text-align: center;
+
+                  & > .dashicons {
+                    color: $sea-green;
+                  }
+                }
 
                 & > label {
                     display: block;
                 }
             }
 
+            &.comment-editing,
+            &.comment-expiration,
+            &.customize-buttons,
+            &.custom-classes,
+            &.wordpress-ids {
+              legend {
+                & > .dashicons {
+                  color: $sea-green;
+                }
+              }
+            }
+
             &.comment-expiration {
               input {
                 float: none;
                 width: 98%;
-                margin: 0;
+                margin: 0 1em;
+                box-sizing: border-box;
               }
             }
 
@@ -219,9 +250,13 @@
                             display: block;
                         }
                     }
+                    
+                    .expiration-control {
+                      margin: 0 1em;
+                    }
 
                     .editing-control {
-                        margin-top: .75em;
+                        margin: .75em 1em 0;
                         float: none;
                     }
 

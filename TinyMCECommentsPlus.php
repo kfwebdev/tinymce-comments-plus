@@ -78,7 +78,7 @@ class TinyMCECommentsPlus {
 		define( tcp_ajax_prefix . 'update_comment', tcp_prefix . 'update_comment' );
 		define( tcp_ajax_prefix . 'editing_enabled', tcp_prefix . 'editing_enabled' );
 		define( tcp_ajax_prefix . 'editing_expiration', tcp_prefix . 'editing_expiration' );
-		define( tcp_ajax_prefix . 'custom_classes_open', tcp_prefix . 'custom_classes_open' );
+		define( tcp_ajax_prefix . 'custom_classes', tcp_prefix . 'custom_classes' );
 		define( tcp_ajax_prefix . 'wordpress_ids_open', tcp_prefix . 'wordpress_ids_open' );
 
 		define( tcp_prefix . 'buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv' );
@@ -109,7 +109,7 @@ class TinyMCECommentsPlus {
 			'optionUpdateDelay' => tcp_ajax_option_update_delay,
 			'editingEnabledAction' => tcp_ajax_editing_enabled,
 			'editingExpirationAction' => tcp_ajax_editing_expiration,
-			'customClassesOpenAction' => tcp_ajax_custom_classes_open,
+			'customClassesAction' => tcp_ajax_custom_classes,
 			'wordpressIdsOpenAction' => tcp_ajax_wordpress_ids_open
 		);
 
@@ -167,8 +167,8 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_ajax_' . tcp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . tcp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . tcp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_custom_classes_open, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_custom_classes_open, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . tcp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . tcp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . tcp_ajax_wordpress_ids_open, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . tcp_ajax_wordpress_ids_open, array( $this, 'action_ajax_request' ) );
 
@@ -492,10 +492,12 @@ class TinyMCECommentsPlus {
 				$result = $this->tcp_save_option( tcp_ajax_editing_expiration, $content );
 			break;
 
-			case tcp_ajax_custom_classes_open:
-				check_ajax_referer( tcp_ajax_custom_classes_open, 'security' );
-				$content = sanitize_key( $_REQUEST[ 'content' ] );
-				$result = $this->tcp_save_option( tcp_ajax_custom_classes_open, $content );
+			case tcp_ajax_custom_classes:
+				check_ajax_referer( tcp_ajax_custom_classes, 'security' );
+				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
+					$option = sanitize_html_class( $option );
+					$result = $this->tcp_save_option( tcp_ajax_custom_classes . $key, $option );
+				}
 			break;
 
 			case tcp_ajax_wordpress_ids_open:

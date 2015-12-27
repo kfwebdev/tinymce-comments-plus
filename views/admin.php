@@ -23,8 +23,8 @@
 					$nonce = wp_create_nonce( tcp_ajax_editing_enabled );
 					$editing_option = get_option( tcp_ajax_editing_enabled );
 				?>
-				<legend>Comment Editing</legend>
-				<p>Show Edit button on comments for logged in users</p>
+				<legend><span class="dashicons dashicons-welcome-write-blog"></span> Comment Editing</legend>
+				<p>Edit comments for logged in users</p>
 				<div class="editing-control">
 					<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
 					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-tcp-nc="<?php echo $nonce ?>" />
@@ -35,7 +35,7 @@
 					$nonce = wp_create_nonce( tcp_ajax_editing_expiration );
 					$expiration_option = get_option( tcp_ajax_editing_expiration );
 				?>
-				<legend>Comment Editing Period</legend>
+				<legend><span class="dashicons dashicons-clock"></span> Comment Editing Period</legend>
 				<p>Time to allow comments to be edited</p>
 				<div class="expiration-control">
 					<output></output>
@@ -46,16 +46,20 @@
 		<div class="tcp-option">
 			<fieldset class="custom-classes">
 				<?php
-					$nonce = wp_create_nonce( tcp_ajax_custom_classes_open );
-					$classes_option = get_option( tcp_ajax_custom_classes_open );
+					$nonce = wp_create_nonce( tcp_ajax_custom_classes );
+					$classes_option = get_option( tcp_ajax_custom_classes );
 				?>
-				<legend>Custom CSS</legend>
+				<legend><span class="dashicons dashicons-media-code"></span> Custom CSS</legend>
 				<p>Add additional CSS classes for TinyMCE Comments Plus buttons and inputs</p>
 
-				<div class="box">
+				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
+					<div class="confirmed">
+						<span class="dashicons dashicons-yes"></span>
+						<span>Saved!</span>
+					</div>
 					<label><span>All Buttons</span> <input type="text" /></label>
-					<label><span>Edit Button</span> <input type="text" /></label>
 					<label><span>WordPress Reply Button</span> <input type="text" /></label>
+					<label><span>Edit Button</span> <input type="text" /></label>
 					<label><span>Submit Edit Button</span> <input type="text" /></label>
 					<label><span>Cancel Edit Button</span> <input type="text" /></label>
 				</div>
@@ -66,8 +70,8 @@
 					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids_open );
 					$ids_option = get_option( tcp_ajax_wordpress_ids_open );
 				?>
-				<legend>WordPress IDs</legend>
-				<p>Some themes may use different element IDs for comments</p>
+				<legend><span class="dashicons dashicons-media-code"></span> WordPress IDs &amp; Classes</legend>
+				<p>Some themes may use different element IDs or classes in comments.                                                                                                                                                           </p>
 
 				<div class="box">
 					<label><span>Comments List</span> <input type="text" placeholder="#comments" /></label>
@@ -84,10 +88,10 @@
 		<div class="tcp-option">
 			<fieldset class="customize-buttons">
 				<?php
-					$nonce = wp_create_nonce( tcp_ajax_custom_classes_open );
-					$classes_option = get_option( tcp_ajax_custom_classes_open );
+					$nonce = wp_create_nonce( tcp_ajax_custom_classes );
+					$classes_option = get_option( tcp_ajax_custom_classes );
 				?>
-				<legend>Customize TinyMCE Toolbar Buttons</legend>
+				<legend><span class="dashicons dashicons-editor-kitchensink"></span> Customize TinyMCE Toolbar Buttons</legend>
 				<p>Configure toolbar row buttons in TinyMCE for comments</p>
 
 				<div class="box">

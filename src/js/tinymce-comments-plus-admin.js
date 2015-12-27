@@ -52,7 +52,7 @@ tcp.initAdmin = function() {
 		},
 
 		editingEnabled: function( event ) {
-			var self = this;
+			var that = this;
 			this.$input = this.$el.find( 'input[type=checkbox]' );
 			this.$label = this.$el.find( 'label' );
 			this.nonce = this.$input.data( 'tcp-nc' );
@@ -70,7 +70,7 @@ tcp.initAdmin = function() {
 
 			tcp.ajaxSaveOption( this.model.toJSON() )
 			.done( function( response ) {
-				self.$label.text( ( self.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
+				that.$label.text( ( that.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
 			});
 		}
 	});
@@ -106,41 +106,48 @@ tcp.initAdmin = function() {
 		},
 
 		editingExpiration: function( event ) {
-			var self = this;
+			var that = this;
 			this.model.set( 'security', this.nonce );
 			this.model.set( 'action', tcpGlobals.editingExpirationAction );
 			this.model.set( 'content', this.expiration );
 
 			clearTimeout( this.timeoutUpdate );
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.ajaxSaveOption( self.model.toJSON() );
-				clearTimeout( this.timeoutUpdate );
+				tcp.ajaxSaveOption( that.model.toJSON() );
+				clearTimeout( that.timeoutUpdate );
 			}, tcpGlobals.optionUpdateDelay );
 		}
 	});
 
 	tcp.customClasses = Backbone.View.extend({
 		events: {
-			'click input[type="button"]': 'toggleList'
+			'change input[type="text"]': 'updateClasses'
 		},
 
 		initialize: function() {
-			this.$input = this.$el.find( 'input[type=button]' );
 			this.$box = this.$el.find( '.box' );
-			this.nonce = this.$input.data( 'tcp-nc' );
-			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
+			this.nonce = this.$box.data( 'tcp-nc' );
+			this.timeoutUpdate = false;
 		},
 
-		toggleList: function() {
-			this.listOpen = ( this.listOpen == 'yes' ? 'no' : 'yes' );
-			this.$input.val( ( this.listOpen == 'yes' ? 'Hide' : 'Show' ) );
-			this.$box.slideToggle();
+		updateClasses: function() {
+			var that = this;
+
+			this.content = [];
+			this.$inputs = this.$el.find( 'input[type=text]' );
+			$.each(this.$inputs, function( key, input ){
+				that.content.push( input.value );
+			});
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.customClassesOpenAction );
-			this.model.set( 'content', this.listOpen );
+			this.model.set( 'action', tcpGlobals.customClassesAction );
+			this.model.set( 'content', this.content );
 
-			tcp.ajaxSaveOption( this.model.toJSON() );
+			clearTimeout( this.timeoutUpdate );
+			this.timeoutUpdate = setTimeout( function(){
+				tcp.ajaxSaveOption( that.model.toJSON() );
+				clearTimeout( that.timeoutUpdate );
+			}, tcpGlobals.optionUpdateDelay );
 		}
 	});
 
