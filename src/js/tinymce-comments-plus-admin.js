@@ -11,12 +11,17 @@
  * @copyright 3-22-2015 Kentaro Fischer
  */
 
-var tcp = tcp || {};
+'use strict';
+
+var
+	tcp = window.tcp || {},
+	tcpGlobals = window.tcpGlobals || {},
+	$ = jQuery
+;
+
+window.cl = console.dir.bind( console );
 
 tcp.initAdmin = function() {
-	'use strict';
-
-	window.cl = console.dir.bind( console );
 
 	if ( typeof tcpGlobals != 'undefined' ) {
 		tcpGlobals = JSON.parse( tcpGlobals );
@@ -188,7 +193,7 @@ tcp.initAdmin = function() {
 
 ( function( $ ){
 	$( function() {
-		if ( $( 'tcp-settings' ).length ) {
+		if ( $( '.tcp-settings' ).length ) {
 			tcp.initAdmin();
 		}
 	});
