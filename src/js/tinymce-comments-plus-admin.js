@@ -127,6 +127,7 @@ tcp.initAdmin = function() {
 		initialize: function() {
 			this.$box = this.$el.find( '.box' );
 			this.nonce = this.$box.data( 'tcp-nc' );
+			this.$confirmed = this.$box.find( '.confirmed' );
 			this.timeoutUpdate = false;
 		},
 
@@ -144,8 +145,16 @@ tcp.initAdmin = function() {
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
+			clearTimeout( this.fadeAnimation );
+			clearTimeout( this.hideAnimation );
+			this.$confirmed.removeClass('fade').hide();
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.ajaxSaveOption( that.model.toJSON() );
+				tcp.ajaxSaveOption( that.model.toJSON() )
+				.done(function( data ) {
+					that.$confirmed.show();
+					that.fadeAnimation = setTimeout( function(){ that.$confirmed.addClass('fade'); }, tcpGlobals.optionConfirmationDelay );
+					that.hideAnimation = setTimeout( function(){ that.$confirmed.hide(); }, tcpGlobals.optionConfirmationDelay + 1000 );
+				});
 				clearTimeout( that.timeoutUpdate );
 			}, tcpGlobals.optionUpdateDelay );
 		}

@@ -4,6 +4,7 @@
   $brown: #554236;
   $yellow-green: #D3CE3D;
   $light-yellow: #F1EFA5;
+  $white: #ffffff;
 
     .tcp-option {
         display: block;
@@ -56,8 +57,27 @@
 
                 .confirmed {
                   display: none;
-                  margin-bottom: 5px;
+                  margin: 0 10px 15px 0;
+                  padding: .5em 1em;
                   text-align: center;
+                  background-color: $light-yellow;
+                  border-radius: 5px;
+                  box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+
+                  opacity: 1;
+
+                  &.fade {
+                    opacity: 0;
+                    transition: opacity 1s linear;
+                  }
+
+                  & > .message {
+                    animation: blinker .25s 1;
+
+                    @keyframes blinker {
+                      50% { opacity: 0.0; }
+                    }
+                  }
 
                   & > .dashicons {
                     color: $sea-green;
@@ -250,7 +270,7 @@
                             display: block;
                         }
                     }
-                    
+
                     .expiration-control {
                       margin: 0 1em;
                     }

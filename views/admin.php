@@ -47,7 +47,11 @@
 			<fieldset class="custom-classes">
 				<?php
 					$nonce = wp_create_nonce( tcp_ajax_custom_classes );
-					$classes_option = get_option( tcp_ajax_custom_classes );
+					$classes_option0 = get_option( tcp_ajax_custom_classes .'0' );
+					$classes_option1 = get_option( tcp_ajax_custom_classes .'1' );
+					$classes_option2 = get_option( tcp_ajax_custom_classes .'2' );
+					$classes_option3 = get_option( tcp_ajax_custom_classes .'3' );
+					$classes_option4 = get_option( tcp_ajax_custom_classes .'4' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> Custom CSS</legend>
 				<p>Add additional CSS classes for TinyMCE Comments Plus buttons and inputs</p>
@@ -55,13 +59,13 @@
 				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
 					<div class="confirmed">
 						<span class="dashicons dashicons-yes"></span>
-						<span>Saved!</span>
+						<span class="message">CSS Classes Saved</span>
 					</div>
-					<label><span>All Buttons</span> <input type="text" /></label>
-					<label><span>WordPress Reply Button</span> <input type="text" /></label>
-					<label><span>Edit Button</span> <input type="text" /></label>
-					<label><span>Submit Edit Button</span> <input type="text" /></label>
-					<label><span>Cancel Edit Button</span> <input type="text" /></label>
+					<label><span>All Buttons</span> <input type="text" value="<?php echo $classes_option0 ?>" /></label>
+					<label><span>WordPress Reply Button</span> <input type="text" value="<?php echo $classes_option1 ?>" /></label>
+					<label><span>Edit Button</span> <input type="text" value="<?php echo $classes_option2 ?>" /></label>
+					<label><span>Submit Edit Button</span> <input type="text" value="<?php echo $classes_option3 ?>" /></label>
+					<label><span>Cancel Edit Button</span> <input type="text" value="<?php echo $classes_option4 ?>" /></label>
 				</div>
 
 			</fieldset>

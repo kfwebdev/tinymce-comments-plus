@@ -74,6 +74,7 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'javascript_globals', 'tcpGlobals' );
 		define( tcp_prefix . 'ajax_prefix', 'tcp_ajax_' );
 		define( tcp_ajax_prefix . 'option_update_delay', 2000 );
+		define( tcp_ajax_prefix . 'confirmation_delay', 3000 );
 		define( tcp_ajax_prefix . 'add_comment', tcp_prefix . 'add_comment' );
 		define( tcp_ajax_prefix . 'update_comment', tcp_prefix . 'update_comment' );
 		define( tcp_ajax_prefix . 'editing_enabled', tcp_prefix . 'editing_enabled' );
@@ -107,6 +108,7 @@ class TinyMCECommentsPlus {
 		$this->tcp_admin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'optionUpdateDelay' => tcp_ajax_option_update_delay,
+			'optionConfirmationDelay' => tcp_ajax_confirmation_delay,
 			'editingEnabledAction' => tcp_ajax_editing_enabled,
 			'editingExpirationAction' => tcp_ajax_editing_expiration,
 			'customClassesAction' => tcp_ajax_custom_classes,
@@ -498,6 +500,8 @@ class TinyMCECommentsPlus {
 					$option = sanitize_html_class( $option );
 					$result = $this->tcp_save_option( tcp_ajax_custom_classes . $key, $option );
 				}
+
+				$result = true;
 			break;
 
 			case tcp_ajax_wordpress_ids_open:
