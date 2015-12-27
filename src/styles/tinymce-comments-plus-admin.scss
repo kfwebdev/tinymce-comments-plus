@@ -22,6 +22,14 @@
               }
             }
 
+            &.comment-expiration {
+              input {
+                float: none;
+                width: 98%;
+                margin: 0;
+              }
+            }
+
             p {
                 display: inline-block;
                 margin: 0 1em 0 0;
@@ -86,13 +94,13 @@
                 }
             }
 
+            .expiration-control,
             .editing-control {
-                margin-top: .25em;
-
                 & > output {
                     margin-top: 0;
                 }
             }
+
         }
     }
 }

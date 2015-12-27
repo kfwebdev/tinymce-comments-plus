@@ -36,11 +36,11 @@
 					$expiration_option = get_option( tcp_ajax_editing_expiration );
 				?>
 				<legend>Comment Editing Period</legend>
-				<p>Comments can be edited for</p>
+				<p>Comments can be edited</p>
 				<div class="expiration-control">
 					<output></output>
-					<input class="years" type="range" step="1" min="1" max="20160" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
 				</div>
+				<input class="years" type="range" step="1" min="1" max="262801" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
 			</fieldset>
 		</div>
 		<div class="tcp-option">
