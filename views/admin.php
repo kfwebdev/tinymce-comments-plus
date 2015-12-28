@@ -36,6 +36,10 @@
 					$expiration_option = get_option( tcp_ajax_editing_expiration );
 				?>
 				<legend><span class="dashicons dashicons-clock"></span> Comment Editing Period</legend>
+				<div class="confirmed">
+					<span class="dashicons dashicons-yes"></span>
+					<span class="message"></span>
+				</div>
 				<p>Time to allow comments to be edited</p>
 				<div class="expiration-control">
 					<output></output>
@@ -47,11 +51,11 @@
 			<fieldset class="custom-classes">
 				<?php
 					$nonce = wp_create_nonce( tcp_ajax_custom_classes );
-					$classes_option0 = get_option( tcp_ajax_custom_classes .'0' );
-					$classes_option1 = get_option( tcp_ajax_custom_classes .'1' );
-					$classes_option2 = get_option( tcp_ajax_custom_classes .'2' );
-					$classes_option3 = get_option( tcp_ajax_custom_classes .'3' );
-					$classes_option4 = get_option( tcp_ajax_custom_classes .'4' );
+					$tcp_classes_all = get_option( tcp_ajax_custom_classes . '_all' );
+					$tcp_classes_reply = get_option( tcp_ajax_custom_classes . '_reply' );
+					$tcp_classes_edit = get_option( tcp_ajax_custom_classes . '_edit' );
+					$tcp_classes_submit = get_option( tcp_ajax_custom_classes . '_submit' );
+					$tcp_classes_cancel = get_option( tcp_ajax_custom_classes . '_cancel' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> Custom CSS</legend>
 				<p>Add additional CSS classes for TinyMCE Comments Plus buttons and inputs</p>
@@ -59,33 +63,42 @@
 				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
 					<div class="confirmed">
 						<span class="dashicons dashicons-yes"></span>
-						<span class="message">CSS Classes Saved</span>
+						<span class="message"></span>
 					</div>
-					<label><span>All Buttons</span> <input type="text" value="<?php echo $classes_option0 ?>" /></label>
-					<label><span>WordPress Reply Button</span> <input type="text" value="<?php echo $classes_option1 ?>" /></label>
-					<label><span>Edit Button</span> <input type="text" value="<?php echo $classes_option2 ?>" /></label>
-					<label><span>Submit Edit Button</span> <input type="text" value="<?php echo $classes_option3 ?>" /></label>
-					<label><span>Cancel Edit Button</span> <input type="text" value="<?php echo $classes_option4 ?>" /></label>
+					<label><span>All Buttons</span> <input type="text" value="<?php echo $tcp_classes_all ?>" data-tcp-field="_all" /></label>
+					<label><span>WordPress Reply Button</span> <input type="text" value="<?php echo $tcp_classes_reply ?>" data-tcp-field="_reply" /></label>
+					<label><span>Edit Button</span> <input type="text" value="<?php echo $tcp_classes_edit ?>" data-tcp-field="_edit" /></label>
+					<label><span>Submit Edit Button</span> <input type="text" value="<?php echo $tcp_classes_submit ?>" data-tcp-field="_submit" /></label>
+					<label><span>Cancel Edit Button</span> <input type="text" value="<?php echo $tcp_classes_cancel ?>" data-tcp-field="_cancel" /></label>
 				</div>
 
 			</fieldset>
 			<fieldset class="wordpress-ids">
 				<?php
-					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids_open );
-					$ids_option = get_option( tcp_ajax_wordpress_ids_open );
+					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids );
+					$wp_ids_list = get_option( tcp_ajax_wordpress_ids .'_list' );
+					$wp_ids_respond = get_option( tcp_ajax_wordpress_ids .'_respond' );
+					$wp_ids_form = get_option( tcp_ajax_wordpress_ids .'_form' );
+					$wp_ids_reply = get_option( tcp_ajax_wordpress_ids .'_reply' );
+					$wp_ids_cancel = get_option( tcp_ajax_wordpress_ids .'_cancel' );
+					$wp_ids_submit = get_option( tcp_ajax_wordpress_ids .'_submit' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> WordPress IDs &amp; Classes</legend>
 				<p>Some themes may use different element IDs or classes in comments.                                                                                                                                                           </p>
 
-				<div class="box">
-					<label><span>Comments List</span> <input type="text" placeholder="#comments" /></label>
+				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
+					<div class="confirmed">
+						<span class="dashicons dashicons-yes"></span>
+						<span class="message"></span>
+					</div>
+					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_ids_list ?>" data-tcp-field="_list" /></label>
 					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
-					<label><span>Respond</span> <input type="text" placeholder="#respond" /></label>
-					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" /></label>
-					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" /></label>
-					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" /></label>
-					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" /></label>
+					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_ids_respond ?>" data-tcp-field="_respond" /></label>
+					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_ids_form ?>" data-tcp-field="_form" /></label>
+					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_ids_reply ?>" data-tcp-field="_reply" /></label>
+					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_ids_cancel ?>" data-tcp-field="_cancel" /></label>
+					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_ids_submit ?>" data-tcp-field="_submit" /></label>
 				</div>
 			</fieldset>
 		</div>

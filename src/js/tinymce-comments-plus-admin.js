@@ -45,6 +45,52 @@ tcp.initAdmin = function() {
 	};
 
 
+	tcp.confirmationSaving = function( view ) {
+		view.$confirmed
+			.find( '.dashicons' )
+			.attr( 'class', 'dashicons dashicons-update' );
+		view.$confirmed
+			.addClass( 'saving' )
+			.find( '.message' )
+			.text( 'Saving...' );
+		view.$confirmed.show();
+	}
+
+	tcp.confirmationFail = function( view ) {
+		view.$confirmed
+			.find( '.dashicons' )
+			.attr( 'class', 'dashicons dashicons-no' );
+		view.$confirmed
+			.addClass( 'fail' )
+			.find( '.message' )
+			.text( 'Failed to Save!' );
+		view.$confirmed.show();
+		tcp.confirmationFade( view );
+	}
+
+	tcp.confirmationDone = function( view ) {
+		view.$confirmed
+			.find( '.dashicons' )
+			.attr( 'class', 'dashicons dashicons-yes' );
+		view.$confirmed
+			.removeClass( 'saving' )
+			.find( '.message' )
+			.text( view.confirmationMessage );
+		view.$confirmed.show();
+		tcp.confirmationFade( view );
+	}
+
+	tcp.confirmationFade = function( view ) {
+		view.fadeAnimation = setTimeout( function(){
+			view.$confirmed.addClass('fade');
+		}, tcpGlobals.optionConfirmationDelay );
+		view.hideAnimation = setTimeout( function(){
+			view.$confirmed.hide();
+			// add 1000ms to optionConfirmationDelay for fade animation
+		}, tcpGlobals.optionConfirmationDelay + 1000 );
+	}
+
+
 	tcp.editingEnabled = Backbone.View.extend({
 		events: {
 			'click input[type="checkbox"]': 'editingEnabled',
@@ -88,6 +134,7 @@ tcp.initAdmin = function() {
 		initialize: function() {
 			this.$input = this.$el.find( 'input[type=range]' );
 			this.$output = this.$el.find( 'output' );
+			this.$confirmed = this.$el.find( '.confirmed' );
 			this.nonce = this.$input.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
 			this.changeExpiration( false );
@@ -96,7 +143,8 @@ tcp.initAdmin = function() {
 		changeExpiration: function( event ) {
 			if ( ! event ) { this.expiration = parseInt( this.$input.val() ); }
 			else { this.expiration = parseInt( event.currentTarget.value ); }
-			if ( ! _.isNumber( this.expiration ) ) { this.expiration = 1; } // overwrite invalid inputs
+			// overwrite invalid inputs
+			if ( ! _.isNumber( this.expiration ) ) { this.expiration = 1; }
 
 			var expire = this.expiration * 1000 * 60;
 			if ( this.expiration == this.$input.prop( 'max' ) ) {
@@ -112,8 +160,19 @@ tcp.initAdmin = function() {
 			this.model.set( 'content', this.expiration );
 
 			clearTimeout( this.timeoutUpdate );
+			clearTimeout( this.fadeAnimation );
+			clearTimeout( this.hideAnimation );
+
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.ajaxSaveOption( that.model.toJSON() );
+				tcp.confirmationSaving( that );
+				tcp.ajaxSaveOption( that.model.toJSON() )
+				.fail(function( data ) {
+					tcp.confirmationFail( that );
+				})
+				.done(function( data ) {
+					that.confirmationMessage = 'Editing Period Saved';
+					tcp.confirmationDone( that );
+				});
 				clearTimeout( that.timeoutUpdate );
 			}, tcpGlobals.optionUpdateDelay );
 		}
@@ -126,18 +185,19 @@ tcp.initAdmin = function() {
 
 		initialize: function() {
 			this.$box = this.$el.find( '.box' );
-			this.nonce = this.$box.data( 'tcp-nc' );
 			this.$confirmed = this.$box.find( '.confirmed' );
+			this.nonce = this.$box.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
 		},
 
 		updateClasses: function() {
 			var that = this;
 
-			this.content = [];
+			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
-			$.each(this.$inputs, function( key, input ){
-				that.content.push( input.value );
+			$.each( this.$inputs, function( key, input ){
+				let field = $( input ).data( 'tcp-field' );
+				that.content[ field ] = input.value;
 			});
 
 			this.model.set( 'security', this.nonce );
@@ -147,13 +207,16 @@ tcp.initAdmin = function() {
 			clearTimeout( this.timeoutUpdate );
 			clearTimeout( this.fadeAnimation );
 			clearTimeout( this.hideAnimation );
-			this.$confirmed.removeClass('fade').hide();
+
 			this.timeoutUpdate = setTimeout( function(){
+				tcp.confirmationSaving( that );
 				tcp.ajaxSaveOption( that.model.toJSON() )
+				.fail(function( data ) {
+					tcp.confirmationFail( that );
+				})
 				.done(function( data ) {
-					that.$confirmed.show();
-					that.fadeAnimation = setTimeout( function(){ that.$confirmed.addClass('fade'); }, tcpGlobals.optionConfirmationDelay );
-					that.hideAnimation = setTimeout( function(){ that.$confirmed.hide(); }, tcpGlobals.optionConfirmationDelay + 1000 );
+					that.confirmationMessage = 'CSS Classes Saved';
+					tcp.confirmationDone( that );
 				});
 				clearTimeout( that.timeoutUpdate );
 			}, tcpGlobals.optionUpdateDelay );
@@ -162,26 +225,46 @@ tcp.initAdmin = function() {
 
 	tcp.wordpressIds = Backbone.View.extend({
 		events: {
-			'click input[type="button"]': 'toggleList'
+			'change input[type="text"]': 'updateIDs'
 		},
 
 		initialize: function() {
-			this.$input = this.$el.find( 'input[type=button]' );
 			this.$box = this.$el.find( '.box' );
-			this.nonce = this.$input.data( 'tcp-nc' );
+			this.$confirmed = this.$box.find( '.confirmed' );
+			this.nonce = this.$box.data( 'tcp-nc' );
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
-		toggleList: function() {
-			this.listOpen = ( this.listOpen == 'yes' ? 'no' : 'yes' );
-			this.$input.val( ( this.listOpen == 'yes' ? 'Hide' : 'Show' ) );
-			this.$box.slideToggle();
+		updateIDs: function() {
+			var that = this;
+
+			this.content = {};
+			this.$inputs = this.$el.find( 'input[type=text]' );
+			$.each( this.$inputs, function( key, input ){
+				let field = $( input ).data( 'tcp-field' );
+				that.content[ field ] = input.value;
+			});
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.wordpressIdsOpenAction );
-			this.model.set( 'content', this.listOpen );
+			this.model.set( 'action', tcpGlobals.wordpressIdsAction );
+			this.model.set( 'content', this.content );
 
-			tcp.ajaxSaveOption( this.model.toJSON() );
+			clearTimeout( this.timeoutUpdate );
+			clearTimeout( this.fadeAnimation );
+			clearTimeout( this.hideAnimation );
+
+			this.timeoutUpdate = setTimeout( function(){
+				tcp.confirmationSaving( that );
+				tcp.ajaxSaveOption( that.model.toJSON() )
+				.fail(function( data ) {
+					tcp.confirmationFail( that );
+				})
+				.done(function( data ) {
+					that.confirmationMessage = 'WordPress IDs & Classes Saved';
+					tcp.confirmationDone( that );
+				});
+				clearTimeout( that.timeoutUpdate );
+			}, tcpGlobals.optionUpdateDelay );
 		}
 	});
 

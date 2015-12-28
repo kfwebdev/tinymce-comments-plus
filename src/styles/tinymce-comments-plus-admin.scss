@@ -1,10 +1,12 @@
 .tcp-settings {
   $sea-green: #60B99A;
+  $light-green: #A0F9DA;
   $orange: #F77825;
   $brown: #554236;
   $yellow-green: #D3CE3D;
   $light-yellow: #F1EFA5;
   $white: #ffffff;
+  $red: #FA023C;
 
     .tcp-option {
         display: block;
@@ -55,38 +57,60 @@
                 border: 1px solid #ddd;
                 border-radius: 5px;
 
-                .confirmed {
-                  display: none;
-                  margin: 0 10px 15px 0;
-                  padding: .5em 1em;
-                  text-align: center;
-                  background-color: $light-yellow;
-                  border-radius: 5px;
-                  box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
-
-                  opacity: 1;
-
-                  &.fade {
-                    opacity: 0;
-                    transition: opacity 1s linear;
-                  }
-
-                  & > .message {
-                    animation: blinker .25s 1;
-
-                    @keyframes blinker {
-                      50% { opacity: 0.0; }
-                    }
-                  }
-
-                  & > .dashicons {
-                    color: $sea-green;
-                  }
-                }
-
                 & > label {
                     display: block;
                 }
+            }
+
+            .confirmed {
+              display: none;
+              margin: 0 0 15px 0;
+              padding: .5em 1em;
+              text-align: center;
+              background-color: $light-green;
+              border-radius: 5px;
+              box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+
+              opacity: 1;
+
+              & > .message {
+                color: $brown;
+                animation: blinker .25s 1;
+
+                @keyframes blinker {
+                  50% { opacity: 0.0; }
+                }
+              }
+
+              & > .dashicons {
+                color: $sea-green;
+              }
+
+
+              &.saving {
+                background-color: $light-yellow;
+
+                & > .message {
+                  animation: blinker .5s infinite;
+
+                  @keyframes blinker {
+                    50% { opacity: 0.0; }
+                  }
+                }
+              }
+
+              &.fail {
+                background-color: $red;
+
+                & > .message {
+                  color: $white;
+                }
+              }
+
+              &.fade {
+                opacity: 0;
+                transition: opacity 1s linear;
+              }
             }
 
             &.comment-editing,
