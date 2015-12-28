@@ -65,6 +65,15 @@ class TinyMCECommentsPlus {
 	private $tcp_javascript_globals = array();
 
 	/**
+	 * Custom TCP Button CSS
+	 *
+	 * @since    1.0.0
+	 *
+	 * @var      string
+	 */
+	private $tcp_css_custom_buttons = array();
+
+	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
 	 *
 	 * @since     1.0.0
@@ -105,6 +114,15 @@ class TinyMCECommentsPlus {
 		define( tcp_css_prefix . 'nonce', tcp_prefix . 'nonce' );
 		define( tcp_id_prefix . 'cancel_comment_reply_id', 'cancel-comment-reply-link' );
 		define( tcp_css_prefix . 'submit_edit_button_custom', 'comment-reply-link' );
+
+		// TCP Custom CSS Button Classes
+		$this->tcp_css_custom_buttons = array(
+			'_all' => sanitize_html_class( get_option( tcp_ajax_custom_classes . '_all' ) ),
+			'_reply' => sanitize_html_class( get_option( tcp_ajax_custom_classes . '_reply' ) ),
+			'_edit' => sanitize_html_class( get_option( tcp_ajax_custom_classes . '_edit' ) ),
+			'_submit' => sanitize_html_class( get_option( tcp_ajax_custom_classes . '_submit' ) ),
+			'_cancel' => sanitize_html_class( get_option( tcp_ajax_custom_classes . '_cancel' ) )
+		);
 
 		// Admin JavaScript Globals
 		$this->tcp_admin_javascript_globals = array(
@@ -692,7 +710,13 @@ class TinyMCECommentsPlus {
 			$comment->user_id == $current_user->ID ) ||
 			current_user_can( 'administrator' ) ) {
 			$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
-			$tcp_reply_link = '<div class="' . tcp_css_edit . '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
+
+			$tcp_reply_link = '<div class="' . tcp_css_button_class;
+
+			$custom_css = $this->tcp_css_custom_buttons[ '_all' ];
+			if ( $custom_css ) { $tcp_reply_link .= ' ' . $custom_css . ' '; }
+
+			$tcp_reply_link .= '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
 
 			$args[ 'before' ] .= $tcp_reply_link;
 		}

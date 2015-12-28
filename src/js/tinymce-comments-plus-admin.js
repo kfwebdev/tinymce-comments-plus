@@ -121,6 +121,22 @@ tcp.initAdmin = function() {
 		}
 	}
 
+	tcp.validHtmlClassKey = function( key ) {
+		return key.replace( /([^0-9a-z-_ ])+/gi ) ? true : false;
+	}
+
+	tcp.sanitizeHtmlClass = function( string ) {
+		return string.replace( /([^0-9a-z-_ ])+/gi, '' );
+	}
+
+	tcp.validHtmlIdKey = function( key ) {
+		return key.replace( /([^0-9a-z-_.# ])+/gi ) ? true : false;
+	}
+
+	tcp.sanitizeHtmlId = function( string ) {
+		return string.replace( /([^0-9a-z-_.# ])+/gi, '' );
+	}
+
 
 	// Admin Views
 
@@ -224,8 +240,10 @@ tcp.initAdmin = function() {
 		updateClasses: function( event ) {
 			var	that = this;
 
-			// if key is not valid, skip update
-			if ( ! tcp.validInputKey( event.which ) ) {
+			// validate input key and character input
+			if ( ! tcp.validInputKey( event.which ) ||
+					 ! tcp.validHtmlClassKey( event.key ) ) {
+				event.preventDefault();
 				return false;
 			}
 
@@ -233,7 +251,10 @@ tcp.initAdmin = function() {
 			this.$inputs = this.$el.find( 'input[type=text]' );
 			$.each( this.$inputs, function( key, input ){
 				let field = $( input ).data( 'tcp-field' );
-				that.content[ field ] = input.value;
+				// sanitize input data
+				that.content[ field ] = tcp.sanitizeHtmlClass( input.value );
+				// update input with clean data
+				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
@@ -269,11 +290,13 @@ tcp.initAdmin = function() {
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
-		updateIDs: function() {
+		updateIDs: function( event ) {
 			var that = this;
 
-			// if key is not valid, skip update
-			if ( ! tcp.validInputKey( event.which ) ) {
+			// validate input key and character input
+			if ( ! tcp.validInputKey( event.which ) ||
+					 ! tcp.validHtmlIdKey( event.key ) ) {
+				event.preventDefault();
 				return false;
 			}
 
@@ -281,7 +304,10 @@ tcp.initAdmin = function() {
 			this.$inputs = this.$el.find( 'input[type=text]' );
 			$.each( this.$inputs, function( key, input ){
 				let field = $( input ).data( 'tcp-field' );
-				that.content[ field ] = input.value;
+				// sanitize input data
+				that.content[ field ] = tcp.sanitizeHtmlId( input.value );
+				// update input with clean data
+				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
@@ -317,11 +343,13 @@ tcp.initAdmin = function() {
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
-		updateToolbars: function() {
+		updateToolbars: function( event ) {
 			var that = this;
 
-			// if key is not valid, skip update
-			if ( ! tcp.validInputKey( event.which ) ) {
+			// validate input key and character input
+			if ( ! tcp.validInputKey( event.which ) ||
+					 ! tcp.validHtmlClassKey( event.key ) ) {
+				event.preventDefault();
 				return false;
 			}
 
@@ -329,7 +357,10 @@ tcp.initAdmin = function() {
 			this.$inputs = this.$el.find( 'input[type=text]' );
 			$.each( this.$inputs, function( key, input ){
 				let field = $( input ).data( 'tcp-field' );
-				that.content[ field ] = input.value;
+				// sanitize input data
+				that.content[ field ] = tcp.sanitizeHtmlClass( input.value );
+				// update input with clean data
+				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
