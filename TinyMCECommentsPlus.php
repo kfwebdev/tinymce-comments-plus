@@ -749,8 +749,6 @@ class TinyMCECommentsPlus {
 	public function filter_comment_reply_link_args( $args, $comment, $post ) {
 		global $current_user;
 
-		print_r($this->tcp_ids_wordpress);
-
 		// if ( ( is_user_logged_in() &&
 		// 	$comment->user_id == $current_user->ID ) ||
 		// 	current_user_can( 'administrator' ) ) {
