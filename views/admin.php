@@ -58,7 +58,7 @@
 					$tcp_classes_cancel = get_option( tcp_ajax_custom_classes . '_cancel' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> Custom CSS</legend>
-				<p>Add additional CSS classes for TinyMCE Comments Plus buttons and inputs</p>
+				<p>Add custom CSS classes to TinyMCE Comments Plus buttons</p>
 
 				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
 					<div class="confirmed">

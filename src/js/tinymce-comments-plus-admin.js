@@ -101,6 +101,7 @@ tcp.initAdmin = function() {
 			case 9: // tab
 			case 13: // enter
 			case 16: // shift
+			case 18: // alt
 			case 19: // pause/break
 			case 27: // escape
 			// page up, page down, end, home, left/up/right/down arrows, insert
