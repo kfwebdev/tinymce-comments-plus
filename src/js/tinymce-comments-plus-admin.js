@@ -268,6 +268,51 @@ tcp.initAdmin = function() {
 		}
 	});
 
+	tcp.customToolbars = Backbone.View.extend({
+		events: {
+			'change input[type="text"]': 'updateToolbars'
+		},
+
+		initialize: function() {
+			this.$box = this.$el.find( '.box' );
+			this.$confirmed = this.$box.find( '.confirmed' );
+			this.nonce = this.$box.data( 'tcp-nc' );
+			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
+		},
+
+		updateToolbars: function() {
+			var that = this;
+
+			this.content = {};
+			this.$inputs = this.$el.find( 'input[type=text]' );
+			$.each( this.$inputs, function( key, input ){
+				let field = $( input ).data( 'tcp-field' );
+				that.content[ field ] = input.value;
+			});
+
+			this.model.set( 'security', this.nonce );
+			this.model.set( 'action', tcpGlobals.customToolbarsAction );
+			this.model.set( 'content', this.content );
+
+			clearTimeout( this.timeoutUpdate );
+			clearTimeout( this.fadeAnimation );
+			clearTimeout( this.hideAnimation );
+
+			this.timeoutUpdate = setTimeout( function(){
+				tcp.confirmationSaving( that );
+				tcp.ajaxSaveOption( that.model.toJSON() )
+				.fail(function( data ) {
+					tcp.confirmationFail( that );
+				})
+				.done(function( data ) {
+					that.confirmationMessage = 'Toolbar layouts Saved';
+					tcp.confirmationDone( that );
+				});
+				clearTimeout( that.timeoutUpdate );
+			}, tcpGlobals.optionUpdateDelay );
+		}
+	});
+
 	new tcp.editingEnabled({
 		el: $( '.tcp-option .comment-editing' ),
 		model: new tcp.ajaxModel
@@ -285,6 +330,11 @@ tcp.initAdmin = function() {
 
 	new tcp.wordpressIds({
 		el: $( '.tcp-option .wordpress-ids' ),
+		model: new tcp.ajaxModel
+	});
+
+	new tcp.customToolbars({
+		el: $( '.tcp-option .custom-toolbars' ),
 		model: new tcp.ajaxModel
 	});
 

@@ -65,11 +65,11 @@
 						<span class="dashicons dashicons-yes"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>All Buttons</span> <input type="text" value="<?php echo $tcp_classes_all ?>" data-tcp-field="_all" /></label>
-					<label><span>WordPress Reply Button</span> <input type="text" value="<?php echo $tcp_classes_reply ?>" data-tcp-field="_reply" /></label>
-					<label><span>Edit Button</span> <input type="text" value="<?php echo $tcp_classes_edit ?>" data-tcp-field="_edit" /></label>
-					<label><span>Submit Edit Button</span> <input type="text" value="<?php echo $tcp_classes_submit ?>" data-tcp-field="_submit" /></label>
-					<label><span>Cancel Edit Button</span> <input type="text" value="<?php echo $tcp_classes_cancel ?>" data-tcp-field="_cancel" /></label>
+					<label><span>All Buttons</span> <input type="text" value="<?php echo $tcp_classes_all ?>" data-tcp-field="_all"></label>
+					<label><span>WordPress Reply Button</span> <input type="text" value="<?php echo $tcp_classes_reply ?>" data-tcp-field="_reply"></label>
+					<label><span>Edit Button</span> <input type="text" value="<?php echo $tcp_classes_edit ?>" data-tcp-field="_edit"></label>
+					<label><span>Submit Edit Button</span> <input type="text" value="<?php echo $tcp_classes_submit ?>" data-tcp-field="_submit"></label>
+					<label><span>Cancel Edit Button</span> <input type="text" value="<?php echo $tcp_classes_cancel ?>" data-tcp-field="_cancel"></label>
 				</div>
 
 			</fieldset>
@@ -84,38 +84,45 @@
 					$wp_ids_submit = get_option( tcp_ajax_wordpress_ids .'_submit' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> WordPress IDs &amp; Classes</legend>
-				<p>Some themes may use different element IDs or classes in comments.                                                                                                                                                           </p>
+				<p>Some themes may use different element IDs or classes in comments. Leave blank for WordPress defaults.                                                                                                                                              </p>
 
 				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
 					<div class="confirmed">
-						<span class="dashicons dashicons-yes"></span>
+						<span class="dashicons"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_ids_list ?>" data-tcp-field="_list" /></label>
+					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_ids_list ?>" data-tcp-field="_list"></label>
 					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
-					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_ids_respond ?>" data-tcp-field="_respond" /></label>
-					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_ids_form ?>" data-tcp-field="_form" /></label>
-					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_ids_reply ?>" data-tcp-field="_reply" /></label>
-					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_ids_cancel ?>" data-tcp-field="_cancel" /></label>
-					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_ids_submit ?>" data-tcp-field="_submit" /></label>
+					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_ids_respond ?>" data-tcp-field="_respond"></label>
+					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_ids_form ?>" data-tcp-field="_form"></label>
+					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_ids_reply ?>" data-tcp-field="_reply"></label>
+					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_ids_cancel ?>" data-tcp-field="_cancel"></label>
+					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_ids_submit ?>" data-tcp-field="_submit"></label>
 				</div>
 			</fieldset>
 		</div>
 		<div class="tcp-option">
-			<fieldset class="customize-buttons">
+			<fieldset class="custom-toolbars">
 				<?php
-					$nonce = wp_create_nonce( tcp_ajax_custom_classes );
-					$classes_option = get_option( tcp_ajax_custom_classes );
+					$nonce = wp_create_nonce( tcp_ajax_custom_toolbars );
+					$tcp_toolbar1 = get_option( tcp_ajax_custom_toolbars .'_toolbar1' );
+					$tcp_toolbar2 = get_option( tcp_ajax_custom_toolbars .'_toolbar2' );
+					$tcp_toolbar3 = get_option( tcp_ajax_custom_toolbars .'_toolbar3' );
+					$tcp_toolbar4 = get_option( tcp_ajax_custom_toolbars .'_toolbar4' );
 				?>
 				<legend><span class="dashicons dashicons-editor-kitchensink"></span> Customize TinyMCE Toolbar Buttons</legend>
-				<p>Configure toolbar row buttons in TinyMCE for comments</p>
+				<p>Configure toolbar row buttons in TinyMCE for comments. Leave blank for default layout.</p>
 
-				<div class="box">
-					<label><span>Toolbar row 1</span> <input type="text"></label>
-					<label><span>Toolbar row 2</span> <input type="text"></label>
-					<label><span>Toolbar row 3</span> <input type="text"></label>
-					<label><span>Toolbar row 4</span> <input type="text"></label>
+				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
+					<div class="confirmed">
+						<span class="dashicons"></span>
+						<span class="message"></span>
+					</div>
+					<label><span>Toolbar row 1</span> <input type="text" placeholder="bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv" value="<?php echo $tcp_toolbar1 ?>" data-tcp-field="_toolbar1"></label>
+					<label><span>Toolbar row 2</span> <input type="text" placeholder="formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help" value="<?php echo $tcp_toolbar2 ?>" data-tcp-field="_toolbar2"></label>
+					<label><span>Toolbar row 3</span> <input type="text" placeholder="" value="<?php echo $tcp_toolbar3 ?>" data-tcp-field="_toolbar3"></label>
+					<label><span>Toolbar row 4</span> <input type="text" placeholder="" value="<?php echo $tcp_toolbar4 ?>" data-tcp-field="_toolbar4"></label>
 				</div>
 			</fieldset>
 		</div>

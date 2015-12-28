@@ -115,7 +115,7 @@
 
             &.comment-editing,
             &.comment-expiration,
-            &.customize-buttons,
+            &.custom-toolbars,
             &.custom-classes,
             &.wordpress-ids {
               legend {
@@ -134,7 +134,7 @@
               }
             }
 
-            &.customize-buttons,
+            &.custom-toolbars,
             &.custom-classes,
             &.wordpress-ids {
               label {
@@ -162,7 +162,7 @@
                 }
               }
             }
-            &.customize-buttons {
+            &.custom-toolbars {
               width: 97.3%;
 
                 label {
@@ -217,7 +217,7 @@
                 display: block;
                 margin: 10px 0 0;
 
-                &.customize-buttons,
+                &.custom-toolbars,
                 &.custom-classes,
                 &.wordpress-ids {
                   label {
@@ -227,7 +227,7 @@
                   }
                 }
 
-                &.customize-buttons {
+                &.custom-toolbars {
                   width: 100%;
                 }
             }
@@ -240,7 +240,7 @@
   .tcp-settings {
     .tcp-option {
       fieldset {
-        &.customize-buttons,
+        &.custom-toolbars,
         &.custom-classes,
         &.wordpress-ids {
           label {
@@ -272,7 +272,7 @@
 
                 &.custom-classes,
                 &.wordpress-ids,
-                &.customize-buttons {
+                &.custom-toolbars {
                   input {
                     display: block;
                     margin: 10px 0 15px;
