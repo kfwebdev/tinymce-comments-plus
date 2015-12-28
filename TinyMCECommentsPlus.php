@@ -525,7 +525,7 @@ class TinyMCECommentsPlus {
 			case tcp_ajax_custom_toolbars:
 				check_ajax_referer( tcp_ajax_custom_toolbars, 'security' );
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = sanitize_html_class( $option );
+					$option = sanitize_key( $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
 					else { $result = $this->tcp_save_option( tcp_ajax_custom_toolbars . $key, $option ); }
 				}
