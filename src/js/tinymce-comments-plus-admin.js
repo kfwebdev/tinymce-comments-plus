@@ -223,7 +223,7 @@ tcp.initAdmin = function() {
 		updateClasses: function( event ) {
 			var	that = this;
 
-			// validate input key before processing update
+			// if key is not valid, skip update
 			if ( ! tcp.validInputKey( event.which ) ) {
 				return false;
 			}
@@ -258,7 +258,7 @@ tcp.initAdmin = function() {
 
 	tcp.wordpressIds = Backbone.View.extend({
 		events: {
-			'change input[type="text"]': 'updateIDs'
+			'keyup': 'updateIDs'
 		},
 
 		initialize: function() {
@@ -270,6 +270,11 @@ tcp.initAdmin = function() {
 
 		updateIDs: function() {
 			var that = this;
+
+			// if key is not valid, skip update
+			if ( ! tcp.validInputKey( event.which ) ) {
+				return false;
+			}
 
 			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
@@ -283,8 +288,6 @@ tcp.initAdmin = function() {
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
-			clearTimeout( this.fadeAnimation );
-			clearTimeout( this.hideAnimation );
 
 			this.timeoutUpdate = setTimeout( function(){
 				tcp.confirmationSaving( that );
@@ -303,7 +306,7 @@ tcp.initAdmin = function() {
 
 	tcp.customToolbars = Backbone.View.extend({
 		events: {
-			'change input[type="text"]': 'updateToolbars'
+			'keyup': 'updateToolbars'
 		},
 
 		initialize: function() {
@@ -315,6 +318,11 @@ tcp.initAdmin = function() {
 
 		updateToolbars: function() {
 			var that = this;
+
+			// if key is not valid, skip update
+			if ( ! tcp.validInputKey( event.which ) ) {
+				return false;
+			}
 
 			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
@@ -328,8 +336,6 @@ tcp.initAdmin = function() {
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
-			clearTimeout( this.fadeAnimation );
-			clearTimeout( this.hideAnimation );
 
 			this.timeoutUpdate = setTimeout( function(){
 				tcp.confirmationSaving( that );
