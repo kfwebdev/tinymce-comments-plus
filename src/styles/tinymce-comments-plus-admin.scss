@@ -89,6 +89,7 @@
 
               &.saving {
                 background-color: $light-yellow;
+                opacity: 1;
 
                 & > .message {
                   animation: blinker .5s infinite;

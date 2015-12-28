@@ -45,11 +45,14 @@ tcp.initAdmin = function() {
 	};
 
 
+	// Admin Confirmation Notices
+
 	tcp.confirmationSaving = function( view ) {
 		view.$confirmed
 			.find( '.dashicons' )
 			.attr( 'class', 'dashicons dashicons-update' );
 		view.$confirmed
+			.removeClass( 'fade' )
 			.addClass( 'saving' )
 			.find( '.message' )
 			.text( 'Saving...' );
@@ -81,6 +84,8 @@ tcp.initAdmin = function() {
 	}
 
 	tcp.confirmationFade = function( view ) {
+		clearTimeout( view.fadeAnimation );
+		clearTimeout( view.hideAnimation );
 		view.fadeAnimation = setTimeout( function(){
 			view.$confirmed.addClass('fade');
 		}, tcpGlobals.optionConfirmationDelay );
@@ -90,6 +95,33 @@ tcp.initAdmin = function() {
 		}, tcpGlobals.optionConfirmationDelay + 1000 );
 	}
 
+	tcp.validInputKey = function( key ) {
+		switch ( key ) {
+			// skip non input keys
+			case 9: // tab
+			case 13: // enter
+			case 16: // shift
+			case 19: // pause/break
+			case 27: // escape
+			// page up, page down, end, home, left/up/right/down arrows, insert
+			case (key >= 33 && key <= 45):
+			// windows keys, select key
+			case (key >= 91 && key <= 93):
+			// function keys F1-F12
+			case (key >= 112 && key <= 123):
+			// num & scroll lock
+			case (key >= 144 && key <= 145):
+				return false;
+			break;
+
+			default:
+				return true;
+			break;
+		}
+	}
+
+
+	// Admin Views
 
 	tcp.editingEnabled = Backbone.View.extend({
 		events: {
@@ -160,8 +192,6 @@ tcp.initAdmin = function() {
 			this.model.set( 'content', this.expiration );
 
 			clearTimeout( this.timeoutUpdate );
-			clearTimeout( this.fadeAnimation );
-			clearTimeout( this.hideAnimation );
 
 			this.timeoutUpdate = setTimeout( function(){
 				tcp.confirmationSaving( that );
@@ -180,7 +210,7 @@ tcp.initAdmin = function() {
 
 	tcp.customClasses = Backbone.View.extend({
 		events: {
-			'change input[type="text"]': 'updateClasses'
+			'keyup': 'updateClasses'
 		},
 
 		initialize: function() {
@@ -190,8 +220,13 @@ tcp.initAdmin = function() {
 			this.timeoutUpdate = false;
 		},
 
-		updateClasses: function() {
-			var that = this;
+		updateClasses: function( event ) {
+			var	that = this;
+
+			// validate input key before processing update
+			if ( ! tcp.validInputKey( event.which ) ) {
+				return false;
+			}
 
 			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
@@ -205,8 +240,6 @@ tcp.initAdmin = function() {
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
-			clearTimeout( this.fadeAnimation );
-			clearTimeout( this.hideAnimation );
 
 			this.timeoutUpdate = setTimeout( function(){
 				tcp.confirmationSaving( that );
