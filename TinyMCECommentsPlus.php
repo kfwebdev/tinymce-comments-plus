@@ -755,7 +755,7 @@ class TinyMCECommentsPlus {
 			current_user_can( 'administrator' ) ) {
 			$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
 
-			$tcp_edit_link = '<div class="' . tcp_css_button_class . ' ' . tcp_css_edit;
+			$tcp_edit_link = '<div class="' . tcp_css_edit;
 
 			$custom_css = $this->tcp_css_custom_buttons[ '_all' ];
 			if ( $custom_css ) { $tcp_edit_link .= ' ' . $custom_css; }
