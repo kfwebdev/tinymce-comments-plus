@@ -749,20 +749,21 @@ class TinyMCECommentsPlus {
 	public function filter_comment_reply_link_args( $args, $comment, $post ) {
 		global $current_user;
 
-		// if ( ( is_user_logged_in() &&
-		// 	$comment->user_id == $current_user->ID ) ||
-		// 	current_user_can( 'administrator' ) ) {
-		// 	$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
-		//
-		// 	$tcp_reply_link = '<div class="' . tcp_css_button_class;
-		//
-		// 	$custom_css = $this->tcp_css_custom_buttons[ '_all' ];
-		// 	if ( $custom_css ) { $tcp_reply_link .= ' ' . $custom_css; }
-		//
-		// 	$tcp_reply_link .= '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
-		//
-		// 	$args[ 'before' ] .= $tcp_reply_link;
-		// }
+		// Insert edit targets
+		if ( ( is_user_logged_in() &&
+			$comment->user_id == $current_user->ID ) ||
+			current_user_can( 'administrator' ) ) {
+			$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
+
+			$tcp_reply_link = '<div class="' . tcp_css_button_class . ' ' . tcp_css_edit;
+
+			$custom_css = $this->tcp_css_custom_buttons[ '_all' ];
+			if ( $custom_css ) { $tcp_reply_link .= ' ' . $custom_css; }
+
+			$tcp_reply_link .= '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
+
+			$args[ 'before' ] .= $tcp_reply_link;
+		}
 
 		return $args;
 	}
