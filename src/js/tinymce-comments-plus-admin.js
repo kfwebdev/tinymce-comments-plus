@@ -286,8 +286,7 @@ tcp.initAdmin = function() {
 
 	tcp.customClasses = Backbone.View.extend({
 		events: {
-			'keypress': 'handleKeypress',
-			'keyup': 'detectKeys'
+			'keyup': 'handleKeypress'
 		},
 
 		initialize: function() {
@@ -295,19 +294,6 @@ tcp.initAdmin = function() {
 			this.$confirmed = this.$box.find( '.confirmed' );
 			this.nonce = this.$box.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
-		},
-
-		detectKeys: function( event ) {
-			switch ( event.which ) {
-				// delete key
-				case 8:
-				// c after ctrl+c
-				case 67:
-				// v after ctrl+v
-				case 86:
-					this.updateKeypress( event );
-				break;
-			}
 		},
 
 		handleKeypress: function( event ) {
@@ -357,8 +343,7 @@ tcp.initAdmin = function() {
 
 	tcp.wordpressIds = Backbone.View.extend({
 		events: {
-			'keypress': 'updateIDs',
-			'keyup': 'detectKeys'
+			'keyup': 'updateIDs'
 		},
 
 		initialize: function() {
@@ -366,19 +351,6 @@ tcp.initAdmin = function() {
 			this.$confirmed = this.$box.find( '.confirmed' );
 			this.nonce = this.$box.data( 'tcp-nc' );
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
-		},
-
-		detectKeys: function( event ) {
-			switch ( event.which ) {
-				// delete key
-				case 8:
-				// c after ctrl+c
-				case 67:
-				// v after ctrl+v
-				case 86:
-					this.updateIDs( event );
-				break;
-			}
 		},
 
 		updateIDs: function( event ) {
