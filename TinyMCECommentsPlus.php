@@ -167,8 +167,10 @@ class TinyMCECommentsPlus {
 
 		$option_wp_id_comments = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
 		$option_wp_id_comments = ( empty( trim( $option_wp_id_comments ) ) ) ? tcp_id_comments : $option_wp_id_comments;
-		$option_wp_id_cancel_comment_reply = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
+		$option_wp_id_cancel_comment_reply = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_cancel' ) );
 		$option_wp_id_cancel_comment_reply = ( empty( trim( $option_wp_id_cancel_comment_reply ) ) ) ? tcp_id_cancel_comment_reply : $option_wp_id_cancel_comment_reply;
+		$option_wp_id_comment_reply_link = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_reply' ) );
+		$option_wp_id_comment_reply_link = ( empty( trim( $option_wp_id_comment_reply_link ) ) ) ? tcp_css_comment_reply_button_class : $option_wp_id_comment_reply_link;
 
 		$this->tcp_css_custom_buttons = array(
 			'_all' => tcp_css_button_class . ' ' . $option_custom_classes_all,

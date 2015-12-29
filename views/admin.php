@@ -115,7 +115,7 @@
 						<span class="dashicons"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_id_comments ?>" data-tcp-field="_list"></label>
+					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_id_comments ?>" data-tcp-field="_comments"></label>
 					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
 					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_id_respond ?>" data-tcp-field="_respond"></label>
