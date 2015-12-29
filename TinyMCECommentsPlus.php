@@ -214,6 +214,11 @@ class TinyMCECommentsPlus {
 			'addCommentAction' => tcp_ajax_add_comment,
 			'updateCommentAction' => tcp_ajax_update_comment,
 
+			tcp_prefix . 'toolbar1' => $this->option_toolbar1,
+			tcp_prefix . 'toolbar2' => $this->option_toolbar2,
+			tcp_prefix . 'toolbar3' => $this->option_toolbar3,
+			tcp_prefix . 'toolbar4' => $this->option_toolbar4,
+
 			// Classes
 			tcp_css_prefix . 'button' => tcp_css_button_class,
 			tcp_css_prefix . 'edit_button' => tcp_css_edit_button_class,

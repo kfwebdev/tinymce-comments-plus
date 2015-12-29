@@ -70,8 +70,10 @@ class EditorComponent extends React.Component {
           "charmap, colorpicker, fullscreen, lists, paste, tabfocus, textcolor, wordpress, wpdialogs, wpemoji, wplink, wpview"
         ],
         toolbar: [
-          "bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv",
-          "formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help"
+          this.props.tcpGlobals.tcp_toolbar1,
+          this.props.tcpGlobals.tcp_toolbar2,
+          this.props.tcpGlobals.tcp_toolbar3,
+          this.props.tcpGlobals.tcp_toolbar4
         ]
     });
     // update tinyMCE content
