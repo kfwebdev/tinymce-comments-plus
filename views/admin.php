@@ -14,7 +14,7 @@
 ?>
 <div class="wrap">
 
-	<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+	<h2>TinyMCE Comments Plus Settings</h2>
 
 	<div class="tcp-settings">
 		<div class="tcp-option">
@@ -44,7 +44,31 @@
 				<div class="expiration-control">
 					<output></output>
 				</div>
-				<input class="years" type="range" step="1" min="1" max="262981" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
+				<input class="years" type="range" step="1" min="1" max="<?php echo tcp_editing_expiration_max ?>" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
+			</fieldset>
+		</div>
+		<div class="tcp-option">
+			<fieldset class="custom-toolbars">
+				<?php
+					$nonce = wp_create_nonce( tcp_ajax_custom_toolbars );
+					$tcp_toolbar1 = get_option( tcp_ajax_custom_toolbars .'_toolbar1' );
+					$tcp_toolbar2 = get_option( tcp_ajax_custom_toolbars .'_toolbar2' );
+					$tcp_toolbar3 = get_option( tcp_ajax_custom_toolbars .'_toolbar3' );
+					$tcp_toolbar4 = get_option( tcp_ajax_custom_toolbars .'_toolbar4' );
+				?>
+				<legend><span class="dashicons dashicons-editor-kitchensink"></span> Customize TinyMCE Toolbar Buttons</legend>
+				<p>Configure toolbar row buttons in TinyMCE for comments. Leave blank for default layout.</p>
+
+				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
+					<div class="confirmed">
+						<span class="dashicons"></span>
+						<span class="message"></span>
+					</div>
+					<label><span>Toolbar row 1</span> <input type="text" placeholder="bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv" value="<?php echo $tcp_toolbar1 ?>" data-tcp-field="_toolbar1"></label>
+					<label><span>Toolbar row 2</span> <input type="text" placeholder="formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help" value="<?php echo $tcp_toolbar2 ?>" data-tcp-field="_toolbar2"></label>
+					<label><span>Toolbar row 3</span> <input type="text" placeholder="" value="<?php echo $tcp_toolbar3 ?>" data-tcp-field="_toolbar3"></label>
+					<label><span>Toolbar row 4</span> <input type="text" placeholder="" value="<?php echo $tcp_toolbar4 ?>" data-tcp-field="_toolbar4"></label>
+				</div>
 			</fieldset>
 		</div>
 		<div class="tcp-option">
@@ -99,30 +123,6 @@
 					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_ids_reply ?>" data-tcp-field="_reply"></label>
 					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_ids_cancel ?>" data-tcp-field="_cancel"></label>
 					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_ids_submit ?>" data-tcp-field="_submit"></label>
-				</div>
-			</fieldset>
-		</div>
-		<div class="tcp-option">
-			<fieldset class="custom-toolbars">
-				<?php
-					$nonce = wp_create_nonce( tcp_ajax_custom_toolbars );
-					$tcp_toolbar1 = get_option( tcp_ajax_custom_toolbars .'_toolbar1' );
-					$tcp_toolbar2 = get_option( tcp_ajax_custom_toolbars .'_toolbar2' );
-					$tcp_toolbar3 = get_option( tcp_ajax_custom_toolbars .'_toolbar3' );
-					$tcp_toolbar4 = get_option( tcp_ajax_custom_toolbars .'_toolbar4' );
-				?>
-				<legend><span class="dashicons dashicons-editor-kitchensink"></span> Customize TinyMCE Toolbar Buttons</legend>
-				<p>Configure toolbar row buttons in TinyMCE for comments. Leave blank for default layout.</p>
-
-				<div class="box" data-tcp-nc="<?php echo $nonce ?>">
-					<div class="confirmed">
-						<span class="dashicons"></span>
-						<span class="message"></span>
-					</div>
-					<label><span>Toolbar row 1</span> <input type="text" placeholder="bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv" value="<?php echo $tcp_toolbar1 ?>" data-tcp-field="_toolbar1"></label>
-					<label><span>Toolbar row 2</span> <input type="text" placeholder="formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help" value="<?php echo $tcp_toolbar2 ?>" data-tcp-field="_toolbar2"></label>
-					<label><span>Toolbar row 3</span> <input type="text" placeholder="" value="<?php echo $tcp_toolbar3 ?>" data-tcp-field="_toolbar3"></label>
-					<label><span>Toolbar row 4</span> <input type="text" placeholder="" value="<?php echo $tcp_toolbar4 ?>" data-tcp-field="_toolbar4"></label>
 				</div>
 			</fieldset>
 		</div>

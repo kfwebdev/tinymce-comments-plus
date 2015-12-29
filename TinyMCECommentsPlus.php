@@ -74,6 +74,16 @@ class TinyMCECommentsPlus {
 	private $tcp_css_custom_buttons = array();
 
 	/**
+	 * TCP Options
+	 *
+	 * @since    1.0.0
+	 *
+	 * @var      string
+	 */
+	private $option_editing_enabled = '';
+	private $option_editing_expiration = 0;
+
+	/**
 	 * WordPress element IDs and Classes
 	 *
 	 * @since    1.0.0
@@ -105,6 +115,7 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help' );
 		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
 
+		define( tcp_prefix . 'editing_expiration_max', 262981 );
 		define( tcp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
 
 		// CSS Classes
@@ -137,7 +148,11 @@ class TinyMCECommentsPlus {
 		$option_custom_classes_submit = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_submit' ) );
 		$option_custom_classes_cancel = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_cancel' ) );
 
-		// sanitize WordPress option
+		// sanitize WordPress options
+		$this->option_editing_enabled = sanitize_html_class( get_option( tcp_ajax_editing_enabled ) );
+		$this->option_editing_enabled = ( $this->option_editing_enabled === 'off' ) ? 'off' : 'on';
+		$this->option_editing_expiration = sanitize_key( get_option( tcp_ajax_editing_expiration ) );
+
 		$option_wp_ids_list = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_list' ) );
 		$option_wp_ids_list = ( empty( trim( $option_wp_ids_list ) ) ) ? tcp_id_comments : $option_wp_ids_list;
 
@@ -472,9 +487,18 @@ class TinyMCECommentsPlus {
 
 		get_currentuserinfo();
 		$comment = get_comment( $comment_id );
+		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
+		$comment_age = floor( $comment_age / 60 );
 
 		if ( ! current_user_can( 'edit_posts' ) &&
 			 $current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
+
+		// comment editing has expiration period
+		if ( $this->option_editing_expiration < tcp_editing_expiration_max ) &&
+			// if the comment is past editing period expiration
+			$comment_age > $this->option_editing_expiration &&
+			// user is not an administrator
+			! current_user_can( 'administrator' ) ) { wp_send_json_error( 'permission denied' ); }
 
 		$update = array(
 			'comment_ID' => $comment_id,
@@ -749,10 +773,25 @@ class TinyMCECommentsPlus {
 	public function filter_comment_reply_link_args( $args, $comment, $post ) {
 		global $current_user;
 
+		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
+		$comment_age = floor( $comment_age / 60 );
+
 		// Insert edit button targets
-		if ( ( is_user_logged_in() &&
-			$comment->user_id == $current_user->ID ) ||
-			current_user_can( 'administrator' ) ) {
+		// If editing option is enabled
+		if ( ( $this->option_editing_enabled === 'on' &&
+				// if user is logged in
+				is_user_logged_in() &&
+				// if user created this comment
+				$comment->user_id == $current_user->ID &&
+				// if comment editing does not expire
+				( $this->option_editing_expiration == tcp_editing_expiration_max ||
+				// or comment editing has not expired
+					$comment_age <= $this->option_editing_expiration )
+			) ||
+			// Or user is administrator
+			current_user_can( 'administrator' )
+			) {
+
 			$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
 
 			$tcp_edit_link = '<div class="' . tcp_css_edit;
