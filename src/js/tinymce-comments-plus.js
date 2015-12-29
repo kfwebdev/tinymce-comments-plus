@@ -34,7 +34,7 @@ tcp.initTcp = function() {
 		events: function() {
 			var _events = {};
 
-			_events[ 'click #' + tcp.globals.tcp_id_cancel_comment_reply ] = 'resetEditor';
+			_events[ 'click ' + tcp.globals.tcp_id_cancel_comment_reply ] = 'resetEditor';
 			_events[ 'submit' ] = 'submitForm';
 
 			return _events;
