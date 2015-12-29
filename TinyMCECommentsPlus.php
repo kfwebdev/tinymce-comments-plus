@@ -82,6 +82,10 @@ class TinyMCECommentsPlus {
 	 */
 	private $option_editing_enabled = '';
 	private $option_editing_expiration = 0;
+	private $option_toolbar1 = '';
+	private $option_toolbar2 = '';
+	private $option_toolbar3 = '';
+	private $option_toolbar4 = '';
 
 	/**
 	 * WordPress element IDs and Classes
@@ -111,8 +115,8 @@ class TinyMCECommentsPlus {
 		define( tcp_ajax_prefix . 'wordpress_ids', tcp_prefix . 'wordpress_ids' );
 		define( tcp_ajax_prefix . 'custom_toolbars', tcp_prefix . 'custom_toolbars' );
 
-		define( tcp_prefix . 'buttons1', 'bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,image,link,unlink,wp_more,spellchecker,wp_adv' );
-		define( tcp_prefix . 'buttons2', 'formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help' );
+		define( tcp_prefix . 'buttons1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
+		define( tcp_prefix . 'buttons2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
 		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
 
 		define( tcp_prefix . 'editing_expiration_max', 262981 );
@@ -152,6 +156,15 @@ class TinyMCECommentsPlus {
 		$this->option_editing_enabled = sanitize_html_class( get_option( tcp_ajax_editing_enabled ) );
 		$this->option_editing_enabled = ( $this->option_editing_enabled === 'off' ) ? 'off' : 'on';
 		$this->option_editing_expiration = sanitize_key( get_option( tcp_ajax_editing_expiration ) );
+
+		$this->option_toolbar1 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar1' ) );
+		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? tcp_buttons1 : $this->option_toolbar1;
+		$this->option_toolbar2 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar2' ) );
+		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? tcp_buttons2 : $this->option_toolbar2;
+		$this->option_toolbar3 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar3' ) );
+		$this->option_toolbar3 = ( empty( trim( $this->option_toolbar3 ) ) ) ? '' : $this->option_toolbar3;
+		$this->option_toolbar4 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
+		$this->option_toolbar4 = ( empty( trim( $this->option_toolbar4 ) ) ) ? '' : $this->option_toolbar4;
 
 		$option_wp_ids_list = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_list' ) );
 		$option_wp_ids_list = ( empty( trim( $option_wp_ids_list ) ) ) ? tcp_id_comments : $option_wp_ids_list;
@@ -613,46 +626,18 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	 public function filter_tinymce_buttons_1( $buttons, $editor_id ) {
-	 	$buttons = array();
-		$buttons[] = 'bold';
-		$buttons[] = 'italic';
-		$buttons[] = 'strikethrough';
-		$buttons[] = 'bullist';
-		$buttons[] = 'numlist';
-		$buttons[] = 'blockquote';
-		$buttons[] = 'hr';
-		$buttons[] = 'alignleft';
-		$buttons[] = 'aligncenter';
-		$buttons[] = 'alignright';
-		$buttons[] = 'image';
-		$buttons[] = 'link';
-		$buttons[] = 'unlink';
-		$buttons[] = 'wp_more';
-		$buttons[] = 'spellchecker';
-		$buttons[] = 'wp_adv';
+		 $buttons = explode( ' ', $this->option_toolbar1 );
 
-	 	return $buttons;
+		 return $buttons;
 	 }
 
 	/**
 	 * @since    1.0.0
 	 */
 	 public function filter_tinymce_buttons_2( $buttons ) {
-	 	$buttons = array();
-		$buttons[] = 'formatselect';
-		$buttons[] = 'underline';
-		$buttons[] = 'alignjustify';
-		$buttons[] = 'forecolor';
-		$buttons[] = 'pastetext';
-		$buttons[] = 'removeformat';
-		$buttons[] = 'charmap';
-		$buttons[] = 'outdent';
-		$buttons[] = 'indent';
-		$buttons[] = 'undo';
-		$buttons[] = 'redo';
-		$buttons[] = 'wp_help';
+		 $buttons = explode( ' ', $this->option_toolbar2 );
 
-	 	return $buttons;
+		 return $buttons;
 	 }
 
 	/**
@@ -676,10 +661,10 @@ class TinyMCECommentsPlus {
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
 	  $args['block_formats'] = "Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
-	 	$args['toolbar1'] = tcp_buttons1;
-	 	$args['toolbar2'] = tcp_buttons2;
-	 	$args['toolbar3'] = '';
-	 	$args['toolbar4'] = '';
+	 	$args['toolbar1'] = $this->option_toolbar1;
+	 	$args['toolbar2'] = $this->option_toolbar2;
+	 	$args['toolbar3'] = $this->option_toolbar3;
+	 	$args['toolbar4'] = $this->option_toolbar4;
 
 	 	return $args;
 	 }
@@ -706,8 +691,10 @@ class TinyMCECommentsPlus {
 			    'teeny' => false,
 				'tinymce' => array(
 					'plugins' => 'inlinepopups, wordpress, wplink, wpdialogs',
-					'theme_advanced_buttons1' => tcp_buttons1,
-          'theme_advanced_buttons2' => tcp_buttons2
+					'theme_advanced_buttons1' => $this->option_toolbar1,
+          'theme_advanced_buttons2' => $this->option_toolbar2,
+					'theme_advanced_buttons3' => $this->option_toolbar3,
+          'theme_advanced_buttons4' => $this->option_toolbar4
 				),
 			    'quicktags' => false,
 			    'media_buttons' => false
@@ -776,6 +763,7 @@ class TinyMCECommentsPlus {
 		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
 		$comment_age = floor( $comment_age / 60 );
 
+print_r($this->option_toolbar1);
 		// Insert edit button targets
 		// If editing option is enabled
 		if ( ( $this->option_editing_enabled === 'on' &&
