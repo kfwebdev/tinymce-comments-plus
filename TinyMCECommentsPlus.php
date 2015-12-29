@@ -494,7 +494,7 @@ class TinyMCECommentsPlus {
 			 $current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
 
 		// comment editing has expiration period
-		if ( $this->option_editing_expiration < tcp_editing_expiration_max ) &&
+		if ( $this->option_editing_expiration < tcp_editing_expiration_max &&
 			// if the comment is past editing period expiration
 			$comment_age > $this->option_editing_expiration &&
 			// user is not an administrator
