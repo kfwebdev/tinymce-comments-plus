@@ -35,7 +35,7 @@ tcp.initTcp = function() {
 		events: function() {
 			var _events = {};
 
-			_events[ 'click #' + tcp.globals.idCancelCommentReply ] = 'resetEditor';
+			_events[ 'click #' + tcp.globals.tcp_id_cancel_comment_reply ] = 'resetEditor';
 			_events[ 'submit' ] = 'submitForm';
 
 			return _events;
@@ -69,10 +69,10 @@ tcp.initTcp = function() {
 				data: this.$commentForm.serialize()
 			})
 			.done( function( data ){
-				self.$el.find( '#' + tcp.globals.idCancelCommentReply ).click();
+				self.$el.find( tcp.globals.tcp_id_cancel_comment_reply ).click();
 				self.$submitButton.attr( 'disabled', false );
 				self.$submitButton.val( submitText );
-				tinyMCE.activeEditor.setContent('');
+				tinyMCE.activeEditor.setContent( '' );
 				tcp.resetEditor();
 
 				var
