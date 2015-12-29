@@ -94,7 +94,6 @@ class TinyMCECommentsPlus {
 	 *
 	 * @var      string
 	 */
-	private $tcp_ids_wordpress = array();
 	private $option_wp_id_comments = '';
 	private $option_wp_id_respond = '';
 	private $option_wp_id_comment_form = '';
@@ -193,11 +192,6 @@ class TinyMCECommentsPlus {
 			'_reply' => tcp_css_reply_button_class . ' ' . $this->option_custom_classes_reply,
 			'_submit' => tcp_css_submit_edit_button_class . ' ' . $this->option_custom_classes_submit,
 			'_cancel' => tcp_css_cancel_edit_button_class . ' ' . $this->option_custom_classes_cancel
-		);
-
-		$this->tcp_ids_wordpress = array(
-			'_comments' => $option_wp_id_comments,
-			'_cancel_comment_reply' => $option_wp_id_cancel_comment_reply
 		);
 
 		// Admin JavaScript Globals
