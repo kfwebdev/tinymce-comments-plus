@@ -95,6 +95,12 @@ class TinyMCECommentsPlus {
 	 * @var      string
 	 */
 	private $tcp_ids_wordpress = array();
+	private $option_wp_id_comments = '';
+	private $option_wp_id_respond = '';
+	private $option_wp_id_comment_form = '';
+	private $option_wp_id_comment_reply_link = '';
+	private $option_wp_id_cancel_comment_reply = '';
+	private $option_wp_id_submit_comment = '';
 
 	/**
 	 * Initialize the plugin by setting localization, filters, and administration functions.
@@ -142,7 +148,10 @@ class TinyMCECommentsPlus {
 
 		// WordPress IDs
 		define( tcp_id_prefix . 'comments', 'comments' );
+		define( tcp_id_prefix . 'respond', 'respond' );
+		define( tcp_id_prefix . 'comment_form', 'commentform' );
 		define( tcp_id_prefix . 'cancel_comment_reply', 'cancel-comment-reply-link' );
+		define( tcp_id_prefix . 'submit_comment', 'submit' );
 
 		// TCP Custom CSS Button Classes
 		$option_custom_classes_all = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_all' ) );
@@ -165,12 +174,18 @@ class TinyMCECommentsPlus {
 		$this->option_toolbar4 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
 		$this->option_toolbar4 = ( empty( trim( $this->option_toolbar4 ) ) ) ? '' : $this->option_toolbar4;
 
-		$option_wp_id_comments = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
-		$option_wp_id_comments = ( empty( trim( $option_wp_id_comments ) ) ) ? tcp_id_comments : $option_wp_id_comments;
-		$option_wp_id_cancel_comment_reply = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_cancel' ) );
-		$option_wp_id_cancel_comment_reply = ( empty( trim( $option_wp_id_cancel_comment_reply ) ) ) ? tcp_id_cancel_comment_reply : $option_wp_id_cancel_comment_reply;
-		$option_wp_id_comment_reply_link = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_reply' ) );
-		$option_wp_id_comment_reply_link = ( empty( trim( $option_wp_id_comment_reply_link ) ) ) ? tcp_css_comment_reply_button_class : $option_wp_id_comment_reply_link;
+		$this->option_wp_id_comments = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
+		$this->option_wp_id_comments = ( empty( trim( $this->option_wp_id_comments ) ) ) ? tcp_id_comments : $this->option_wp_id_comments;
+		$this->option_wp_id_respond = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_respond' ) );
+		$this->option_wp_id_respond = ( empty( trim( $this->option_wp_id_respond ) ) ) ? tcp_id_respond : $this->option_wp_id_respond;
+		$this->option_wp_id_comment_form = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comment_form' ) );
+		$this->option_wp_id_comment_form = ( empty( trim( $this->option_wp_id_comment_form ) ) ) ? tcp_id_comment_form : $this->option_wp_id_comment_form;
+		$this->option_wp_id_comment_reply_link = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_reply' ) );
+		$this->option_wp_id_comment_reply_link = ( empty( trim( $this->option_wp_id_comment_reply_link ) ) ) ? tcp_css_comment_reply_button_class : $this->option_wp_id_comment_reply_link;
+		$this->option_wp_id_cancel_comment_reply = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_cancel' ) );
+		$this->option_wp_id_cancel_comment_reply = ( empty( trim( $this->option_wp_id_cancel_comment_reply ) ) ) ? tcp_id_cancel_comment_reply : $this->option_wp_id_cancel_comment_reply;
+		$this->option_wp_id_submit_comment = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_submit' ) );
+		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? tcp_id_submit_comment : $this->option_wp_id_submit_comment;
 
 		$this->tcp_css_custom_buttons = array(
 			'_all' => tcp_css_button_class . ' ' . $option_custom_classes_all,
@@ -677,7 +692,7 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function filter_comment_form_defaults( $args ) {
-		$args['comment_field'] = $this->filter_tinymce_editor();
+		$args[ 'comment_field' ] = $this->filter_tinymce_editor();
 
 		return $args;
 	}

@@ -119,7 +119,7 @@
 					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
 					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_id_respond ?>" data-tcp-field="_respond"></label>
-					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_id_form ?>" data-tcp-field="_form"></label>
+					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_id_comment_form ?>" data-tcp-field="_comment_form"></label>
 					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_id_reply ?>" data-tcp-field="_reply"></label>
 					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_id_cancel ?>" data-tcp-field="_cancel"></label>
 					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_id_submit ?>" data-tcp-field="_submit"></label>
