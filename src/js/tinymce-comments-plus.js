@@ -84,8 +84,8 @@ tcp.initTcp = function() {
 					// replace #comments element with data response #comments element
 					$commentsList.replaceWith( $commentData );
 
-					// restore tinymce editor to refreshed reply form
-					tcp.resetEditor();
+					// rebind React components
+					tcp.bindEditors();
 
 					// // scroll to latest comment
 					// var $commentsList = $comments.find( '.comment' );
@@ -157,6 +157,6 @@ tcp.initTcp = function() {
 ( function( $ ){
    $(function(){
       tcp.initTcp();
-			tcp.bindEditors();
+		tcp.bindEditors();
    });
 })( jQuery );

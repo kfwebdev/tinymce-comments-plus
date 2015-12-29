@@ -389,7 +389,7 @@ class TinyMCECommentsPlus {
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
 			wp_enqueue_script( $this->plugin_slug . "-humanize-duration", plugins_url( "src/js/humanize-duration.js", __FILE__) );
 			// wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "src/js/tinymce-comments-plus-admin.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
-			wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
+			wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
