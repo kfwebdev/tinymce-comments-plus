@@ -100,12 +100,12 @@
 			<fieldset class="wordpress-ids">
 				<?php
 					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids );
-					$wp_ids_list = get_option( tcp_ajax_wordpress_ids .'_list' );
-					$wp_ids_respond = get_option( tcp_ajax_wordpress_ids .'_respond' );
-					$wp_ids_form = get_option( tcp_ajax_wordpress_ids .'_form' );
-					$wp_ids_reply = get_option( tcp_ajax_wordpress_ids .'_reply' );
-					$wp_ids_cancel = get_option( tcp_ajax_wordpress_ids .'_cancel' );
-					$wp_ids_submit = get_option( tcp_ajax_wordpress_ids .'_submit' );
+					$wp_id_comments = get_option( tcp_ajax_wordpress_ids .'_comments' );
+					$wp_id_respond = get_option( tcp_ajax_wordpress_ids .'_respond' );
+					$wp_id_form = get_option( tcp_ajax_wordpress_ids .'_form' );
+					$wp_id_reply = get_option( tcp_ajax_wordpress_ids .'_reply' );
+					$wp_id_cancel = get_option( tcp_ajax_wordpress_ids .'_cancel' );
+					$wp_id_submit = get_option( tcp_ajax_wordpress_ids .'_submit' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> WordPress IDs &amp; Classes</legend>
 				<p>Some themes may use different element IDs or classes in comments. Leave blank for WordPress defaults.                                                                                                                                              </p>
@@ -115,14 +115,14 @@
 						<span class="dashicons"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_ids_list ?>" data-tcp-field="_list"></label>
+					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_id_comments ?>" data-tcp-field="_list"></label>
 					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
-					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_ids_respond ?>" data-tcp-field="_respond"></label>
-					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_ids_form ?>" data-tcp-field="_form"></label>
-					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_ids_reply ?>" data-tcp-field="_reply"></label>
-					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_ids_cancel ?>" data-tcp-field="_cancel"></label>
-					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_ids_submit ?>" data-tcp-field="_submit"></label>
+					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_id_respond ?>" data-tcp-field="_respond"></label>
+					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_id_form ?>" data-tcp-field="_form"></label>
+					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_id_reply ?>" data-tcp-field="_reply"></label>
+					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_id_cancel ?>" data-tcp-field="_cancel"></label>
+					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_id_submit ?>" data-tcp-field="_submit"></label>
 				</div>
 			</fieldset>
 		</div>

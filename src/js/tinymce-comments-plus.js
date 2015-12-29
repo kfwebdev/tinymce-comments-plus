@@ -76,8 +76,8 @@ tcp.initTcp = function() {
 				tcp.resetEditor();
 
 				var
-					$commentData = $( data ).find( tcp.globals.commentsList ),
-					$commentsList = $( tcp.globals.commentsList )
+					$commentData = $( data ).find( tcp.globals.tcp_id_comments ),
+					$commentsList = $( tcp.globals.tcp_id_comments )
 				;
 
 				if ( $commentData.length ) {
@@ -86,7 +86,7 @@ tcp.initTcp = function() {
 					$commentsList.replaceWith( $commentData );
 
 					tcp.views.comments = new tcp.CommentsView({
-						el: $( tcp.globals.commentsList )
+						el: $( tcp.globals.tcp_id_comments )
 					});
 
 					// restore tinymce editor to refreshed reply form

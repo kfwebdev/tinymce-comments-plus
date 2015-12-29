@@ -139,12 +139,10 @@ class TinyMCECommentsPlus {
 		define( tcp_css_prefix . 'post_id', tcp_prefix . 'post_id' );
 		define( tcp_css_prefix . 'comment_id', tcp_prefix . 'comment_id' );
 		define( tcp_css_prefix . 'nonce', tcp_prefix . 'nonce' );
-		define( tcp_id_prefix . 'cancel_comment_reply_id', 'cancel-comment-reply-link' );
-		define( tcp_css_prefix . 'submit_edit_button_custom', 'comment-reply-link' );
 
 		// WordPress IDs
-
 		define( tcp_id_prefix . 'comments', 'comments' );
+		define( tcp_id_prefix . 'cancel_comment_reply', 'cancel-comment-reply-link' );
 
 		// TCP Custom CSS Button Classes
 		$option_custom_classes_all = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_all' ) );
@@ -167,8 +165,10 @@ class TinyMCECommentsPlus {
 		$this->option_toolbar4 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
 		$this->option_toolbar4 = ( empty( trim( $this->option_toolbar4 ) ) ) ? '' : $this->option_toolbar4;
 
-		$option_wp_ids_list = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_list' ) );
-		$option_wp_ids_list = ( empty( trim( $option_wp_ids_list ) ) ) ? tcp_id_comments : $option_wp_ids_list;
+		$option_wp_id_comments = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
+		$option_wp_id_comments = ( empty( trim( $option_wp_id_comments ) ) ) ? tcp_id_comments : $option_wp_id_comments;
+		$option_wp_id_cancel_comment_reply = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
+		$option_wp_id_cancel_comment_reply = ( empty( trim( $option_wp_id_cancel_comment_reply ) ) ) ? tcp_id_cancel_comment_reply : $option_wp_id_cancel_comment_reply;
 
 		$this->tcp_css_custom_buttons = array(
 			'_all' => tcp_css_button_class . ' ' . $option_custom_classes_all,
@@ -179,7 +179,8 @@ class TinyMCECommentsPlus {
 		);
 
 		$this->tcp_ids_wordpress = array(
-			'_list' => $option_wp_ids_list
+			'_comments' => $option_wp_id_comments,
+			'_cancel_comment_reply' => $option_wp_id_cancel_comment_reply
 		);
 
 		// Admin JavaScript Globals
@@ -222,11 +223,9 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'submit_button_custom' => $option_custom_classes_submit,
 			tcp_css_prefix . 'cancel_button_custom' => $option_custom_classes_cancel,
 			// IDs
-			tcp_id_prefix . 'cancel_comment_reply_id' => tcp_id_cancel_comment_reply_id
+			tcp_id_prefix . 'comments' => tcp_id_comments,
+			tcp_id_prefix . 'cancel_comment_reply' => tcp_id_cancel_comment_reply
 		);
-
-		$this->tcp_plugin_javascript_globals[ 'commentFormSpan' ] = '#tcpCommentFormSpan';
-		$this->tcp_plugin_javascript_globals[ 'commentsList' ] = '#comments';
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
