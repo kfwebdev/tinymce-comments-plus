@@ -89,11 +89,11 @@
 						<span class="dashicons dashicons-yes"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>All Buttons</span> <input type="text" value="<?php echo $tcp_classes_all ?>" data-tcp-field="_all"></label>
-					<label><span>WordPress Reply Button</span> <input type="text" value="<?php echo $tcp_classes_reply ?>" data-tcp-field="_reply"></label>
-					<label><span>Edit Button</span> <input type="text" value="<?php echo $tcp_classes_edit ?>" data-tcp-field="_edit"></label>
-					<label><span>Submit Edit Button</span> <input type="text" value="<?php echo $tcp_classes_submit ?>" data-tcp-field="_submit"></label>
-					<label><span>Cancel Edit Button</span> <input type="text" value="<?php echo $tcp_classes_cancel ?>" data-tcp-field="_cancel"></label>
+					<label><span>All Buttons</span> <input type="text" placeholder="tcp-button" value="<?php echo $tcp_classes_all ?>" data-tcp-field="_all"></label>
+					<label><span>WordPress Reply Button</span> <input type="text" placeholder="tcp-reply-comment" value="<?php echo $tcp_classes_reply ?>" data-tcp-field="_reply"></label>
+					<label><span>Edit Button</span> <input type="text" placeholder="tcp_edit" value="<?php echo $tcp_classes_edit ?>" data-tcp-field="_edit"></label>
+					<label><span>Submit Edit Button</span> <input type="text" placeholder="tcp-submit-edit" value="<?php echo $tcp_classes_submit ?>" data-tcp-field="_submit"></label>
+					<label><span>Cancel Edit Button</span> <input type="text" placeholder="tcp-cancel-edit" value="<?php echo $tcp_classes_cancel ?>" data-tcp-field="_cancel"></label>
 				</div>
 
 			</fieldset>

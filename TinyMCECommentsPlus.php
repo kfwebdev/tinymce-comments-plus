@@ -134,8 +134,8 @@ class TinyMCECommentsPlus {
 		define( tcp_css_prefix . 'cancel_edit_button_class', 'tcp-cancel-edit' );
 		define( tcp_css_prefix . 'comment_reply_button_class', 'comment-reply-link' );
 		define( tcp_css_prefix . 'comment_content', tcp_prefix . 'comment_content' );
-		define( tcp_css_prefix . 'edit', tcp_prefix . 'edit' );
-		define( tcp_css_prefix . 'editor', tcp_prefix . 'editor' );
+		define( tcp_css_prefix . 'edit', 'tcp-edit' );
+		define( tcp_css_prefix . 'editor', 'tcp-editor' );
 		define( tcp_css_prefix . 'post_id', tcp_prefix . 'post_id' );
 		define( tcp_css_prefix . 'comment_id', tcp_prefix . 'comment_id' );
 		define( tcp_css_prefix . 'nonce', tcp_prefix . 'nonce' );
@@ -147,24 +147,24 @@ class TinyMCECommentsPlus {
 		define( tcp_id_prefix . 'comments', 'comments' );
 
 		// TCP Custom CSS Button Classes
-		$option_custom_classes_all = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_all' ) );
-		$option_custom_classes_reply = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_reply' ) );
-		$option_custom_classes_edit = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_edit' ) );
-		$option_custom_classes_submit = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_submit' ) );
-		$option_custom_classes_cancel = sanitize_html_class( get_option( tcp_ajax_custom_classes . '_cancel' ) );
+		$option_custom_classes_all = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_all' ) );
+		$option_custom_classes_reply = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_reply' ) );
+		$option_custom_classes_edit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_edit' ) );
+		$option_custom_classes_submit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_submit' ) );
+		$option_custom_classes_cancel = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_cancel' ) );
 
 		// sanitize WordPress options
 		$this->option_editing_enabled = sanitize_html_class( get_option( tcp_ajax_editing_enabled ) );
 		$this->option_editing_enabled = ( $this->option_editing_enabled === 'off' ) ? 'off' : 'on';
 		$this->option_editing_expiration = sanitize_key( get_option( tcp_ajax_editing_expiration ) );
 
-		$this->option_toolbar1 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar1' ) );
+		$this->option_toolbar1 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar1' ) );
 		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? tcp_buttons1 : $this->option_toolbar1;
-		$this->option_toolbar2 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar2' ) );
+		$this->option_toolbar2 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar2' ) );
 		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? tcp_buttons2 : $this->option_toolbar2;
-		$this->option_toolbar3 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar3' ) );
+		$this->option_toolbar3 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar3' ) );
 		$this->option_toolbar3 = ( empty( trim( $this->option_toolbar3 ) ) ) ? '' : $this->option_toolbar3;
-		$this->option_toolbar4 = sanitize_html_class( get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
+		$this->option_toolbar4 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
 		$this->option_toolbar4 = ( empty( trim( $this->option_toolbar4 ) ) ) ? '' : $this->option_toolbar4;
 
 		$option_wp_ids_list = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_list' ) );

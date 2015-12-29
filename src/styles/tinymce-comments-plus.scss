@@ -13,25 +13,25 @@
     margin-bottom: 1rem;
 }
 
-.tcp_editor {
+.tcp-editor {
     .mce-tinymce.mce-container {
         border: 1px solid #eaeaea;
     }
 }
 
-.tcp_edit {
+.tcp-edit {
   display: inline-block;
   margin-right: 1em;
 }
 
-.tcp-submit-edit.comment-reply-link,
-.tcp-edit-comment.comment-reply-link {
+.tcp-submit-edit,
+.tcp-edit-comment {
     margin-right: 1em;
 }
 
-.tcp-submit-edit.comment-reply-link,
-.tcp-cancel-edit.comment-reply-link,
-.tcp-edit-comment.comment-reply-link {
+.tcp-submit-edit,
+.tcp-cancel-edit,
+.tcp-edit-comment {
     position: relative;
 }
 
