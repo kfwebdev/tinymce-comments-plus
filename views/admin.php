@@ -102,7 +102,7 @@
 					$nonce = wp_create_nonce( tcp_ajax_wordpress_ids );
 					$wp_id_comments = get_option( tcp_ajax_wordpress_ids .'_comments' );
 					$wp_id_respond = get_option( tcp_ajax_wordpress_ids .'_respond' );
-					$wp_id_form = get_option( tcp_ajax_wordpress_ids .'_form' );
+					$wp_id_comment_form = get_option( tcp_ajax_wordpress_ids .'_comment_form' );
 					$wp_id_reply = get_option( tcp_ajax_wordpress_ids .'_reply' );
 					$wp_id_cancel = get_option( tcp_ajax_wordpress_ids .'_cancel' );
 					$wp_id_submit = get_option( tcp_ajax_wordpress_ids .'_submit' );
