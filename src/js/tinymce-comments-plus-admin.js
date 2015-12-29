@@ -102,6 +102,7 @@ tcp.initAdmin = function() {
 			case 9: // tab
 			case 13: // enter
 			case 16: // shift
+			case 17: // ctrl
 			case 18: // alt
 			case 19: // pause/break
 			case 27: // escape
@@ -228,8 +229,7 @@ tcp.initAdmin = function() {
 
 	tcp.customToolbars = Backbone.View.extend({
 		events: {
-			'keypress': 'updateToolbars',
-			'keyup': 'detectKeys'
+			'keyup': 'updateToolbars'
 		},
 
 		initialize: function() {
@@ -237,19 +237,6 @@ tcp.initAdmin = function() {
 			this.$confirmed = this.$box.find( '.confirmed' );
 			this.nonce = this.$box.data( 'tcp-nc' );
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
-		},
-
-		detectKeys: function( event ) {
-			switch ( event.which ) {
-				// delete key
-				case 8:
-				// c after ctrl+c
-				case 67:
-				// v after ctrl+v
-				case 86:
-					this.updateToolbars( event );
-				break;
-			}
 		},
 
 		updateToolbars: function( event ) {
