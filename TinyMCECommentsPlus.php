@@ -763,7 +763,6 @@ class TinyMCECommentsPlus {
 		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
 		$comment_age = floor( $comment_age / 60 );
 
-print_r($this->option_toolbar1);
 		// Insert edit button targets
 		// If editing option is enabled
 		if ( ( $this->option_editing_enabled === 'on' &&
