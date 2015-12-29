@@ -216,14 +216,17 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'post_id' => tcp_css_comment_id,
 			tcp_css_prefix . 'comment_id' => tcp_css_comment_id,
 			tcp_css_prefix . 'nonce' => tcp_css_nonce,
+			tcp_css_prefix . 'button_custom' => $option_custom_classes_all,
+			tcp_css_prefix . 'reply_button_custom' => $option_custom_classes_reply,
+			tcp_css_prefix . 'edit_button_custom' => $option_custom_classes_edit,
+			tcp_css_prefix . 'submit_button_custom' => $option_custom_classes_submit,
+			tcp_css_prefix . 'cancel_button_custom' => $option_custom_classes_cancel,
 			// IDs
-			tcp_id_prefix . 'cancel_comment_reply_id' => tcp_id_cancel_comment_reply_id,
+			tcp_id_prefix . 'cancel_comment_reply_id' => tcp_id_cancel_comment_reply_id
 		);
 
 		$this->tcp_plugin_javascript_globals[ 'commentFormSpan' ] = '#tcpCommentFormSpan';
 		$this->tcp_plugin_javascript_globals[ 'commentsList' ] = '#comments';
-		$this->tcp_plugin_javascript_globals[ 'tcp_css_submit_edit_button_custom' ] = tcp_css_submit_edit_button_custom;
-
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
