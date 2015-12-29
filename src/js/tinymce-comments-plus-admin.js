@@ -96,6 +96,7 @@ tcp.initAdmin = function() {
 	}
 
 	tcp.validInputKey = function( key ) {
+
 		switch ( key ) {
 			// skip non input keys
 			case 9: // tab
@@ -105,13 +106,13 @@ tcp.initAdmin = function() {
 			case 19: // pause/break
 			case 27: // escape
 			// page up, page down, end, home, left/up/right/down arrows, insert
-			case ( key > 32 && key < 46 ):
+			case ( key >= 33 && key <= 45 ):
 			// windows keys, select key
-			case ( key > 90 && key < 94 ):
+			case ( key >= 91 && key <= 93 ):
 			// function keys F1-F12
-			case ( key > 111 && key < 124 ):
+			case ( key >= 112 && key <= 123 ):
 			// num & scroll lock
-			case ( key > 143 && key < 146 ):
+			case ( key >= 144 && key <= 145 ):
 				return false;
 			break;
 
@@ -227,7 +228,8 @@ tcp.initAdmin = function() {
 
 	tcp.customClasses = Backbone.View.extend({
 		events: {
-			'keypress': 'updateClasses'
+			'keypress': 'updateClasses',
+			'keyup': 'detectBackspace'
 		},
 
 		initialize: function() {
@@ -237,10 +239,15 @@ tcp.initAdmin = function() {
 			this.timeoutUpdate = false;
 		},
 
+		detectBackspace: function( event ) {
+			if ( event.which == 8 ) { this.updateClasses( event ); }
+		},
+
 		updateClasses: function( event ) {
 			var
 				that = this,
-				keyChar = String.fromCharCode( event.which )
+				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				keyChar = String.fromCharCode( charCode )
 			;
 
 			// validate input key and character input
@@ -283,7 +290,8 @@ tcp.initAdmin = function() {
 
 	tcp.wordpressIds = Backbone.View.extend({
 		events: {
-			'keypress': 'updateIDs'
+			'keypress': 'updateIDs',
+			'keyup': 'detectBackspace'
 		},
 
 		initialize: function() {
@@ -293,10 +301,15 @@ tcp.initAdmin = function() {
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
+		detectBackspace: function( event ) {
+			if ( event.which == 8 ) { this.updateIDs( event ); }
+		},
+
 		updateIDs: function( event ) {
 			var
 				that = this,
-				keyChar = String.fromCharCode( event.which )
+				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				keyChar = String.fromCharCode( charCode )
 			;
 
 			// validate input key and character input
@@ -339,7 +352,8 @@ tcp.initAdmin = function() {
 
 	tcp.customToolbars = Backbone.View.extend({
 		events: {
-			'keypress': 'updateToolbars'
+			'keypress': 'updateToolbars',
+			'keyup': 'detectBackspace'
 		},
 
 		initialize: function() {
@@ -349,10 +363,15 @@ tcp.initAdmin = function() {
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
+		detectBackspace: function( event ) {
+			if ( event.which == 8 ) { this.updateToolbars( event ); }
+		},
+
 		updateToolbars: function( event ) {
 			var
 				that = this,
-				keyChar = String.fromCharCode( event.which )
+				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				keyChar = String.fromCharCode( charCode )
 			;
 
 			// validate input key and character input
