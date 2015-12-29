@@ -120,6 +120,7 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
 
 		define( tcp_prefix . 'editing_expiration_max', 262981 );
+		define( tcp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
 		define( tcp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
 
 		// CSS Classes
@@ -610,7 +611,7 @@ class TinyMCECommentsPlus {
 			case tcp_ajax_custom_toolbars:
 				check_ajax_referer( tcp_ajax_custom_toolbars, 'security' );
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = sanitize_key( $option );
+					$option = preg_replace( tcp_regex_html_class, '', $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
 					else { $result = $this->tcp_save_option( tcp_ajax_custom_toolbars . $key, $option ); }
 				}

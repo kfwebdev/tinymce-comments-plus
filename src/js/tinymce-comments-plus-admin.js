@@ -226,10 +226,81 @@ tcp.initAdmin = function() {
 		}
 	});
 
+	tcp.customToolbars = Backbone.View.extend({
+		events: {
+			'keypress': 'updateToolbars',
+			'keyup': 'detectKeys'
+		},
+
+		initialize: function() {
+			this.$box = this.$el.find( '.box' );
+			this.$confirmed = this.$box.find( '.confirmed' );
+			this.nonce = this.$box.data( 'tcp-nc' );
+			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
+		},
+
+		detectKeys: function( event ) {
+			switch ( event.which ) {
+				// delete key
+				case 8:
+				// c after ctrl+c
+				case 67:
+				// v after ctrl+v
+				case 86:
+					this.updateToolbars( event );
+				break;
+			}
+		},
+
+		updateToolbars: function( event ) {
+			var
+				that = this,
+				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				keyChar = String.fromCharCode( charCode )
+			;
+
+			// validate input key and character input
+			if ( ! tcp.validInputKey( event.which ) ||
+					 ! tcp.validHtmlClassKey( keyChar ) ) {
+				event.preventDefault();
+				return false;
+			}
+
+			this.content = {};
+			this.$inputs = this.$el.find( 'input[type=text]' );
+			$.each( this.$inputs, function( key, input ){
+				let field = $( input ).data( 'tcp-field' );
+				// sanitize input data
+				that.content[ field ] = tcp.sanitizeHtmlClass( input.value );
+				// update input with clean data
+				$( input ).val( that.content[ field ] );
+			});
+
+			this.model.set( 'security', this.nonce );
+			this.model.set( 'action', tcpGlobals.customToolbarsAction );
+			this.model.set( 'content', this.content );
+
+			clearTimeout( this.timeoutUpdate );
+
+			this.timeoutUpdate = setTimeout( function(){
+				tcp.confirmationSaving( that );
+				tcp.ajaxSaveOption( that.model.toJSON() )
+				.fail(function( data ) {
+					tcp.confirmationFail( that );
+				})
+				.done(function( data ) {
+					that.confirmationMessage = 'Toolbar layouts Saved';
+					tcp.confirmationDone( that );
+				});
+				clearTimeout( that.timeoutUpdate );
+			}, tcpGlobals.optionUpdateDelay );
+		}
+	});
+
 	tcp.customClasses = Backbone.View.extend({
 		events: {
-			'keypress': 'updateClasses',
-			'keyup': 'detectBackspace'
+			'keypress': 'handleKeypress',
+			'keyup': 'detectKeys'
 		},
 
 		initialize: function() {
@@ -239,11 +310,20 @@ tcp.initAdmin = function() {
 			this.timeoutUpdate = false;
 		},
 
-		detectBackspace: function( event ) {
-			if ( event.which == 8 ) { this.updateClasses( event ); }
+		detectKeys: function( event ) {
+			switch ( event.which ) {
+				// delete key
+				case 8:
+				// c after ctrl+c
+				case 67:
+				// v after ctrl+v
+				case 86:
+					this.updateKeypress( event );
+				break;
+			}
 		},
 
-		updateClasses: function( event ) {
+		handleKeypress: function( event ) {
 			var
 				that = this,
 				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
@@ -291,7 +371,7 @@ tcp.initAdmin = function() {
 	tcp.wordpressIds = Backbone.View.extend({
 		events: {
 			'keypress': 'updateIDs',
-			'keyup': 'detectBackspace'
+			'keyup': 'detectKeys'
 		},
 
 		initialize: function() {
@@ -301,8 +381,17 @@ tcp.initAdmin = function() {
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
-		detectBackspace: function( event ) {
-			if ( event.which == 8 ) { this.updateIDs( event ); }
+		detectKeys: function( event ) {
+			switch ( event.which ) {
+				// delete key
+				case 8:
+				// c after ctrl+c
+				case 67:
+				// v after ctrl+v
+				case 86:
+					this.updateIDs( event );
+				break;
+			}
 		},
 
 		updateIDs: function( event ) {
@@ -343,68 +432,6 @@ tcp.initAdmin = function() {
 				})
 				.done(function( data ) {
 					that.confirmationMessage = 'WordPress IDs & Classes Saved';
-					tcp.confirmationDone( that );
-				});
-				clearTimeout( that.timeoutUpdate );
-			}, tcpGlobals.optionUpdateDelay );
-		}
-	});
-
-	tcp.customToolbars = Backbone.View.extend({
-		events: {
-			'keypress': 'updateToolbars',
-			'keyup': 'detectBackspace'
-		},
-
-		initialize: function() {
-			this.$box = this.$el.find( '.box' );
-			this.$confirmed = this.$box.find( '.confirmed' );
-			this.nonce = this.$box.data( 'tcp-nc' );
-			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
-		},
-
-		detectBackspace: function( event ) {
-			if ( event.which == 8 ) { this.updateToolbars( event ); }
-		},
-
-		updateToolbars: function( event ) {
-			var
-				that = this,
-				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
-				keyChar = String.fromCharCode( charCode )
-			;
-
-			// validate input key and character input
-			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( keyChar ) ) {
-				event.preventDefault();
-				return false;
-			}
-
-			this.content = {};
-			this.$inputs = this.$el.find( 'input[type=text]' );
-			$.each( this.$inputs, function( key, input ){
-				let field = $( input ).data( 'tcp-field' );
-				// sanitize input data
-				that.content[ field ] = tcp.sanitizeHtmlClass( input.value );
-				// update input with clean data
-				$( input ).val( that.content[ field ] );
-			});
-
-			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.customToolbarsAction );
-			this.model.set( 'content', this.content );
-
-			clearTimeout( this.timeoutUpdate );
-
-			this.timeoutUpdate = setTimeout( function(){
-				tcp.confirmationSaving( that );
-				tcp.ajaxSaveOption( that.model.toJSON() )
-				.fail(function( data ) {
-					tcp.confirmationFail( that );
-				})
-				.done(function( data ) {
-					that.confirmationMessage = 'Toolbar layouts Saved';
 					tcp.confirmationDone( that );
 				});
 				clearTimeout( that.timeoutUpdate );
