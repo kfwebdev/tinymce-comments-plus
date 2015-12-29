@@ -30,7 +30,6 @@ tcp.initTcp = function() {
 		window.tcp.globals = JSON.parse( tcpGlobals );
 	}
 
-
 	tcp.RespondView = Backbone.View.extend({
 		events: function() {
 			var _events = {};
@@ -85,10 +84,6 @@ tcp.initTcp = function() {
 					// replace #comments element with data response #comments element
 					$commentsList.replaceWith( $commentData );
 
-					tcp.views.comments = new tcp.CommentsView({
-						el: $( tcp.globals.tcp_id_comments )
-					});
-
 					// restore tinymce editor to refreshed reply form
 					tcp.resetEditor();
 
@@ -139,6 +134,10 @@ tcp.initTcp = function() {
 					editorId = tcp.globals.tcp_css_editor + commentId,
 					contentId = tcp.globals.tcp_css_comment_content + commentId;
 			ReactDOM.render(<tcp.Editor tcpGlobals={ tcp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } contentId={ contentId } />, this );
+		});
+
+		new tcp.RespondView({
+			el: $( tcp.globals.tcp_id_respond )
 		});
 
 		$( '.comment-reply-link' ).on( 'click', function() {
