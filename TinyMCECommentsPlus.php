@@ -209,7 +209,6 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'submit_button' => tcp_css_submit_button_class,
 			tcp_css_prefix . 'submit_edit_button' => tcp_css_submit_edit_button_class,
 			tcp_css_prefix . 'cancel_edit_button' => tcp_css_cancel_edit_button_class,
-			tcp_css_prefix . 'cancel_edit_button' => tcp_css_cancel_edit_button_class,
 			tcp_css_prefix . 'comment_reply_button' => tcp_css_comment_reply_button_class,
 			tcp_css_prefix . 'edit' => tcp_css_edit,
 			tcp_css_prefix . 'editor' => tcp_css_editor,
@@ -782,12 +781,7 @@ class TinyMCECommentsPlus {
 
 			$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
 
-			$tcp_edit_link = '<div class="' . tcp_css_edit;
-
-			$custom_css = $this->tcp_css_custom_buttons[ '_all' ];
-			if ( $custom_css ) { $tcp_edit_link .= ' ' . $custom_css; }
-
-			$tcp_edit_link .= '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
+			$tcp_edit_link = '<div class="' . tcp_css_edit . '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
 
 			$args[ 'before' ] .= $tcp_edit_link;
 		}
