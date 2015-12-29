@@ -120,8 +120,8 @@ class TinyMCECommentsPlus {
 		define( tcp_ajax_prefix . 'wordpress_ids', tcp_prefix . 'wordpress_ids' );
 		define( tcp_ajax_prefix . 'custom_toolbars', tcp_prefix . 'custom_toolbars' );
 
-		define( tcp_prefix . 'buttons1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
-		define( tcp_prefix . 'buttons2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
+		define( tcp_prefix . 'toolbar1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
+		define( tcp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
 		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
 
 		define( tcp_prefix . 'editing_expiration_max', 262981 );
@@ -165,9 +165,9 @@ class TinyMCECommentsPlus {
 		$this->option_editing_expiration = sanitize_key( get_option( tcp_ajax_editing_expiration ) );
 
 		$this->option_toolbar1 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar1' ) );
-		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? tcp_buttons1 : $this->option_toolbar1;
+		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? tcp_toolbar1 : $this->option_toolbar1;
 		$this->option_toolbar2 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar2' ) );
-		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? tcp_buttons2 : $this->option_toolbar2;
+		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? tcp_toolbar2 : $this->option_toolbar2;
 		$this->option_toolbar3 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar3' ) );
 		$this->option_toolbar3 = ( empty( trim( $this->option_toolbar3 ) ) ) ? '' : $this->option_toolbar3;
 		$this->option_toolbar4 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
@@ -234,8 +234,13 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
 			tcp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
 			// IDs
-			tcp_id_prefix . 'comments' => tcp_id_comments,
-			tcp_id_prefix . 'cancel_comment_reply' => tcp_id_cancel_comment_reply
+			tcp_id_prefix . 'comments' => $this->option_wp_id_comments,
+			tcp_id_prefix . 'respond' => $this->option_wp_id_respond,
+			tcp_id_prefix . 'comment_form' => $this->option_wp_id_comment_form,
+			tcp_id_prefix . 'comment_reply' => $this->option_wp_id_comment_reply_link,
+			tcp_id_prefix . 'cancel_comment_reply' => $this->option_wp_id_cancel_comment_reply,
+			tcp_id_prefix . 'submit_comment' => $this->option_wp_id_submit_comment
+
 		);
 
 		// Load plugin text domain
