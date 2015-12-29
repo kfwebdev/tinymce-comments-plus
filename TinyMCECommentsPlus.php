@@ -147,18 +147,18 @@ class TinyMCECommentsPlus {
 		define( tcp_css_prefix . 'nonce', tcp_prefix . 'nonce' );
 
 		// WordPress IDs
-		define( tcp_id_prefix . 'comments', 'comments' );
-		define( tcp_id_prefix . 'respond', 'respond' );
-		define( tcp_id_prefix . 'comment_form', 'commentform' );
-		define( tcp_id_prefix . 'cancel_comment_reply', 'cancel-comment-reply-link' );
-		define( tcp_id_prefix . 'submit_comment', 'submit' );
+		define( tcp_id_prefix . 'comments', '#comments' );
+		define( tcp_id_prefix . 'respond', '#respond' );
+		define( tcp_id_prefix . 'comment_form', '#commentform' );
+		define( tcp_id_prefix . 'cancel_comment_reply', '#cancel-comment-reply-link' );
+		define( tcp_id_prefix . 'submit_comment', '#submit' );
 
 		// TCP Custom CSS Button Classes
-		$option_custom_classes_all = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_all' ) );
-		$option_custom_classes_reply = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_reply' ) );
-		$option_custom_classes_edit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_edit' ) );
-		$option_custom_classes_submit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_submit' ) );
-		$option_custom_classes_cancel = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_cancel' ) );
+		$this->option_custom_classes_all = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_all' ) );
+		$this->option_custom_classes_reply = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_reply' ) );
+		$this->option_custom_classes_edit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_edit' ) );
+		$this->option_custom_classes_submit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_submit' ) );
+		$this->option_custom_classes_cancel = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_cancel' ) );
 
 		// sanitize WordPress options
 		$this->option_editing_enabled = sanitize_html_class( get_option( tcp_ajax_editing_enabled ) );
@@ -188,11 +188,11 @@ class TinyMCECommentsPlus {
 		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? tcp_id_submit_comment : $this->option_wp_id_submit_comment;
 
 		$this->tcp_css_custom_buttons = array(
-			'_all' => tcp_css_button_class . ' ' . $option_custom_classes_all,
-			'_edit' => tcp_css_edit_button_class . ' ' . $option_custom_classes_edit,
-			'_reply' => tcp_css_reply_button_class . ' ' . $option_custom_classes_reply,
-			'_submit' => tcp_css_submit_edit_button_class . ' ' . $option_custom_classes_submit,
-			'_cancel' => tcp_css_cancel_edit_button_class . ' ' . $option_custom_classes_cancel
+			'_all' => tcp_css_button_class . ' ' . $this->option_custom_classes_all,
+			'_edit' => tcp_css_edit_button_class . ' ' . $this->option_custom_classes_edit,
+			'_reply' => tcp_css_reply_button_class . ' ' . $this->option_custom_classes_reply,
+			'_submit' => tcp_css_submit_edit_button_class . ' ' . $this->option_custom_classes_submit,
+			'_cancel' => tcp_css_cancel_edit_button_class . ' ' . $this->option_custom_classes_cancel
 		);
 
 		$this->tcp_ids_wordpress = array(
@@ -234,11 +234,11 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'post_id' => tcp_css_comment_id,
 			tcp_css_prefix . 'comment_id' => tcp_css_comment_id,
 			tcp_css_prefix . 'nonce' => tcp_css_nonce,
-			tcp_css_prefix . 'button_custom' => $option_custom_classes_all,
-			tcp_css_prefix . 'reply_button_custom' => $option_custom_classes_reply,
-			tcp_css_prefix . 'edit_button_custom' => $option_custom_classes_edit,
-			tcp_css_prefix . 'submit_button_custom' => $option_custom_classes_submit,
-			tcp_css_prefix . 'cancel_button_custom' => $option_custom_classes_cancel,
+			tcp_css_prefix . 'button_custom' => $this->option_custom_classes_all,
+			tcp_css_prefix . 'reply_button_custom' => $this->option_custom_classes_reply,
+			tcp_css_prefix . 'edit_button_custom' => $this->option_custom_classes_edit,
+			tcp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
+			tcp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
 			// IDs
 			tcp_id_prefix . 'comments' => tcp_id_comments,
 			tcp_id_prefix . 'cancel_comment_reply' => tcp_id_cancel_comment_reply
@@ -767,8 +767,8 @@ class TinyMCECommentsPlus {
 		global $current_user;
 
 		// insert custom CSS classes
-		$custom_classes = $this->tcp_css_custom_buttons[ '_all' ] . ' ' . $this->tcp_css_custom_buttons[ '_reply' ];
-		$args = str_replace( "class='comment-reply-link'", "class='comment-reply-link " . $custom_classes . "'", $args );
+		$custom_classes = $this->option_custom_classes_all . ' ' . $this->option_custom_classes_reply;
+		$args = str_replace( "class='" . $this->option_wp_id_comment_reply_link . "k'", $this->option_wp_id_comment_reply_link. " " . $custom_classes . "'", $args );
 
 		return $args;
 	}
