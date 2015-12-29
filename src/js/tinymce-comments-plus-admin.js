@@ -238,11 +238,14 @@ tcp.initAdmin = function() {
 		},
 
 		updateClasses: function( event ) {
-			var	that = this;
+			var
+				that = this,
+				key = String.fromCharCode( event.which )
+			;
 
 			// validate input key and character input
 			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( event.key ) ) {
+					 ! tcp.validHtmlClassKey( key ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -291,11 +294,14 @@ tcp.initAdmin = function() {
 		},
 
 		updateIDs: function( event ) {
-			var that = this;
+			var
+				that = this,
+				key = String.fromCharCode( event.which )
+			;
 
 			// validate input key and character input
 			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlIdKey( event.key ) ) {
+					 ! tcp.validHtmlIdKey( key ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -344,11 +350,14 @@ tcp.initAdmin = function() {
 		},
 
 		updateToolbars: function( event ) {
-			var that = this;
+			var
+				that = this,
+				key = String.fromCharCode( event.which )
+			;
 
 			// validate input key and character input
 			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( event.key ) ) {
+					 ! tcp.validHtmlClassKey( key ) ) {
 				event.preventDefault();
 				return false;
 			}
