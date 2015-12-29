@@ -186,14 +186,6 @@ class TinyMCECommentsPlus {
 		$this->option_wp_id_submit_comment = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_submit' ) );
 		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? tcp_id_submit_comment : $this->option_wp_id_submit_comment;
 
-		$this->tcp_css_custom_buttons = array(
-			'_all' => tcp_css_button_class . ' ' . $this->option_custom_classes_all,
-			'_edit' => tcp_css_edit_button_class . ' ' . $this->option_custom_classes_edit,
-			'_reply' => tcp_css_reply_button_class . ' ' . $this->option_custom_classes_reply,
-			'_submit' => tcp_css_submit_edit_button_class . ' ' . $this->option_custom_classes_submit,
-			'_cancel' => tcp_css_cancel_edit_button_class . ' ' . $this->option_custom_classes_cancel
-		);
-
 		// Admin JavaScript Globals
 		$this->tcp_admin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
