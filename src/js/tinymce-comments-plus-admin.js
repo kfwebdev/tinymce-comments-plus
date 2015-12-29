@@ -105,13 +105,13 @@ tcp.initAdmin = function() {
 			case 19: // pause/break
 			case 27: // escape
 			// page up, page down, end, home, left/up/right/down arrows, insert
-			case (key >= 33 && key <= 45):
+			case ( key > 32 && key < 46 ):
 			// windows keys, select key
-			case (key >= 91 && key <= 93):
+			case ( key > 90 && key < 94 ):
 			// function keys F1-F12
-			case (key >= 112 && key <= 123):
+			case ( key > 111 && key < 124 ):
 			// num & scroll lock
-			case (key >= 144 && key <= 145):
+			case ( key > 143 && key < 146 ):
 				return false;
 			break;
 
@@ -227,7 +227,7 @@ tcp.initAdmin = function() {
 
 	tcp.customClasses = Backbone.View.extend({
 		events: {
-			'keyup': 'updateClasses'
+			'keypress': 'updateClasses'
 		},
 
 		initialize: function() {
@@ -240,12 +240,12 @@ tcp.initAdmin = function() {
 		updateClasses: function( event ) {
 			var
 				that = this,
-				key = String.fromCharCode( event.which )
+				keyChar = String.fromCharCode( event.which )
 			;
 
 			// validate input key and character input
 			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( key ) ) {
+					 ! tcp.validHtmlClassKey( keyChar ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -283,7 +283,7 @@ tcp.initAdmin = function() {
 
 	tcp.wordpressIds = Backbone.View.extend({
 		events: {
-			'keyup': 'updateIDs'
+			'keypress': 'updateIDs'
 		},
 
 		initialize: function() {
@@ -296,12 +296,12 @@ tcp.initAdmin = function() {
 		updateIDs: function( event ) {
 			var
 				that = this,
-				key = String.fromCharCode( event.which )
+				keyChar = String.fromCharCode( event.which )
 			;
 
 			// validate input key and character input
 			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlIdKey( key ) ) {
+					 ! tcp.validHtmlIdKey( keyChar ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -339,7 +339,7 @@ tcp.initAdmin = function() {
 
 	tcp.customToolbars = Backbone.View.extend({
 		events: {
-			'keyup': 'updateToolbars'
+			'keypress': 'updateToolbars'
 		},
 
 		initialize: function() {
@@ -352,12 +352,12 @@ tcp.initAdmin = function() {
 		updateToolbars: function( event ) {
 			var
 				that = this,
-				key = String.fromCharCode( event.which )
+				keyChar = String.fromCharCode( event.which )
 			;
 
 			// validate input key and character input
 			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( key ) ) {
+					 ! tcp.validHtmlClassKey( keyChar ) ) {
 				event.preventDefault();
 				return false;
 			}
