@@ -600,7 +600,7 @@ class TinyMCECommentsPlus {
 			case tcp_ajax_custom_classes:
 				check_ajax_referer( tcp_ajax_custom_classes, 'security' );
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = sanitize_html_class( $option );
+					$option = preg_replace( tcp_regex_html_class, '', $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; }
 					else { $result = $this->tcp_save_option( tcp_ajax_custom_classes . $key, $option ); }
 				}
