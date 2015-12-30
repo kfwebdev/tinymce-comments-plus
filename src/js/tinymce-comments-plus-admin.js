@@ -19,7 +19,7 @@ var
 	$ = jQuery
 ;
 
-window.cl = console.dir.bind( console );
+if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 tcp.initAdmin = function() {
 

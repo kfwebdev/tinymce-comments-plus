@@ -12,7 +12,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// if ( window.console && window.console.dir.bind ) { window.cl = console.dir.bind( console ); }
+if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 var
 	tcp = window.tcp || {},
@@ -21,9 +21,6 @@ var
 ;
 
 window.tcp = tcp;
-
-tcp.Edit = require( '../components/edit/edit' );
-tcp.Editor = require( '../components/editor/editor' );
 
 tcp.initTcp = function() {
 	if ( tcpGlobals.length ) {
@@ -34,7 +31,7 @@ tcp.initTcp = function() {
 		events: function() {
 			var _events = {};
 
-			_events[ 'click ' + tcp.globals.tcp_id_cancel_comment_reply ] = 'resetEditor';
+			// _events[ 'click ' + tcp.globals.tcp_id_cancel_comment_reply ] = 'resetEditor';
 			_events[ 'submit' ] = 'submitForm';
 
 			return _events;
@@ -110,25 +107,66 @@ tcp.initTcp = function() {
 
 
 	// Reset tinymce editors
-	tcp.resetEditor = function() {
-		// Remove old textarea tinyMCE editor instance
+	tcp.resetEditor = function( clickEvent ) {
+
+		// Remove tinymce instance before move
 		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
+
 		// Remove old inline toolbar created by old tinyMCE editor instance
 		// $( 'div.mce-inline-toolbar-grp' ).remove();
+
+		// trigger original clickEvent
+		if ( typeof clickEvent != 'undefined' && clickEvent ) {
+			clickEvent();
+		}
+
 		// Recreate new tinyMCE editor at new #comment textarea position
 		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-		tinymce.activeEditor.focus();
+
+		setTimeout( function() {
+			tinymce.activeEditor.focus();
+		}, 500 );
 	};
 
+	tcp.bindReply = function( element ) {
+		// Save & Remove onClick event from comment-reply-link to reorder execution
+		let onClick = $( element ).prop( 'onclick' );
+		$( element ).removeProp( 'onclick');
+		$( element ).on( 'click', function( event ) {
+			event.preventDefault();
+			tcp.resetEditor( onClick );
+		});
+	};
+
+	tcp.bindCancelReply = function() {
+		let $cancelReply = $( tcp.globals.tcp_id_cancel_comment_reply );
+
+		$cancelReply.on( 'click', function( event ) {
+			tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+
+			setTimeout( function() {
+				tinymce.activeEditor.focus();
+			}, 500 );
+		});
+	};
 
 	tcp.bindEditors = function() {
+		// include edit component
+		tcp.Edit = require( '../components/edit/edit' );
+
 		// bind edit components
 		$( '.' + tcp.globals.tcp_css_edit ).each(function(){
 			let commentId = $( this ).data( tcp.globals.tcp_css_comment_id ),
 					editId = tcp.globals.tcp_css_edit + commentId,
-					editorId = tcp.globals.tcp_css_editor + commentId;
+					editorId = tcp.globals.tcp_css_editor + commentId,
+					commentReplyLink = $( this ).siblings( '.' + tcp.globals.tcp_css_comment_reply_button )[ 0 ];
+
+			// tcp.bindReply( commentReplyLink, true );
 			ReactDOM.render(<tcp.Edit tcpGlobals={ tcp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } />, this );
 		});
+
+		// include editor component
+		tcp.Editor = require( '../components/editor/editor' );
 
 		// bind editor components
 		$( '.' + tcp.globals.tcp_css_editor ).each(function(){
@@ -143,20 +181,12 @@ tcp.initTcp = function() {
 			el: $( tcp.globals.tcp_id_respond )
 		});
 
-		$( '.' + tcp.globals.tcp_css_comment_reply_button ).on( 'click', function() {
-			setTimeout( function() {
-				tcp.resetEditor();
-
-				$( tcp.globals.tcp_id_cancel_comment_reply ).on( 'click', function() {
-					// reset editor after move
-					setTimeout( function() {
-						tcp.resetEditor();
-					}, 500 );
-				});
-
-			}, 500 );
+		$( tcp.globals.tcp_id_cancel_comment_reply ).on( 'click', function( event ) {
+			// reset editor after move
+			// tcp.bindCancelReply();
 		});
-	}
+
+	};
 
 };
 
