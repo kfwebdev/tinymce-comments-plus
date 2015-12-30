@@ -12,7 +12,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-window.cl = console.dir.bind( console );
+// if ( window.console && window.console.dir.bind ) { window.cl = console.dir.bind( console ); }
 
 var
 	tcp = window.tcp || {},
@@ -146,14 +146,15 @@ tcp.initTcp = function() {
 		$( '.' + tcp.globals.tcp_css_comment_reply_button ).on( 'click', function() {
 			setTimeout( function() {
 				tcp.resetEditor();
-			}, 500 );
 
-			$( tcp.globals.tcp_id_cancel_comment_reply_id ).on( 'click', function() {
-				// reset editor after move
-				setTimeout( function() {
-					tcp.resetEditor();
-				}, 500 );
-			});
+				$( tcp.globals.tcp_id_cancel_comment_reply ).on( 'click', function() {
+					// reset editor after move
+					setTimeout( function() {
+						tcp.resetEditor();
+					}, 500 );
+				});
+
+			}, 500 );
 		});
 	}
 
