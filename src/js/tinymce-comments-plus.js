@@ -31,7 +31,6 @@ tcp.initTcp = function() {
 		events: function() {
 			var _events = {};
 
-			// _events[ 'click ' + tcp.globals.tcp_id_cancel_comment_reply ] = 'resetEditor';
 			_events[ 'submit' ] = 'submitForm';
 
 			return _events;
@@ -42,10 +41,6 @@ tcp.initTcp = function() {
 			this.$textArea = this.$el.find( 'textarea' );
 			this.$submitButton = this.$commentForm.find( 'input[type=submit]' );
 			this.$submitButton.addClass( tcp.globals.cssButton + ' ' + tcp.globals.cssSubmitButton )
-		},
-
-		resetEditor: function() {
-			tcp.resetEditor();
 		},
 
 		submitForm: function( event ) {
@@ -69,7 +64,6 @@ tcp.initTcp = function() {
 				self.$submitButton.attr( 'disabled', false );
 				self.$submitButton.val( submitText );
 				tinyMCE.activeEditor.setContent( '' );
-				tcp.resetEditor();
 
 				var
 					$commentData = $( data ).find( tcp.globals.tcp_id_comments ),
@@ -83,9 +77,6 @@ tcp.initTcp = function() {
 
 					// rebind React components
 					tcp.bindEditors();
-
-					// reset tinymce editor in replaced #comments list
-					tcp.resetEditor();
 
 					// // scroll to latest comment
 					// var $commentsList = $comments.find( '.comment' );
@@ -104,51 +95,6 @@ tcp.initTcp = function() {
 			});
 		}
 	});
-
-
-	// Reset tinymce editors
-	tcp.resetEditor = function( clickEvent ) {
-
-		// Remove tinymce instance before move
-		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
-
-		// Remove old inline toolbar created by old tinyMCE editor instance
-		// $( 'div.mce-inline-toolbar-grp' ).remove();
-
-		// trigger original clickEvent
-		if ( typeof clickEvent != 'undefined' && clickEvent ) {
-			clickEvent();
-		}
-
-		// Recreate new tinyMCE editor at new #comment textarea position
-		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-
-		setTimeout( function() {
-			tinymce.activeEditor.focus();
-		}, 500 );
-	};
-
-	tcp.bindReply = function( element ) {
-		// Save & Remove onClick event from comment-reply-link to reorder execution
-		let onClick = $( element ).prop( 'onclick' );
-		$( element ).removeProp( 'onclick');
-		$( element ).on( 'click', function( event ) {
-			event.preventDefault();
-			tcp.resetEditor( onClick );
-		});
-	};
-
-	tcp.bindCancelReply = function() {
-		let $cancelReply = $( tcp.globals.tcp_id_cancel_comment_reply );
-
-		$cancelReply.on( 'click', function( event ) {
-			tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-
-			setTimeout( function() {
-				tinymce.activeEditor.focus();
-			}, 500 );
-		});
-	};
 
 	tcp.bindEditors = function() {
 		// include edit component
@@ -179,11 +125,6 @@ tcp.initTcp = function() {
 
 		new tcp.RespondView({
 			el: $( tcp.globals.tcp_id_respond )
-		});
-
-		$( tcp.globals.tcp_id_cancel_comment_reply ).on( 'click', function( event ) {
-			// reset editor after move
-			// tcp.bindCancelReply();
 		});
 
 	};

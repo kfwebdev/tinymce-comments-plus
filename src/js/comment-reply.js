@@ -25,14 +25,12 @@ window.addComment = {
 
 		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
 
-
 		comm.parentNode.insertBefore( respond, comm.nextSibling );
 		if ( post && postId ) {
 			post.value = postId;
 		}
 		parent.value = parentId;
 		cancel.style.display = '';
-
 
 		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
 
