@@ -242,7 +242,7 @@ class TinyMCECommentsPlus {
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
-		add_action( 'init', array( $this, 'init_replace_comment_reply' ) );
+		add_action( 'init', array( $this, 'init_remove_comment_reply' ) );
 
 		// Add the options page and menu item.
 		add_action( 'admin_menu', array( $this, 'add_plugin_admin_menu' ) );
@@ -343,7 +343,7 @@ class TinyMCECommentsPlus {
 	 *
 	 * @since    1.0.0
 	 */
-	public function init_replace_comment_reply() {
+	public function init_remove_comment_reply() {
 		wp_deregister_script( 'comment-reply' );
 	}
 
