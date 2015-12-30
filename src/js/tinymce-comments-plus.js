@@ -140,14 +140,16 @@ tcp.initTcp = function() {
 			el: $( tcp.globals.tcp_id_respond )
 		});
 
-		$( tcp.globals.tcp_css_comment_reply ).on( 'click', function() {
-			tcp.resetEditor();
+		$( '.' + tcp.globals.tcp_css_comment_reply_button ).on( 'click', function() {
+			setTimeout( function() {
+				tcp.resetEditor();
+			}, 500 );
 
 			$( tcp.globals.tcp_id_cancel_comment_reply_id ).on( 'click', function() {
 				// reset editor after move
 				setTimeout( function() {
 					tcp.resetEditor();
-				}, 600 );
+				}, 500 );
 			});
 		});
 	}
