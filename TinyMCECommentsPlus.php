@@ -270,7 +270,7 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_ajax_nopriv_' . tcp_ajax_custom_toolbars, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . tcp_ajax_custom_toolbars, array( $this, 'action_ajax_request' ) );
 
-		add_action( 'comment_form', array( $this, 'action_comment_form' ), 999 );
+		// add_action( 'comment_form', array( $this, 'action_comment_form' ), 999 );
 
 		// Define custom functionality.
 		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 999 );
@@ -387,8 +387,8 @@ class TinyMCECommentsPlus {
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
-			wp_enqueue_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
-			// wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
+			// wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
+			wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
@@ -403,8 +403,8 @@ class TinyMCECommentsPlus {
 	 */
 	public function enqueue_scripts() {
 
-		wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
-		// wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
+		// wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
+		wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
 		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script' );
@@ -466,16 +466,14 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function action_comment_form( $post_id ) {
-		// marker for comment form
-		$nonce = wp_create_nonce( tcp_ajax_add_comment . $post_id );
-
-		echo '<span style="display:none;" id="tcpCommentForm" data-tcp-post-id="' . $post_id. '" data-tcp-nc="' . $nonce . '"></span>' . PHP_EOL;
-
-		// enable tinymce editor on comment form
-		$this->filter_tinymce_editor();
-
-	}
+	// public function action_comment_form( $post_id ) {
+	// 	// marker for comment form
+	// 	$nonce = wp_create_nonce( tcp_ajax_add_comment . $post_id );
+	//
+	// 	// enable tinymce editor on comment form
+	// 	$this->filter_tinymce_editor();
+	//
+	// }
 
 
 	/**
