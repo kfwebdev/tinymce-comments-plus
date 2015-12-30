@@ -87,6 +87,9 @@ tcp.initTcp = function() {
 					// rebind React components
 					tcp.bindEditors();
 
+					// reset tinymce editor in replaced #comments list
+					tcp.resetEditor();
+
 					// // scroll to latest comment
 					// var $commentsList = $comments.find( '.comment' );
 					// if ( $commentsList.length ) {
