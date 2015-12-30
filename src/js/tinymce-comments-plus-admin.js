@@ -13,13 +13,15 @@
 
 'use strict';
 
+import humanizeDuration from 'humanize-duration';
+
 var
 	tcp = window.tcp || {},
 	tcpGlobals = window.tcpGlobals || {},
 	$ = jQuery
 ;
 
-if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
+// if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 tcp.initAdmin = function() {
 

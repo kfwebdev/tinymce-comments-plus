@@ -396,8 +396,8 @@ class TinyMCECommentsPlus {
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
-			// wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
-			wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
+			wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone', 'underscore' ), $this->version );
+			// wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
@@ -412,8 +412,8 @@ class TinyMCECommentsPlus {
 	 */
 	public function enqueue_scripts() {
 
-		// wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
-		wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
+		wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
+		// wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
 		// Instantiate Javascript Globals for plugin script
 		wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
 		wp_enqueue_script( $this->plugin_slug . '-plugin-script' );

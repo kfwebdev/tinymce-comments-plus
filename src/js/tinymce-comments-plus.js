@@ -12,7 +12,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
+// if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 var
 	tcp = window.tcp || {},
