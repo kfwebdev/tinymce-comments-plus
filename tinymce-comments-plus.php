@@ -28,7 +28,7 @@ if (!defined("WPINC")) {
 	die;
 }
 
-if ( ! class_exists( 'FirePHP' ) ) { require( 'fb.php' ); }
+if ( WP_DEBUG && ! class_exists( 'FirePHP' ) ) { require( 'fb.php' ); }
 
 define( 'tcp_plugin_dir', plugin_dir_path( __FILE__ ) );
 define( 'tcp_plugin_file', plugin_basename( __FILE__ ) );
