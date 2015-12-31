@@ -43,7 +43,7 @@
 					<span class="dashicons dashicons-yes"></span>
 					<span class="message"></span>
 				</div>
-				<p>Time to allow comments to be edited. Leave all fields at 0 to always allow editing.</p>
+				<p>Duration to allow comments to be edited. Leave all fields at 0 to always allow editing.</p>
 				<div class="expiration-control" data-tcp-nc="<?php echo $nonce ?>">
 					<label for="days" class="days">Days
 						<input name="days" value="<?php echo $expirations->format('%a'); ?>">

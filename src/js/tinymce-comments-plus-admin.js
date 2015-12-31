@@ -253,7 +253,7 @@ tcp.initAdmin = function() {
 				case 'seconds': this.seconds = parseInt( event.target.value ); break;
 			}
 
-			this.expiration = this.days + this.hours + this.minutes + this.seconds;
+			this.expiration = Math.floor( this.days + this.hours + this.minutes + this.seconds );
 
 			this.updateExpiration();
 		},

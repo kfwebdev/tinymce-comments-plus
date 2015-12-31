@@ -77,7 +77,6 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
 		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
 
-		define( tcp_prefix . 'editing_expiration_max', 262981 );
 		define( tcp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
 		define( tcp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
 
@@ -494,7 +493,7 @@ class TinyMCECommentsPlus {
 			 $current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
 
 		// comment editing has expiration period
-		if ( $this->option_editing_expiration < tcp_editing_expiration_max &&
+		if ( $this->option_editing_expiration > 0 &&
 			// if the comment is past editing period expiration
 			$comment_age > $this->option_editing_expiration &&
 			// user is not an administrator
@@ -758,7 +757,7 @@ class TinyMCECommentsPlus {
 				// if user created this comment
 				$comment->user_id == $current_user->ID &&
 				// if comment editing does not expire
-				( $this->option_editing_expiration == tcp_editing_expiration_max ||
+				( $this->option_editing_expiration == 0 ||
 				// or comment editing has not expired
 					$comment_age <= $this->option_editing_expiration )
 			) ||
