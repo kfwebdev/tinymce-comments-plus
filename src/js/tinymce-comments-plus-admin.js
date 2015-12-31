@@ -172,12 +172,25 @@ tcp.initAdmin = function() {
 		},
 
 		initialize: function() {
+			this.$years = this.$el.find('.years');
+			this.$months = this.$el.find('.months');
+			this.$days = this.$el.find('.days');
+			this.$hours = this.$el.find('.hours');
+			this.$minutes = this.$el.find('.minutes');
+			this.$seconds = this.$el.find('.seconds');
 			this.$input = this.$el.find( 'input[type=range]' );
 			this.$output = this.$el.find( 'output' );
 			this.$confirmed = this.$el.find( '.confirmed' );
 			this.nonce = this.$input.data( 'tcp-nc' );
 			this.timeoutUpdate = false;
 			this.changeExpiration( false );
+
+			this.$years.spinner();
+			this.$months.spinner();
+			this.$days.spinner();
+			this.$hours.spinner();
+			this.$minutes.spinner();
+			this.$seconds.spinner();
 		},
 
 		changeExpiration: function( event ) {

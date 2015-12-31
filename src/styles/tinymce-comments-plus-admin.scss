@@ -22,7 +22,7 @@
             box-sizing: border-box;
             border: 1px solid #eee;
             border-radius: 5px;
-            box-shadow: 4px 4px 5px #eaeaea;
+            box-shadow: 3px 3px 4px #eaeaea;
 
             p {
                 display: inline-block;
@@ -127,15 +127,6 @@
               }
             }
 
-            &.comment-expiration {
-              input {
-                float: none;
-                width: 98%;
-                margin: 0 1em;
-                box-sizing: border-box;
-              }
-            }
-
             &.custom-toolbars,
             &.custom-classes,
             &.wordpress-ids {
@@ -202,6 +193,30 @@
                 & > output {
                     margin-top: 0;
                 }
+            }
+
+            .expiration-control {
+              margin: 0 .5em;
+              float: none;
+
+              label {
+                width: 125px;
+                display: inline-block;
+                margin: 15px .5em 0 0;
+                white-space: nowrap;
+                box-sizing: border-box;
+                text-align: right;
+
+                .ui-spinner {
+                  width: 3em;
+                  position: relative;
+
+                  input {
+                    width: 2em;
+                  }
+                }
+              }
+
             }
         }
     }

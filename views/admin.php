@@ -41,10 +41,20 @@
 					<span class="message"></span>
 				</div>
 				<p>Time to allow comments to be edited</p>
-				<div class="expiration-control">
-					<output></output>
+				<div class="expiration-control" data-tcp-nc="<?php echo $nonce ?>">
+					<label for="years">Years
+					<input name="years" class="years"></label>
+					<label for="months">Months
+					<input name="months" class="months"></label>
+					<label for="days">Days
+					<input name="days" class="days" ></label>
+					<label for="hours">Hours
+					<input name="hours" class="hours"></label>
+					<label for="minutes">Minutes
+					<input name="minutes" class="minutes"></label>
+					<label for="seconds">Seconds
+					<input name="seconds" class="seconds"></label>
 				</div>
-				<input class="years" type="range" step="1" min="1" max="<?php echo tcp_editing_expiration_max ?>" data-tcp-nc="<?php echo $nonce ?>" <?php echo "value=\"" . $expiration_option . "\"" ?> />
 			</fieldset>
 		</div>
 		<div class="tcp-option">
