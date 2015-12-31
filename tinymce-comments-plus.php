@@ -29,7 +29,11 @@ if (!defined("WPINC")) {
 }
 
 if ( ! class_exists( 'FirePHP' ) ) { require( 'fb.php' ); }
-require_once(plugin_dir_path(__FILE__) . "TinyMCECommentsPlus.php");
+
+define( 'tcp_plugin_dir', plugin_dir_path( __FILE__ ) );
+define( 'tcp_plugin_file', plugin_basename( __FILE__ ) );
+
+require_once( tcp_plugin_dir . "TinyMCECommentsPlus.php");
 
 // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
 register_activation_hook(__FILE__, array("TinyMCECommentsPlus", "activate"));

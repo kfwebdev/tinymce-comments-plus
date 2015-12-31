@@ -56,43 +56,6 @@ class TinyMCECommentsPlus {
 	protected $plugin_screen_hook_suffix = null;
 
 	/**
-	 * Public Javascript Global Variables
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      string
-	 */
-	private $tcp_javascript_globals = array();
-
-	/**
-	 * TCP Options
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      string
-	 */
-	private $option_editing_enabled = '';
-	private $option_editing_expiration = 0;
-	private $option_toolbar1 = '';
-	private $option_toolbar2 = '';
-	private $option_toolbar3 = '';
-	private $option_toolbar4 = '';
-
-	/**
-	 * WordPress element IDs and Classes
-	 *
-	 * @since    1.0.0
-	 *
-	 * @var      string
-	 */
-	private $option_wp_id_comments = '';
-	private $option_wp_id_respond = '';
-	private $option_wp_id_comment_form = '';
-	private $option_wp_id_comment_reply_link = '';
-	private $option_wp_id_cancel_comment_reply = '';
-	private $option_wp_id_submit_comment = '';
-
-	/**
 	 *
 	 * @since     1.0.0
 	 */
@@ -179,6 +142,8 @@ class TinyMCECommentsPlus {
 		$this->option_wp_id_submit_comment = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_submit' ) );
 		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? tcp_id_submit_comment : $this->option_wp_id_submit_comment;
 
+		add_filter( 'plugin_action_links_' . tcp_plugin_file, array( $this, 'add_plugin_action_links' ), 10, 4 );
+
 		// Ajax methods
 		add_action( 'wp_ajax_nopriv_' . tcp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . tcp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
@@ -246,6 +211,18 @@ class TinyMCECommentsPlus {
 	 */
 	public static function deactivate($network_wide) {
 		// TODO: Define deactivation functionality here
+	}
+
+	/**
+	 * Add plugin settings link
+	 *
+	 * @since    1.0.0
+	 */
+	public function add_plugin_action_links ( $actions, $plugin_file, $plugin_data, $context ) {
+		$tcp_plugin_links = array(
+			'settings' => '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_slug ) . '">Settings</a>',
+		);
+		return array_merge( $actions, $tcp_plugin_links );
 	}
 
 	/**
@@ -377,13 +354,6 @@ class TinyMCECommentsPlus {
 		$screen = get_current_screen();
 
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
-			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
-			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
-			wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
-			// wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
-
-			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
-			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
 
 			// Admin JavaScript Globals
 			$this->tcp_admin_javascript_globals = array(
@@ -396,6 +366,14 @@ class TinyMCECommentsPlus {
 				'wordpressIdsAction' => tcp_ajax_wordpress_ids,
 				'customToolbarsAction' => tcp_ajax_custom_toolbars
 			);
+
+			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
+			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
+			wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
+			// wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
+
+			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
+			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
 
 		}
 
@@ -456,20 +434,6 @@ class TinyMCECommentsPlus {
 		else { return false; }
 	}
 
-
-
-	/**
-	 * NOTE:  Actions are points in the execution of a page or process
-	 *        lifecycle that WordPress fires.
-	 *
-	 *        WordPress Actions: http://codex.wordpress.org/Plugin_API#Actions
-	 *        Action Reference:  http://codex.wordpress.org/Plugin_API/Action_Reference
-	 *
-	 * @since    1.0.0
-	 */
-	public function action_method_name() {
-		// TODO: Define your action hook callback here
-	}
 
 
 	/**
