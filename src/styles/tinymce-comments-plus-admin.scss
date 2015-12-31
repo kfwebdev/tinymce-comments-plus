@@ -193,7 +193,7 @@
                 }
 
                 & > label {
-                    margin-right: 1em;
+                    margin-right: .5em;
                 }
             }
 
@@ -202,9 +202,6 @@
                 & > output {
                     margin-top: 0;
                 }
-            }
-            .editing-control {
-              label { margin-right: 0; }
             }
         }
     }

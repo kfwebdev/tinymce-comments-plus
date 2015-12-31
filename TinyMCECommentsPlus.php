@@ -85,6 +85,7 @@ class TinyMCECommentsPlus {
 		define( tcp_prefix . 'css_prefix', tcp_prefix . 'css_' );
 		define( tcp_prefix . 'id_prefix', tcp_prefix . 'id_' );
 		define( tcp_css_prefix . 'button_class', 'tcp-button' );
+		define( tcp_css_prefix . 'edit_container', 'tcp-edit-container' );
 		define( tcp_css_prefix . 'edit_button_class', 'tcp-edit-comment' );
 		define( tcp_css_prefix . 'reply_button_class', 'tcp-reply-comment' );
 		define( tcp_css_prefix . 'submit_button_class', 'tcp-submit-comment' );
@@ -265,6 +266,7 @@ class TinyMCECommentsPlus {
 			tcp_css_prefix . 'edit_button' => tcp_css_edit_button_class,
 			tcp_css_prefix . 'reply_button' => tcp_css_reply_button_class,
 			tcp_css_prefix . 'submit_button' => tcp_css_submit_button_class,
+			tcp_css_prefix . 'edit_container' => tcp_css_edit_container,
 			tcp_css_prefix . 'submit_edit_button' => tcp_css_submit_edit_button_class,
 			tcp_css_prefix . 'cancel_edit_button' => tcp_css_cancel_edit_button_class,
 			tcp_css_prefix . 'comment_reply_button' => tcp_css_comment_reply_button_class,
@@ -595,7 +597,7 @@ class TinyMCECommentsPlus {
 			case tcp_ajax_custom_toolbars:
 				check_ajax_referer( tcp_ajax_custom_toolbars, 'security' );
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = preg_replace( tcp_regex_html_class, '', $option );
+					$option = preg_replace( tcp_regex_html_class, '', strtolower( $option ) );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
 					else { $result = $this->tcp_save_option( tcp_ajax_custom_toolbars . $key, $option ); }
 				}

@@ -9,10 +9,6 @@
     margin-bottom: 1.25em;
 }
 
-.tcp-reply-container {
-    margin-bottom: 1rem;
-}
-
 .tcp-editor {
     .mce-tinymce.mce-container {
         border: 1px solid #eaeaea;
@@ -34,7 +30,10 @@
     position: relative;
 }
 
-.tcp-reply-container .spinner {
+.tcp-edit-container {
+  margin-bottom: 1rem;
+
+  .spinner {
     display: none;
     top: 2px;
     margin-right: 5px;
@@ -42,4 +41,5 @@
     width: 16px;
     height: 16px;
     background: url( '../images/wpspin.gif' ) no-repeat;
+  }
 }

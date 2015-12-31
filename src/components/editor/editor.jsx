@@ -86,6 +86,7 @@ class EditorComponent extends React.Component {
       that = this,
       re_action = /^[a-z_]+$/,
       $content = $( '#' + this.props.contentId ),
+      $spinner = $( '.' + this.props.tcpGlobals.tcp_css_edit_container + ' .spinner' ),
       postId = $content.data( this.props.tcpGlobals.tcp_css_comment_id ),
       re_postId = /^[0-9]+$/,
       re_commentId = /^[0-9]+$/,
@@ -109,6 +110,8 @@ class EditorComponent extends React.Component {
     // validate nonce
     if ( ! re_nonce.test( nonce ) ) { return false; }
 
+    $spinner.css( 'display', 'inline-block' );
+
     $.ajax({
       url: this.props.tcpGlobals.ajaxUrl,
       type: 'post',
@@ -119,7 +122,9 @@ class EditorComponent extends React.Component {
       that.cancelEditor();
     })
     .fail( function( data ){
-      // error
+    })
+    .then( function() {
+      $spinner.hide();
     });
   }
 
@@ -129,9 +134,9 @@ class EditorComponent extends React.Component {
 
   render() {
       return(
-        <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' }}>
+        <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' } }>
           <textarea id={ this.props.editorId } className="tinyMCEeditor" rows="8"></textarea>
-          <div className="reply tcp-reply-container">
+          <div className={ this.props.tcpGlobals.tcp_css_edit_container }>
             <span className="spinner"></span><a href="javascript:void(0);" onClick={ this.submitEdit } className={
               this.props.tcpGlobals.tcp_css_button + ' ' +
               this.props.tcpGlobals.tcp_css_button_custom + ' ' +
