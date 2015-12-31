@@ -215,6 +215,15 @@
                     width: 2em;
                   }
                 }
+
+                &.days {
+                  .ui-spinner {
+                    width: 4em;
+                    input {
+                      width: 3em;
+                    }
+                  }
+                }
               }
 
             }

@@ -34,26 +34,29 @@
 				<?php
 					$nonce = wp_create_nonce( tcp_ajax_editing_expiration );
 					$expiration_option = get_option( tcp_ajax_editing_expiration );
+					$dtF = new DateTime( "@0" );
+    			$dtT = new DateTime( "@$expiration_option" );
+					$expirations = $dtF->diff( $dtT );
 				?>
 				<legend><span class="dashicons dashicons-clock"></span> Comment Editing Period</legend>
 				<div class="confirmed">
 					<span class="dashicons dashicons-yes"></span>
 					<span class="message"></span>
 				</div>
-				<p>Time to allow comments to be edited</p>
+				<p>Time to allow comments to be edited. Leave all fields at 0 to always allow editing.</p>
 				<div class="expiration-control" data-tcp-nc="<?php echo $nonce ?>">
-					<label for="years">Years
-					<input name="years" class="years"></label>
-					<label for="months">Months
-					<input name="months" class="months"></label>
-					<label for="days">Days
-					<input name="days" class="days" ></label>
-					<label for="hours">Hours
-					<input name="hours" class="hours"></label>
-					<label for="minutes">Minutes
-					<input name="minutes" class="minutes"></label>
-					<label for="seconds">Seconds
-					<input name="seconds" class="seconds"></label>
+					<label for="days" class="days">Days
+						<input name="days" value="<?php echo $expirations->format('%a'); ?>">
+					</label>
+					<label for="hours" class="hours">Hours
+						<input name="hours" value="<?php echo $expirations->format('%h'); ?>">
+					</label>
+					<label for="minutes" class="minutes">Minutes
+						<input name="minutes" value="<?php echo $expirations->format('%i'); ?>">
+					</label>
+					<label for="seconds" class="seconds">Seconds
+						<input name="seconds" value="<?php echo $expirations->format('%s'); ?>">
+					</label>
 				</div>
 			</fieldset>
 		</div>

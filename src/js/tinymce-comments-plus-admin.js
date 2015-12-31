@@ -8,7 +8,7 @@ var
 	$ = jQuery
 ;
 
-// if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
+if ( window.console && window.console.log && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 tcp.initAdmin = function() {
 
@@ -164,49 +164,101 @@ tcp.initAdmin = function() {
 
 	tcp.adjustExpiration = Backbone.View.extend({
 		events: {
-			'change input[type="range"]': 'changeExpiration',
-			'mousemove input[type="range"]': 'changeExpiration',
-			'touchmove input[type="range"]': 'changeExpiration',
-			'mouseup input[type="range"]': 'editingExpiration',
-			'touchend input[type="range"]': 'editingExpiration'
+			'change input': 'changeExpiration'
 		},
 
 		initialize: function() {
-			this.$years = this.$el.find('.years');
-			this.$months = this.$el.find('.months');
-			this.$days = this.$el.find('.days');
-			this.$hours = this.$el.find('.hours');
-			this.$minutes = this.$el.find('.minutes');
-			this.$seconds = this.$el.find('.seconds');
-			this.$input = this.$el.find( 'input[type=range]' );
-			this.$output = this.$el.find( 'output' );
-			this.$confirmed = this.$el.find( '.confirmed' );
-			this.nonce = this.$input.data( 'tcp-nc' );
-			this.timeoutUpdate = false;
-			this.changeExpiration( false );
+			var that = this;
 
-			this.$years.spinner();
-			this.$months.spinner();
-			this.$days.spinner();
-			this.$hours.spinner();
-			this.$minutes.spinner();
-			this.$seconds.spinner();
+			this.$expiration = this.$el.find( '.expiration-control' );
+			this.$days = this.$el.find('.days > input');
+			this.$hours = this.$el.find('.hours > input');
+			this.$minutes = this.$el.find('.minutes > input');
+			this.$seconds = this.$el.find('.seconds > input');
+			this.$confirmed = this.$el.find( '.confirmed' );
+			this.nonce = this.$expiration.data( 'tcp-nc' );
+			this.timeoutUpdate = false;
+
+			this.$days.spinner({
+				min: 0,
+				spin: function( event, ui ) {
+					event.target.value = ui.value;
+					that.changeExpiration( event );
+				}
+			});
+
+			this.$hours.spinner({
+				spin: function ( event, ui ) {
+					if (ui.value >= 24) {
+						that.$hours.spinner('value', ui.value - 24);
+						that.$days.spinner('stepUp');
+						return false;
+					} else if (ui.value < 0) {
+						that.$hours.spinner('value', ui.value + 24);
+						that.$days.spinner('stepDown');
+						return false;
+					}
+					event.target.value = ui.value;
+					that.changeExpiration( event );
+      	}
+			});
+
+			this.$minutes.spinner({
+				spin: function ( event, ui ) {
+					if (ui.value >= 60) {
+						that.$minutes.spinner('value', ui.value - 60);
+						that.$hours.spinner('stepUp');
+						return false;
+					} else if (ui.value < 0) {
+						that.$minutes.spinner('value', ui.value + 60);
+						that.$hours.spinner('stepDown');
+						return false;
+					}
+					event.target.value = ui.value;
+					that.changeExpiration( event );
+      	}
+			});
+
+			this.$seconds.spinner({
+				spin: function ( event, ui ) {
+					if (ui.value >= 60) {
+						that.$seconds.spinner('value', ui.value - 60);
+						that.$minutes.spinner('stepUp');
+						return false;
+					} else if (ui.value < 0) {
+						that.$seconds.spinner('value', ui.value + 60);
+						that.$minutes.spinner('stepDown');
+						return false;
+					}
+					event.target.value = ui.value;
+					that.changeExpiration( event );
+				}
+      });
+		},
+
+		updateExpirationValues: function() {
+			this.days = parseInt( this.$days.spinner('value') )  * 24 * 60 * 60;
+			this.hours = parseInt( this.$hours.spinner('value') ) * 60 * 60;
+			this.minutes = parseInt( this.$minutes.spinner('value') ) * 60;
+			this.seconds = parseInt( this.$seconds.spinner('value') );
 		},
 
 		changeExpiration: function( event ) {
-			if ( ! event ) { this.expiration = parseInt( this.$input.val() ); }
-			else { this.expiration = parseInt( event.currentTarget.value ); }
-			// overwrite invalid inputs
-			if ( ! _.isNumber( this.expiration ) ) { this.expiration = 1; }
+			this.updateExpirationValues();
 
-			var expire = this.expiration * 1000 * 60;
-			if ( this.expiration == this.$input.prop( 'max' ) ) {
-				this.$output.text( 'Forever' );
+			switch( event.target.name ) {
+				case 'days': this.days = parseInt( event.target.value ) * 24 * 60 * 60; break;
+				case 'hours': this.hours = parseInt( event.target.value ) * 60 * 60; break;
+				case 'minutes': this.minutes = parseInt( event.target.value ) * 60; break;
+				case 'seconds': this.seconds = parseInt( event.target.value ); break;
 			}
-			else { this.$output.text( humanizeDuration( expire ) ); }
+
+			this.expiration = this.days + this.hours + this.minutes + this.seconds;
+
+			this.updateExpiration();
 		},
 
-		editingExpiration: function( event ) {
+		updateExpiration: function() {
 			var that = this;
 			this.model.set( 'security', this.nonce );
 			this.model.set( 'action', tcpGlobals.editingExpirationAction );
