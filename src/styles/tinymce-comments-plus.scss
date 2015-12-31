@@ -35,11 +35,10 @@
 
   .spinner {
     display: none;
+    position: relative;
     top: 2px;
     margin-right: 5px;
-    position: relative;
     width: 16px;
     height: 16px;
-    background: url( '../images/wpspin.gif' ) no-repeat;
   }
 }

@@ -110,8 +110,6 @@ class EditorComponent extends React.Component {
     // validate nonce
     if ( ! re_nonce.test( nonce ) ) { return false; }
 
-    $spinner.css( 'display', 'inline-block' );
-
     $.ajax({
       url: this.props.tcpGlobals.ajaxUrl,
       type: 'post',
@@ -124,7 +122,6 @@ class EditorComponent extends React.Component {
     .fail( function( data ){
     })
     .then( function() {
-      $spinner.hide();
     });
   }
 
@@ -137,7 +134,8 @@ class EditorComponent extends React.Component {
         <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' } }>
           <textarea id={ this.props.editorId } className="tinyMCEeditor" rows="8"></textarea>
           <div className={ this.props.tcpGlobals.tcp_css_edit_container }>
-            <span className="spinner"></span><a href="javascript:void(0);" onClick={ this.submitEdit } className={
+            <span className="spinner"></span>
+            <a href="javascript:void(0);" onClick={ this.submitEdit } className={
               this.props.tcpGlobals.tcp_css_button + ' ' +
               this.props.tcpGlobals.tcp_css_button_custom + ' ' +
               this.props.tcpGlobals.tcp_css_submit_edit_button + ' ' +
