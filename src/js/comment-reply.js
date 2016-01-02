@@ -57,10 +57,6 @@ window.addComment = {
 
 			tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
 
-			setTimeout( function() {
-				tinymce.activeEditor.focus();
-			}, 500 );
-
 			return false;
 		};
 
