@@ -67,7 +67,7 @@ tcp.initTcp = function() {
 				self.$el.find( tcp.globals.tcp_id_cancel_comment_reply ).click();
 				self.$submitButton.attr( 'disabled', false );
 				self.$submitButton.val( submitText );
-				tinyMCE.activeEditor.setContent( '' );
+				tinymce.activeEditor.setContent( '' );
 
 				var
 					$commentData = $( data ).find( tcp.globals.tcp_id_comments ),
@@ -76,11 +76,15 @@ tcp.initTcp = function() {
 
 				if ( $commentData.length ) {
 
+					tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
+
 					// replace #comments element with data response #comments element
 					$commentsList.replaceWith( $commentData );
 
 					// rebind React components
 					tcp.bindEditors();
+
+					tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
 
 					// // scroll to latest comment
 					// var $commentsList = $comments.find( '.comment' );

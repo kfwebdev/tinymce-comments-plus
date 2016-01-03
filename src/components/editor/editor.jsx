@@ -59,7 +59,7 @@ class EditorComponent extends React.Component {
     tinymce.init({
         menubar: false,
         height: '100%',
-        selector: "textarea.tinyMCEeditor",
+        selector: "textarea",
         content_css: this.props.tcpGlobals.editorStyles,
         setup : function(editor) {
           editor.on('change', function(e) {
@@ -136,7 +136,7 @@ class EditorComponent extends React.Component {
   render() {
       return(
         <div className={ tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' } }>
-          <textarea id={ this.props.editorId } className="tinyMCEeditor" rows="8"></textarea>
+          <textarea id={ this.props.editorId } rows="8"></textarea>
           <div className={ this.props.tcpGlobals.tcp_css_edit_container }>
             <span className="spinner"></span>
             <a href="javascript:void(0);" onClick={ this.submitEdit } className={

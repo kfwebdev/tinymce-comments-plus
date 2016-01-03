@@ -699,7 +699,7 @@ class TinyMCECommentsPlus {
 			    'textarea_rows' => 12,
 			    'teeny' => false,
 				'tinymce' => array(
-					'plugins' => 'inlinepopups, wordpress, wplink, wpdialogs',
+					'plugins' => 'charmap, colorpicker, fullscreen, lists, paste, tabfocus, textcolor, wordpress, wpdialogs, wpemoji, wplink, wpview',
 					'theme_advanced_buttons1' => $this->option_toolbar1,
           'theme_advanced_buttons2' => $this->option_toolbar2,
 					'theme_advanced_buttons3' => $this->option_toolbar3,
