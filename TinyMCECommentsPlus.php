@@ -61,6 +61,7 @@ class TinyMCECommentsPlus {
 	 */
 	private function __construct() {
 		define( 'tcp_prefix', 'tcp_' );
+		define( tcp_prefix . 'local_dev', true );
 		define( tcp_prefix . 'javascript_globals', 'tcpGlobals' );
 		define( tcp_prefix . 'ajax_prefix', 'tcp_ajax_' );
 		define( tcp_ajax_prefix . 'option_update_delay', 2000 );
@@ -254,6 +255,7 @@ class TinyMCECommentsPlus {
 			'optionUpdateDelay' => tcp_ajax_option_update_delay,
 			'addCommentAction' => tcp_ajax_add_comment,
 			'updateCommentAction' => tcp_ajax_update_comment,
+			'editingExpiration' => $this->option_editing_expiration,
 
 			tcp_prefix . 'toolbar1' => $this->option_toolbar1,
 			tcp_prefix . 'toolbar2' => $this->option_toolbar2,
@@ -294,18 +296,18 @@ class TinyMCECommentsPlus {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-		// add_action( 'comment_form', array( $this, 'action_comment_form' ), 999 );
+		// add_action( 'comment_form', array( $this, 'action_comment_form' ), 10 );
 
 		// Define custom functionality.
-		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 999 );
-		add_filter( 'mce_buttons', array( $this, 'filter_tinymce_buttons_1' ), 999, 2 );
-		add_filter( 'mce_buttons_2', array( $this, 'filter_tinymce_buttons_2' ), 999 );
-		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 999 );
-		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 999 );
-		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 999 );
-		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 999, 3 );
-		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 999, 3 );
-		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 999, 2 );
+		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 10 );
+		add_filter( 'mce_buttons', array( $this, 'filter_tinymce_buttons_1' ), 10, 2 );
+		add_filter( 'mce_buttons_2', array( $this, 'filter_tinymce_buttons_2' ), 10 );
+		add_filter( 'preprocess_comment', array( $this, 'filter_customize_allowed_tags' ), 10 );
+		add_filter( 'comment_form_defaults', array( $this, 'filter_comment_form_defaults' ), 10 );
+		add_filter( 'comment_form_field_comment', array( $this, 'filter_tinymce_editor' ), 10 );
+		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
+		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
+		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 10, 2 );
 	}
 
 	/**
@@ -370,8 +372,12 @@ class TinyMCECommentsPlus {
 
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
-			wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
-			// wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, false );
+
+			if ( tcp_local_dev ) {
+				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone' ),	$this->version, false );
+			} else {
+				wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
+			}
 
 			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
@@ -390,8 +396,11 @@ class TinyMCECommentsPlus {
 			// replace comment-reply to handle tinymce form moves
 		  wp_deregister_script( 'comment-reply' );
 
-			wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone' ),	$this->version, false );
-			// wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone', 'underscore' ),	$this->version, true );
+			if ( tcp_local_dev ) {
+				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone' ),	$this->version, true );
+			} else {
+				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone' ),	$this->version, false );
+			}
 			// Instantiate Javascript Globals for plugin script
 			wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-plugin-script' );
@@ -761,7 +770,7 @@ class TinyMCECommentsPlus {
 		global $current_user;
 
 		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
-		$comment_age = floor( $comment_age / 60 );
+		$comment_age = floor( $comment_age );
 
 		// Insert edit button targets
 		// If editing option is enabled
