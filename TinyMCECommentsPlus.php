@@ -565,18 +565,24 @@ class TinyMCECommentsPlus {
 
 			case tcp_ajax_editing_enabled:
 				check_ajax_referer( tcp_ajax_editing_enabled, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
 				$result = $this->tcp_save_option( tcp_ajax_editing_enabled, $content );
 			break;
 
 			case tcp_ajax_editing_expiration:
 				check_ajax_referer( tcp_ajax_editing_expiration, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
 				$result = $this->tcp_save_option( tcp_ajax_editing_expiration, $content );
 			break;
 
 			case tcp_ajax_custom_classes:
 				check_ajax_referer( tcp_ajax_custom_classes, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
 					$option = preg_replace( tcp_regex_html_class, '', $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; }
@@ -588,6 +594,8 @@ class TinyMCECommentsPlus {
 
 			case tcp_ajax_wordpress_ids:
 				check_ajax_referer( tcp_ajax_wordpress_ids, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
 					$option = preg_replace( tcp_regex_html_id, '', $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
@@ -599,6 +607,8 @@ class TinyMCECommentsPlus {
 
 			case tcp_ajax_custom_toolbars:
 				check_ajax_referer( tcp_ajax_custom_toolbars, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
 					$option = preg_replace( tcp_regex_html_class, '', strtolower( $option ) );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
