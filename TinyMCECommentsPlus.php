@@ -758,7 +758,7 @@ class TinyMCECommentsPlus {
 
 		// insert custom CSS classes
 		$custom_classes = $this->option_custom_classes_all . ' ' . $this->option_custom_classes_reply;
-		$args = str_replace( "class='" . $this->option_wp_id_comment_reply_link . "' ", $this->option_wp_id_comment_reply_link. " " . $custom_classes . "'", $args );
+		$args = str_replace( "class='" . $this->option_wp_id_comment_reply_link . "'", 'class="' . $this->option_wp_id_comment_reply_link . ' ' . $custom_classes . '"', $args );
 
 		return $args;
 	}
