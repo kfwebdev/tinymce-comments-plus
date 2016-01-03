@@ -404,8 +404,10 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function add_plugin_admin_menu() {
-		$this->plugin_screen_hook_suffix = add_options_page( __( "TinyMCE Comments Plus - Settings", $this->plugin_slug ),
-			__( "TinyMCE Comments Plus", $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
+		if ( current_user_can( 'administrator' ) ) {
+			$this->plugin_screen_hook_suffix = add_options_page( __( "TinyMCE Comments Plus - Settings", $this->plugin_slug ),
+				__( "TinyMCE Comments Plus", $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
+		}
 	}
 
 	/**
@@ -414,7 +416,9 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function display_plugin_admin_page() {
-		include_once("views/admin.php");
+		if ( current_user_can( 'administrator' ) ) {
+			include_once("views/admin.php");
+		}
 	}
 
 
@@ -735,7 +739,7 @@ class TinyMCECommentsPlus {
 
 		// insert custom CSS classes
 		$custom_classes = $this->option_custom_classes_all . ' ' . $this->option_custom_classes_reply;
-		$args = str_replace( "class='" . $this->option_wp_id_comment_reply_link . "k'", $this->option_wp_id_comment_reply_link. " " . $custom_classes . "'", $args );
+		$args = str_replace( "class='" . $this->option_wp_id_comment_reply_link . "' ", $this->option_wp_id_comment_reply_link. " " . $custom_classes . "'", $args );
 
 		return $args;
 	}
