@@ -18,7 +18,7 @@ Enhance WordPress comments with the TinyMCE Editor, inline Comment Editing and a
 TinyMCE Comments Plus brings many features of WordPress's content editor TinyMCE to your website's comments.
 
 =Richer Comment Content=
-TinyMCE Comments Plus enables users to more easily and quickly format their comments with formatting, colors, links and more.
+TinyMCE Comments Plus enables users to more easily and quickly compose their comments with formatting, colors, links and more.
 
 =Configurable Editing=
 Logged in users can edit comments after posting them with the TinyMCE editor. This feature can be set to expire after certain period or disabled entirely.
