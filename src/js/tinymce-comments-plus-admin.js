@@ -8,6 +8,7 @@ var
 	$ = jQuery
 ;
 
+// console shortcut for debugging
 if ( window.console && window.console.log && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 tcp.initAdmin = function() {

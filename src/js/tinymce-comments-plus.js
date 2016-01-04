@@ -1,9 +1,6 @@
 /**
  * This is the main javascript file for the TinyMCE Comments Plus plugin's main administration view.
  *
- * This includes the header, options, and other information that should provide
- * The User Interface to the end administrator.
- *
  * @package   tinymce-comments-plus
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
  * @license   GPL-2.0+
@@ -15,8 +12,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-// if ( window.console && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
 var
 	tcp = window.tcp || {},
@@ -75,7 +70,7 @@ tcp.initTcp = function() {
 				;
 
 				if ( $commentData.length ) {
-
+					// remove tinymce editor before comments data is updated
 					tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
 
 					// replace #comments element with data response #comments element
@@ -84,18 +79,8 @@ tcp.initTcp = function() {
 					// rebind React components
 					tcp.bindEditors();
 
+					// restore the tinymce editor in the #respond element
 					tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-
-					// // scroll to latest comment
-					// var $commentsList = $comments.find( '.comment' );
-					// if ( $commentsList.length ) {
-					// 	var $lastComment = $commentsList[ $commentsList.length - 1 ];
-					// 	if ( $lastComment.offsetHeight ) {
-					// 		$( 'html, body' ).animate({
-					// 			scrollTop: $lastComment.offsetHeight
-					// 		}, 1500 );
-					// 	}
-					// }
 				}
 			})
 			.fail( function( data ){

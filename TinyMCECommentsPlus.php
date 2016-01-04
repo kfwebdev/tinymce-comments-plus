@@ -453,19 +453,6 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	// public function action_comment_form( $post_id ) {
-	// 	// marker for comment form
-	// 	$nonce = wp_create_nonce( tcp_ajax_add_comment . $post_id );
-	//
-	// 	// enable tinymce editor on comment form
-	// 	$this->filter_tinymce_editor();
-	//
-	// }
-
-
-	/**
-	 * @since    1.0.0
-	 */
 	public function tcp_add_comment( $post_id, $content ) {
 		global 	$post,
 				$current_user;

@@ -2,9 +2,6 @@
 /**
  * Represents the view for the administration dashboard.
  *
- * This includes the header, options, and other information that should provide
- * The User Interface to the end user.
- *
  * @package   tinymce-comments-plus
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
  * @license   GPL-2.0+
