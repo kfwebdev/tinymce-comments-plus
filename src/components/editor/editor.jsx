@@ -145,12 +145,12 @@ class EditorComponent extends React.Component {
         <div className={ this.props.tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' } }>
           <textarea id={ this.props.editorId } rows="8"></textarea>
           <div className={ this.props.tcpGlobals.tcp_css_edit_container }>
-            <tcp.Spinner tcpGlobals={ this.props.tcpGlobals } spinnerId={ 'spinner' + this.props.commentId } showSpinner={ this.state.showSpinner } />
             <a href="javascript:void(0);" onClick={ this.submitEdit } className={
               this.props.tcpGlobals.tcp_css_button + ' ' +
               this.props.tcpGlobals.tcp_css_button_custom + ' ' +
               this.props.tcpGlobals.tcp_css_submit_edit_button + ' ' +
               this.props.tcpGlobals.tcp_css_submit_button_custom }>Submit</a>
+            <tcp.Spinner tcpGlobals={ this.props.tcpGlobals } spinnerId={ 'spinner' + this.props.commentId } showSpinner={ this.state.showSpinner } />
             <a href="javascript:void(0);" onClick={ this.cancelEditor } className={
                 this.props.tcpGlobals.tcp_css_button + ' ' +
                 this.props.tcpGlobals.tcp_css_button_custom + ' ' +
