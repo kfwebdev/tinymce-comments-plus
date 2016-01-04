@@ -61,7 +61,7 @@ class TinyMCECommentsPlus {
 	 */
 	private function __construct() {
 		define( 'tcp_prefix', 'tcp_' );
-		define( tcp_prefix . 'local_dev', true );
+		define( tcp_prefix . 'local_dev', false );
 		define( tcp_prefix . 'javascript_globals', 'tcpGlobals' );
 		define( tcp_prefix . 'ajax_prefix', 'tcp_ajax_' );
 		define( tcp_ajax_prefix . 'option_update_delay', 2000 );
