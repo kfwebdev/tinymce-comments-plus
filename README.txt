@@ -31,29 +31,31 @@ The editor in TinyMCE Comments Plus can be configured to support up to 4 toolbar
 
 == Installation ==
 
-1. Upload `` to the `/wp-content/plugins/` directory
+1. Upload `tinymce-comments-plus.zip` to the `/wp-content/plugins/` directory
+1. Unzip `tinymce-comments-plus.zip`
 1. Activate the plugin through the "Plugins" menu in WordPress
-1. That's it! (Configure settings to your preference in Settings -> TinyMCE Comments Plus Settings)
+1. That's it! (No configuration needed. Settings can be adjusted to your preference in Settings -> TinyMCE Comments Plus Settings.)
 
 == Frequently Asked Questions ==
+
+= Why are there two edit buttons on my comments? =
+
+WordPress adds it's own Edit link when logged in with Administrator privileges. Subscriber level users will only see TinyMCE Comments Plus Edit links and only while logged in.
 
 = Why do the buttons not match my site / look weird? =
 
 TinyMCE Comments Plus does it's best to integrate into your site's theme. Different themes may require some help with CSS classes to look and position buttons right. Use the Custom CSS settings include CSS classes that tell the TinyMCE Comments Plus buttons how to look and where to position themselves.
 
-= Um why doesn't this plugin work with my theme? =
+= Huh, why doesn't this plugin work with my theme? =
 
-Uh oh, where to begin. It's possible your theme uses different IDs than the default WordPress IDs. To accommodate this, you can update the TinyMCE Comments Plus Settings -> WordPress IDs & Classes inputs with any IDs that don't match the default IDs (shown in the empty input boxes). In case this starts to get too technical, feel free to reach out for help in the plugin page's [support](https://wordpress.org/support/plugin/tinymce-comments-plus) tab.
+Uh oh, it's possible your theme uses different IDs than the default WordPress IDs. To accommodate this, you can update the TinyMCE Comments Plus Settings -> WordPress IDs & Classes inputs with any IDs that don't match the default IDs (shown in the empty input boxes). In case this starts to get too technical, feel free to reach out for help in the plugin page's [support](https://wordpress.org/support/plugin/tinymce-comments-plus) tab.
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. TinyMCE Comments Plus installed in the official WordPress Twenty Sixteen theme.
+2. Settings options for TinyMCE Comments Plus.
 
 == Changelog ==
 
 = 1.0 =
-* Initial Commit
+* Initial release
