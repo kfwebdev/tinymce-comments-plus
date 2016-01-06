@@ -700,13 +700,14 @@ class WPEditorCommentsPlus {
 				'skin' => 'wp_theme',
 			    'textarea_rows' => 12,
 			    'teeny' => false,
-				'tinymce' => array(
-					'plugins' => wpecp_plugins,
-					'theme_advanced_buttons1' => $this->option_toolbar1,
-          'theme_advanced_buttons2' => $this->option_toolbar2,
-					'theme_advanced_buttons3' => $this->option_toolbar3,
-          'theme_advanced_buttons4' => $this->option_toolbar4
-				),
+					'tinymce' => array(
+						'plugins' => wpecp_plugins,
+						'theme_advanced_buttons1' => $this->option_toolbar1,
+	          'theme_advanced_buttons2' => $this->option_toolbar2,
+						'theme_advanced_buttons3' => $this->option_toolbar3,
+	          'theme_advanced_buttons4' => $this->option_toolbar4
+					),
+					'wpeditimage_disable_captions' => true,
 			    'quicktags' => false,
 			    'media_buttons' => false
 	  		)
@@ -832,6 +833,8 @@ class WPEditorCommentsPlus {
 				'style' => true
 			),
 			'img' => array(
+				'src' => true,
+				'alt' => true,
 				'style' => true,
 				'title' => true
 			),

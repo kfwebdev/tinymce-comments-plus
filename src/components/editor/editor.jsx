@@ -65,6 +65,7 @@ class EditorComponent extends React.Component {
         height: '100%',
         selector: "textarea",
         content_css: this.props.wpecpGlobals.editorStyles,
+        wpeditimage_disable_captions: true,
         setup : function(editor) {
           editor.on('change', function(e) {
             that.setState({ tinyMCEcontent: editor.getContent()});
