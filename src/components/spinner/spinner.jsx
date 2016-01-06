@@ -58,18 +58,18 @@ spinner.stopAnimation = function(){ //stops animation
   spinner.cPreloaderTimeout = false;
 }
 
-spinner.imageLoader = function( s, fun )//Pre-loads the sprites image
+spinner.imageLoader = function( s, fun, showSpinner )//Pre-loads the sprites image
 {
+  let that = this;
   clearTimeout( spinner.cImageTimeout );
   spinner.cImageTimeout = 0;
   spinner.genImage = new Image();
-  spinner.genImage.onload = function (){ spinner.cImageTimeout = setTimeout( function() { fun }, 0 ) };
   spinner.genImage.setAttribute( 'src', s );
 }
 
 spinner.initSpinner = function( elementName ) {
   //The following code starts the animation
-  new spinner.imageLoader( spinner.cImageSrc, spinner.startAnimation( elementName ) );
+  new spinner.imageLoader( spinner.cImageSrc );
 }
 
 class SpinnerComponent extends React.Component {
@@ -85,10 +85,19 @@ class SpinnerComponent extends React.Component {
 
    componentDidMount() {
      let that = this;
-     spinner.initSpinner( this.props.spinnerId );
+     spinner.initSpinner( this.props.spinnerId  );
    }
 
     render() {
+        let that = this;
+
+        if ( this.props.showSpinner ) {
+          spinner.cImageTimeout = setTimeout( function() { spinner.startAnimation( that.props.spinnerId ); }, 0 );
+        }
+        else {
+          spinner.stopAnimation();
+        }
+
         return(
                 <div className="spinner" id={ this.props.spinnerId }  style={ this.props.showSpinner ? { display:'inline-block' }:{ display:'none' } }></div>
         );
