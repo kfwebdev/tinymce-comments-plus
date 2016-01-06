@@ -18,7 +18,7 @@ module.exports = {
   debug: true,
   output: {
     path: path.join(__dirname, '/../dist/assets'),
-    filename: 'app.js',
+    filename: 'wpEditorCommentsPlus.js',
     publicPath: publicPath
   },
   devServer: {

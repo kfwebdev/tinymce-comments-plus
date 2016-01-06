@@ -1,23 +1,23 @@
 <?php
 /**
- * TinyMCE Comments Plus
+ * WP Editor Comments Plus
  *
  * Enhance WordPress comments with the TinyMCE Editor, Inline Comment Editing and Asynchronous Posting.
  *
- * @package   tinymce-comments-plus
+ * @package   wp-editor-comments-plus
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
  * @license   GPL-2.0+
  * @link      http://kentarofischer.com
- * @copyright 3-22-2015 Kentaro Fischer
+ * @copyright 1-4-2015 Kentaro Fischer
  *
  * @wordpress-plugin
- * Plugin Name: TinyMCE Comments Plus
+ * Plugin Name: WP Editor Comments Plus
  * Plugin URI:  http://kentarofischer.com
  * Description: Enhance WordPress comments with the TinyMCE Editor, Inline Comment Editing and Asynchronous Posting.
  * Version:     1.0.0
  * Author:      Kentaro Fischer
  * Author URI:  http://kentarofischer.com
- * Text Domain: tinymce-comments-plus-locale
+ * Text Domain: wp-editor-comments-plus-locale
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  * Domain Path: /lang
@@ -28,16 +28,16 @@ if (!defined("WPINC")) {
 	die;
 }
 
-if ( WP_DEBUG && ! class_exists( 'FirePHP' ) ) { require( 'fb.php' ); }
+// if ( ! class_exists( 'FirePHP' ) ) { require( 'fb.php' ); }
 
-define( 'tcp_plugin_dir', plugin_dir_path( __FILE__ ) );
-define( 'tcp_plugin_file', plugin_basename( __FILE__ ) );
+define( 'wpecp_plugin_dir', plugin_dir_path( __FILE__ ) );
+define( 'wpecp_plugin_file', plugin_basename( __FILE__ ) );
 
-require_once( tcp_plugin_dir . "TinyMCECommentsPlus.php");
+require_once( wpecp_plugin_dir . "WPEditorCommentsPlus.php");
 
 // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
-register_activation_hook(__FILE__, array("TinyMCECommentsPlus", "activate"));
-register_deactivation_hook(__FILE__, array("TinyMCECommentsPlus", "deactivate"));
+register_activation_hook(__FILE__, array("WPEditorCommentsPlus", "activate"));
+register_deactivation_hook(__FILE__, array("WPEditorCommentsPlus", "deactivate"));
 
 
-TinyMCECommentsPlus::get_instance();
+WPEditorCommentsPlus::get_instance();

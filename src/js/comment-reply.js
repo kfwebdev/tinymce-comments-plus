@@ -23,7 +23,7 @@ window.addComment = {
 			respond.parentNode.insertBefore( div, respond );
 		}
 
-		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
+		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, commId );
 
 		comm.parentNode.insertBefore( respond, comm.nextSibling );
 		if ( post && postId ) {
@@ -32,7 +32,7 @@ window.addComment = {
 		parent.value = parentId;
 		cancel.style.display = '';
 
-		tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+		tinymce.EditorManager.execCommand( 'mceAddEditor', true, commId );
 
 		setTimeout( function() {
 			tinymce.activeEditor.focus();
@@ -47,7 +47,7 @@ window.addComment = {
 				return;
 			}
 
-			tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
+			tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, commId );
 
 			t.I( 'comment_parent' ).value = '0';
 			temp.parentNode.insertBefore( respond, temp );
@@ -55,7 +55,7 @@ window.addComment = {
 			this.style.display = 'none';
 			this.onclick = null;
 
-			tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+			tinymce.EditorManager.execCommand( 'mceAddEditor', true, commId );
 
 			return false;
 		};

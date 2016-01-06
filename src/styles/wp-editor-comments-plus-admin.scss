@@ -1,4 +1,4 @@
-.tcp-settings {
+.wpecp-settings {
   $sea-green: #60B99A;
   $light-green: #A0F9DA;
   $orange: #F77825;
@@ -8,7 +8,7 @@
   $white: #ffffff;
   $red: #FA023C;
 
-    .tcp-option {
+    .wpecp-option {
         display: block;
         font-size: 1.25em;
 
@@ -233,8 +233,8 @@
 
 
 @media only screen and (max-width: 1224px) {
-    .tcp-settings {
-        .tcp-option {
+    .wpecp-settings {
+        .wpecp-option {
             fieldset {
                 width: 100%;
                 display: block;
@@ -260,8 +260,8 @@
 
 
 @media only screen and (max-width: 1024px) {
-  .tcp-settings {
-    .tcp-option {
+  .wpecp-settings {
+    .wpecp-option {
       fieldset {
         &.custom-toolbars,
         &.custom-classes,
@@ -286,8 +286,8 @@
 }
 
 @media only screen and (max-width: 768px) {
-    .tcp-settings {
-        .tcp-option {
+    .wpecp-settings {
+        .wpecp-option {
             fieldset {
                 width: 100%;
                 display: block;

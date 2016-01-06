@@ -2,11 +2,11 @@
 import React from 'react';
 
 var
-  tcp = window.tcp || {},
+  wpecp = window.wpecp || {},
   $ = jQuery
 ;
 
-tcp.Spinner = require( '../spinner/spinner' );
+wpecp.Spinner = require( '../spinner/spinner' );
 
 class EditorComponent extends React.Component {
    constructor() {
@@ -64,20 +64,20 @@ class EditorComponent extends React.Component {
         menubar: false,
         height: '100%',
         selector: "textarea",
-        content_css: this.props.tcpGlobals.editorStyles,
+        content_css: this.props.wpecpGlobals.editorStyles,
         setup : function(editor) {
           editor.on('change', function(e) {
             that.setState({ tinyMCEcontent: editor.getContent()});
           });
         },
         plugins: [
-          this.props.tcpGlobals.tcp_plugins
+          this.props.wpecpGlobals.wpecp_plugins
         ],
         toolbar: [
-          this.props.tcpGlobals.tcp_toolbar1,
-          this.props.tcpGlobals.tcp_toolbar2,
-          this.props.tcpGlobals.tcp_toolbar3,
-          this.props.tcpGlobals.tcp_toolbar4
+          this.props.wpecpGlobals.wpecp_toolbar1,
+          this.props.wpecpGlobals.wpecp_toolbar2,
+          this.props.wpecpGlobals.wpecp_toolbar3,
+          this.props.wpecpGlobals.wpecp_toolbar4
         ]
     });
 
@@ -94,14 +94,14 @@ class EditorComponent extends React.Component {
       that = this,
       re_action = /^[a-z_]+$/,
       $content = $( '#' + this.props.contentId ),
-      $spinner = $( '.' + this.props.tcpGlobals.tcp_css_edit_container + ' .spinner' ),
-      postId = $content.data( this.props.tcpGlobals.tcp_css_comment_id ),
+      $spinner = $( '.' + this.props.wpecpGlobals.wpecp_css_edit_container + ' .spinner' ),
+      postId = $content.data( this.props.wpecpGlobals.wpecp_css_comment_id ),
       re_postId = /^[0-9]+$/,
       re_commentId = /^[0-9]+$/,
-      nonce = $content.data( this.props.tcpGlobals.tcp_css_nonce ),
+      nonce = $content.data( this.props.wpecpGlobals.wpecp_css_nonce ),
       re_nonce = /^[a-zA-Z0-9]+$/,
       commentEditData = {
-        action: this.props.tcpGlobals.updateCommentAction,
+        action: this.props.wpecpGlobals.updateCommentAction,
         security: nonce,
         postId: postId,
         commentId: this.props.commentId,
@@ -110,7 +110,7 @@ class EditorComponent extends React.Component {
     ;
 
     // validate action
-    if ( ! re_action.test( this.props.tcpGlobals.updateCommentAction ) ) { return false; }
+    if ( ! re_action.test( this.props.wpecpGlobals.updateCommentAction ) ) { return false; }
     // validate postId
     if ( ! re_postId.test( postId ) ) { return false; }
     // validate commentId
@@ -121,7 +121,7 @@ class EditorComponent extends React.Component {
     this.setState({ showSpinner: true });
 
     $.ajax({
-      url: this.props.tcpGlobals.ajaxUrl,
+      url: this.props.wpecpGlobals.ajaxUrl,
       type: 'post',
       data: $.param( commentEditData )
     })
@@ -142,27 +142,27 @@ class EditorComponent extends React.Component {
 
   render() {
       return(
-        <div className={ this.props.tcpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' } }>
+        <div className={ this.props.wpecpGlobals.editor } style={ this.state.showEditor ? { display:'block' }:{ display:'none' } }>
           <textarea id={ this.props.editorId } rows="8"></textarea>
-          <div className={ this.props.tcpGlobals.tcp_css_edit_container }>
+          <div className={ this.props.wpecpGlobals.wpecp_css_edit_container }>
             <a href="javascript:void(0);" onClick={ this.submitEdit } className={
-              this.props.tcpGlobals.tcp_css_button + ' ' +
-              this.props.tcpGlobals.tcp_css_button_custom + ' ' +
-              this.props.tcpGlobals.tcp_css_submit_edit_button + ' ' +
-              this.props.tcpGlobals.tcp_css_submit_button_custom }>Submit</a>
-            <tcp.Spinner tcpGlobals={ this.props.tcpGlobals } spinnerId={ 'spinner' + this.props.commentId } showSpinner={ this.state.showSpinner } />
+              this.props.wpecpGlobals.wpecp_css_button + ' ' +
+              this.props.wpecpGlobals.wpecp_css_button_custom + ' ' +
+              this.props.wpecpGlobals.wpecp_css_submit_edit_button + ' ' +
+              this.props.wpecpGlobals.wpecp_css_submit_button_custom }>Submit</a>
+            <wpecp.Spinner wpecpGlobals={ this.props.wpecpGlobals } spinnerId={ 'spinner' + this.props.commentId } showSpinner={ this.state.showSpinner } />
             <a href="javascript:void(0);" onClick={ this.cancelEditor } className={
-                this.props.tcpGlobals.tcp_css_button + ' ' +
-                this.props.tcpGlobals.tcp_css_button_custom + ' ' +
-                this.props.tcpGlobals.tcp_css_cancel_edit_button + ' ' +
-                this.props.tcpGlobals.tcp_css_cancel_button_custom }>Cancel</a>
+                this.props.wpecpGlobals.wpecp_css_button + ' ' +
+                this.props.wpecpGlobals.wpecp_css_button_custom + ' ' +
+                this.props.wpecpGlobals.wpecp_css_cancel_edit_button + ' ' +
+                this.props.wpecpGlobals.wpecp_css_cancel_button_custom }>Cancel</a>
           </div>
         </div>
       );
   }
 
   componentWillUnmount() {
-    if ( tinyMCE.get( this.props.editorId ) ) {
+    if ( tinymce.get( this.props.editorId ) ) {
       this.removeTinyMCE();
     }
   }

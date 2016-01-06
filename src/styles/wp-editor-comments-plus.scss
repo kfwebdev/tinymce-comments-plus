@@ -9,31 +9,31 @@
     margin-bottom: 1.25em;
 }
 
-.tcp-editor {
+.wpecp-editor {
     .mce-tinymce.mce-container {
         border: 1px solid #eaeaea;
     }
 }
 
-.tcp-edit {
+.wpecp-edit {
   display: inline-block;
 }
 
-.tcp-edit-comment {
+.wpecp-edit-comment {
     margin-right: 1em;
 }
 
-.tcp-cancel-edit {
+.wpecp-cancel-edit {
     margin-left: 1em;
 }
 
-.tcp-submit-edit,
-.tcp-cancel-edit,
-.tcp-edit-comment {
+.wpecp-submit-edit,
+.wpecp-cancel-edit,
+.wpecp-edit-comment {
     position: relative;
 }
 
-.tcp-edit-container {
+.wpecp-edit-container {
   margin: 5px 0 1rem;
 
   .spinner {

@@ -3,21 +3,21 @@
 import humanizeDuration from 'humanize-duration';
 
 var
-	tcp = window.tcp || {},
-	tcpGlobals = window.tcpGlobals || {},
+	wpecp = window.wpecp || {},
+	wpecpGlobals = window.wpecpGlobals || {},
 	$ = jQuery
 ;
 
 // console shortcut for debugging
 if ( window.console && window.console.log && window.console.log.bind ) { window.cl = console.log.bind( console ); }
 
-tcp.initAdmin = function() {
+wpecp.initAdmin = function() {
 
-	if ( typeof tcpGlobals != 'undefined' ) {
-		tcpGlobals = JSON.parse( tcpGlobals );
+	if ( typeof wpecpGlobals != 'undefined' ) {
+		wpecpGlobals = JSON.parse( wpecpGlobals );
 	}
 
-	tcp.ajaxModel = Backbone.Model.extend({
+	wpecp.ajaxModel = Backbone.Model.extend({
 		defaults: {
 			action: '',
 			security: '',
@@ -26,9 +26,9 @@ tcp.initAdmin = function() {
 	});
 
 
-	tcp.ajaxSaveOption = function( data ) {
+	wpecp.ajaxSaveOption = function( data ) {
 		return $.ajax({
-			url: tcpGlobals.ajaxUrl,
+			url: wpecpGlobals.ajaxUrl,
 			type: 'post',
 			data: data
 		});
@@ -37,7 +37,7 @@ tcp.initAdmin = function() {
 
 	// Admin Confirmation Notices
 
-	tcp.confirmationSaving = function( view ) {
+	wpecp.confirmationSaving = function( view ) {
 		view.$confirmed
 			.find( '.dashicons' )
 			.attr( 'class', 'dashicons dashicons-update' );
@@ -49,7 +49,7 @@ tcp.initAdmin = function() {
 		view.$confirmed.show();
 	}
 
-	tcp.confirmationFail = function( view ) {
+	wpecp.confirmationFail = function( view ) {
 		view.$confirmed
 			.find( '.dashicons' )
 			.attr( 'class', 'dashicons dashicons-no' );
@@ -58,10 +58,10 @@ tcp.initAdmin = function() {
 			.find( '.message' )
 			.text( 'Failed to Save!' );
 		view.$confirmed.show();
-		tcp.confirmationFade( view );
+		wpecp.confirmationFade( view );
 	}
 
-	tcp.confirmationDone = function( view ) {
+	wpecp.confirmationDone = function( view ) {
 		view.$confirmed
 			.find( '.dashicons' )
 			.attr( 'class', 'dashicons dashicons-yes' );
@@ -70,22 +70,22 @@ tcp.initAdmin = function() {
 			.find( '.message' )
 			.text( view.confirmationMessage );
 		view.$confirmed.show();
-		tcp.confirmationFade( view );
+		wpecp.confirmationFade( view );
 	}
 
-	tcp.confirmationFade = function( view ) {
+	wpecp.confirmationFade = function( view ) {
 		clearTimeout( view.fadeAnimation );
 		clearTimeout( view.hideAnimation );
 		view.fadeAnimation = setTimeout( function(){
 			view.$confirmed.addClass('fade');
-		}, tcpGlobals.optionConfirmationDelay );
+		}, wpecpGlobals.optionConfirmationDelay );
 		view.hideAnimation = setTimeout( function(){
 			view.$confirmed.hide();
 			// add 1000ms to optionConfirmationDelay for fade animation
-		}, tcpGlobals.optionConfirmationDelay + 1000 );
+		}, wpecpGlobals.optionConfirmationDelay + 1000 );
 	}
 
-	tcp.validInputKey = function( key ) {
+	wpecp.validInputKey = function( key ) {
 
 		switch ( key ) {
 			// skip non input keys
@@ -113,26 +113,26 @@ tcp.initAdmin = function() {
 		}
 	}
 
-	tcp.validHtmlClassKey = function( key ) {
+	wpecp.validHtmlClassKey = function( key ) {
 		return key.replace( /([^0-9a-z-_ ])+/gi ) ? true : false;
 	}
 
-	tcp.sanitizeHtmlClass = function( string ) {
+	wpecp.sanitizeHtmlClass = function( string ) {
 		return string.replace( /([^0-9a-z-_ ])+/gi, '' );
 	}
 
-	tcp.validHtmlIdKey = function( key ) {
+	wpecp.validHtmlIdKey = function( key ) {
 		return key.replace( /([^0-9a-z-_.# ])+/gi ) ? true : false;
 	}
 
-	tcp.sanitizeHtmlId = function( string ) {
+	wpecp.sanitizeHtmlId = function( string ) {
 		return string.replace( /([^0-9a-z-_.# ])+/gi, '' );
 	}
 
 
 	// Admin Views
 
-	tcp.editingEnabled = Backbone.View.extend({
+	wpecp.editingEnabled = Backbone.View.extend({
 		events: {
 			'click input[type="checkbox"]': 'editingEnabled',
 			'click label': 'editingEnabled'
@@ -142,7 +142,7 @@ tcp.initAdmin = function() {
 			var that = this;
 			this.$input = this.$el.find( 'input[type=checkbox]' );
 			this.$label = this.$el.find( 'label' );
-			this.nonce = this.$input.data( 'tcp-nc' );
+			this.nonce = this.$input.data( 'wpecp-nc' );
 
 			// Toggle check box if click element is label
 			if ( event.currentTarget == this.$label[0] ) {
@@ -152,10 +152,10 @@ tcp.initAdmin = function() {
 			this.checkValue = ( this.$input.is( ':checked' ) ? 'on' : 'off' );
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.editingEnabledAction );
+			this.model.set( 'action', wpecpGlobals.editingEnabledAction );
 			this.model.set( 'content', this.checkValue );
 
-			tcp.ajaxSaveOption( this.model.toJSON() )
+			wpecp.ajaxSaveOption( this.model.toJSON() )
 			.done( function( response ) {
 				that.$label.text( ( that.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
 			});
@@ -163,7 +163,7 @@ tcp.initAdmin = function() {
 	});
 
 
-	tcp.adjustExpiration = Backbone.View.extend({
+	wpecp.adjustExpiration = Backbone.View.extend({
 		events: {
 			'change input': 'changeExpiration'
 		},
@@ -177,7 +177,7 @@ tcp.initAdmin = function() {
 			this.$minutes = this.$el.find('.minutes > input');
 			this.$seconds = this.$el.find('.seconds > input');
 			this.$confirmed = this.$el.find( '.confirmed' );
-			this.nonce = this.$expiration.data( 'tcp-nc' );
+			this.nonce = this.$expiration.data( 'wpecp-nc' );
 			this.timeoutUpdate = false;
 
 			this.$days.spinner({
@@ -262,27 +262,27 @@ tcp.initAdmin = function() {
 		updateExpiration: function() {
 			var that = this;
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.editingExpirationAction );
+			this.model.set( 'action', wpecpGlobals.editingExpirationAction );
 			this.model.set( 'content', this.expiration );
 
 			clearTimeout( this.timeoutUpdate );
 
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.confirmationSaving( that );
-				tcp.ajaxSaveOption( that.model.toJSON() )
+				wpecp.confirmationSaving( that );
+				wpecp.ajaxSaveOption( that.model.toJSON() )
 				.fail(function( data ) {
-					tcp.confirmationFail( that );
+					wpecp.confirmationFail( that );
 				})
 				.done(function( data ) {
 					that.confirmationMessage = 'Editing Period Saved';
-					tcp.confirmationDone( that );
+					wpecp.confirmationDone( that );
 				});
 				clearTimeout( that.timeoutUpdate );
-			}, tcpGlobals.optionUpdateDelay );
+			}, wpecpGlobals.optionUpdateDelay );
 		}
 	});
 
-	tcp.customToolbars = Backbone.View.extend({
+	wpecp.customToolbars = Backbone.View.extend({
 		events: {
 			'keyup': 'updateToolbars'
 		},
@@ -290,7 +290,7 @@ tcp.initAdmin = function() {
 		initialize: function() {
 			this.$box = this.$el.find( '.box' );
 			this.$confirmed = this.$box.find( '.confirmed' );
-			this.nonce = this.$box.data( 'tcp-nc' );
+			this.nonce = this.$box.data( 'wpecp-nc' );
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
@@ -302,8 +302,8 @@ tcp.initAdmin = function() {
 			;
 
 			// validate input key and character input
-			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( keyChar ) ) {
+			if ( ! wpecp.validInputKey( event.which ) ||
+					 ! wpecp.validHtmlClassKey( keyChar ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -311,35 +311,35 @@ tcp.initAdmin = function() {
 			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
 			$.each( this.$inputs, function( key, input ){
-				let field = $( input ).data( 'tcp-field' );
+				let field = $( input ).data( 'wpecp-field' );
 				// sanitize input data
-				that.content[ field ] = tcp.sanitizeHtmlClass( input.value );
+				that.content[ field ] = wpecp.sanitizeHtmlClass( input.value );
 				// update input with clean data
 				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.customToolbarsAction );
+			this.model.set( 'action', wpecpGlobals.customToolbarsAction );
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
 
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.confirmationSaving( that );
-				tcp.ajaxSaveOption( that.model.toJSON() )
+				wpecp.confirmationSaving( that );
+				wpecp.ajaxSaveOption( that.model.toJSON() )
 				.fail(function( data ) {
-					tcp.confirmationFail( that );
+					wpecp.confirmationFail( that );
 				})
 				.done(function( data ) {
 					that.confirmationMessage = 'Toolbar layouts Saved';
-					tcp.confirmationDone( that );
+					wpecp.confirmationDone( that );
 				});
 				clearTimeout( that.timeoutUpdate );
-			}, tcpGlobals.optionUpdateDelay );
+			}, wpecpGlobals.optionUpdateDelay );
 		}
 	});
 
-	tcp.customClasses = Backbone.View.extend({
+	wpecp.customClasses = Backbone.View.extend({
 		events: {
 			'keyup': 'handleKeypress'
 		},
@@ -347,7 +347,7 @@ tcp.initAdmin = function() {
 		initialize: function() {
 			this.$box = this.$el.find( '.box' );
 			this.$confirmed = this.$box.find( '.confirmed' );
-			this.nonce = this.$box.data( 'tcp-nc' );
+			this.nonce = this.$box.data( 'wpecp-nc' );
 			this.timeoutUpdate = false;
 		},
 
@@ -359,8 +359,8 @@ tcp.initAdmin = function() {
 			;
 
 			// validate input key and character input
-			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlClassKey( keyChar ) ) {
+			if ( ! wpecp.validInputKey( event.which ) ||
+					 ! wpecp.validHtmlClassKey( keyChar ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -368,35 +368,35 @@ tcp.initAdmin = function() {
 			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
 			$.each( this.$inputs, function( key, input ){
-				let field = $( input ).data( 'tcp-field' );
+				let field = $( input ).data( 'wpecp-field' );
 				// sanitize input data
-				that.content[ field ] = tcp.sanitizeHtmlClass( input.value );
+				that.content[ field ] = wpecp.sanitizeHtmlClass( input.value );
 				// update input with clean data
 				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.customClassesAction );
+			this.model.set( 'action', wpecpGlobals.customClassesAction );
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
 
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.confirmationSaving( that );
-				tcp.ajaxSaveOption( that.model.toJSON() )
+				wpecp.confirmationSaving( that );
+				wpecp.ajaxSaveOption( that.model.toJSON() )
 				.fail(function( data ) {
-					tcp.confirmationFail( that );
+					wpecp.confirmationFail( that );
 				})
 				.done(function( data ) {
 					that.confirmationMessage = 'CSS Classes Saved';
-					tcp.confirmationDone( that );
+					wpecp.confirmationDone( that );
 				});
 				clearTimeout( that.timeoutUpdate );
-			}, tcpGlobals.optionUpdateDelay );
+			}, wpecpGlobals.optionUpdateDelay );
 		}
 	});
 
-	tcp.wordpressIds = Backbone.View.extend({
+	wpecp.wordpressIds = Backbone.View.extend({
 		events: {
 			'keyup': 'updateIDs'
 		},
@@ -404,7 +404,7 @@ tcp.initAdmin = function() {
 		initialize: function() {
 			this.$box = this.$el.find( '.box' );
 			this.$confirmed = this.$box.find( '.confirmed' );
-			this.nonce = this.$box.data( 'tcp-nc' );
+			this.nonce = this.$box.data( 'wpecp-nc' );
 			this.listOpen = ( this.$box.is( ':visible' ) ? 'yes' : 'no' );
 		},
 
@@ -416,8 +416,8 @@ tcp.initAdmin = function() {
 			;
 
 			// validate input key and character input
-			if ( ! tcp.validInputKey( event.which ) ||
-					 ! tcp.validHtmlIdKey( keyChar ) ) {
+			if ( ! wpecp.validInputKey( event.which ) ||
+					 ! wpecp.validHtmlIdKey( keyChar ) ) {
 				event.preventDefault();
 				return false;
 			}
@@ -425,65 +425,65 @@ tcp.initAdmin = function() {
 			this.content = {};
 			this.$inputs = this.$el.find( 'input[type=text]' );
 			$.each( this.$inputs, function( key, input ){
-				let field = $( input ).data( 'tcp-field' );
+				let field = $( input ).data( 'wpecp-field' );
 				// sanitize input data
-				that.content[ field ] = tcp.sanitizeHtmlId( input.value );
+				that.content[ field ] = wpecp.sanitizeHtmlId( input.value );
 				// update input with clean data
 				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', tcpGlobals.wordpressIdsAction );
+			this.model.set( 'action', wpecpGlobals.wordpressIdsAction );
 			this.model.set( 'content', this.content );
 
 			clearTimeout( this.timeoutUpdate );
 
 			this.timeoutUpdate = setTimeout( function(){
-				tcp.confirmationSaving( that );
-				tcp.ajaxSaveOption( that.model.toJSON() )
+				wpecp.confirmationSaving( that );
+				wpecp.ajaxSaveOption( that.model.toJSON() )
 				.fail(function( data ) {
-					tcp.confirmationFail( that );
+					wpecp.confirmationFail( that );
 				})
 				.done(function( data ) {
 					that.confirmationMessage = 'WordPress IDs & Classes Saved';
-					tcp.confirmationDone( that );
+					wpecp.confirmationDone( that );
 				});
 				clearTimeout( that.timeoutUpdate );
-			}, tcpGlobals.optionUpdateDelay );
+			}, wpecpGlobals.optionUpdateDelay );
 		}
 	});
 
-	new tcp.editingEnabled({
-		el: $( '.tcp-option .comment-editing' ),
-		model: new tcp.ajaxModel
+	new wpecp.editingEnabled({
+		el: $( '.wpecp-option .comment-editing' ),
+		model: new wpecp.ajaxModel
 	});
 
-	new tcp.adjustExpiration({
-		el: $( '.tcp-option .comment-expiration' ),
-		model: new tcp.ajaxModel
+	new wpecp.adjustExpiration({
+		el: $( '.wpecp-option .comment-expiration' ),
+		model: new wpecp.ajaxModel
 	});
 
-	new tcp.customClasses({
-		el: $( '.tcp-option .custom-classes' ),
-		model: new tcp.ajaxModel
+	new wpecp.customClasses({
+		el: $( '.wpecp-option .custom-classes' ),
+		model: new wpecp.ajaxModel
 	});
 
-	new tcp.wordpressIds({
-		el: $( '.tcp-option .wordpress-ids' ),
-		model: new tcp.ajaxModel
+	new wpecp.wordpressIds({
+		el: $( '.wpecp-option .wordpress-ids' ),
+		model: new wpecp.ajaxModel
 	});
 
-	new tcp.customToolbars({
-		el: $( '.tcp-option .custom-toolbars' ),
-		model: new tcp.ajaxModel
+	new wpecp.customToolbars({
+		el: $( '.wpecp-option .custom-toolbars' ),
+		model: new wpecp.ajaxModel
 	});
 
 };
 
 ( function( $ ){
 	$( function() {
-		if ( $( '.tcp-settings' ).length ) {
-			tcp.initAdmin();
+		if ( $( '.wpecp-settings' ).length ) {
+			wpecp.initAdmin();
 		}
 	});
 }( jQuery ) );

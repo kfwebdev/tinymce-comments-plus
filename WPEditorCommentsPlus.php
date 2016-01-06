@@ -1,21 +1,21 @@
 <?php
 /**
- * TinyMCE Comments Plus
+ * WP Editor Comments Plus
  *
- * @package   tinymce-comments-plus
+ * @package   wp-editor-comments-plus
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
  * @license   GPL-2.0+
  * @link      http://kentarofischer.com
- * @copyright 3-22-2015 Kentaro Fischer
+ * @copyright 1-4-2015 Kentaro Fischer
  */
 
 /**
- * TinyMCE Comments Plus class.
+ * WP Editor Comments Plus class.
  *
- * @package TinyMCECommentsPlus
+ * @package WPEditorCommentsPlus
  * @author  Kentaro Fischer <webdev@kentarofischer.com>
  */
-class TinyMCECommentsPlus {
+class WPEditorCommentsPlus {
 	/**
 	 * Plugin version, used for cache-busting of style and script file references.
 	 *
@@ -35,7 +35,7 @@ class TinyMCECommentsPlus {
 	 *
 	 * @var      string
 	 */
-	protected $plugin_slug = "tinymce-comments-plus";
+	protected $plugin_slug = "wp-editor-comments-plus";
 
 	/**
 	 * Instance of this class.
@@ -60,106 +60,106 @@ class TinyMCECommentsPlus {
 	 * @since     1.0.0
 	 */
 	private function __construct() {
-		define( 'tcp_prefix', 'tcp_' );
-		define( tcp_prefix . 'local_dev', true );
-		define( tcp_prefix . 'javascript_globals', 'tcpGlobals' );
-		define( tcp_prefix . 'ajax_prefix', 'tcp_ajax_' );
-		define( tcp_ajax_prefix . 'option_update_delay', 2000 );
-		define( tcp_ajax_prefix . 'confirmation_delay', 3000 );
-		define( tcp_ajax_prefix . 'add_comment', tcp_prefix . 'add_comment' );
-		define( tcp_ajax_prefix . 'update_comment', tcp_prefix . 'update_comment' );
-		define( tcp_ajax_prefix . 'editing_enabled', tcp_prefix . 'editing_enabled' );
-		define( tcp_ajax_prefix . 'editing_expiration', tcp_prefix . 'editing_expiration' );
-		define( tcp_ajax_prefix . 'custom_classes', tcp_prefix . 'custom_classes' );
-		define( tcp_ajax_prefix . 'wordpress_ids', tcp_prefix . 'wordpress_ids' );
-		define( tcp_ajax_prefix . 'custom_toolbars', tcp_prefix . 'custom_toolbars' );
+		define( 'wpecp_prefix', 'wpecp_' );
+		define( wpecp_prefix . 'local_dev', true );
+		define( wpecp_prefix . 'javascript_globals', 'wpecpGlobals' );
+		define( wpecp_prefix . 'ajax_prefix', 'wpecp_ajax_' );
+		define( wpecp_ajax_prefix . 'option_update_delay', 2000 );
+		define( wpecp_ajax_prefix . 'confirmation_delay', 3000 );
+		define( wpecp_ajax_prefix . 'add_comment', wpecp_prefix . 'add_comment' );
+		define( wpecp_ajax_prefix . 'update_comment', wpecp_prefix . 'update_comment' );
+		define( wpecp_ajax_prefix . 'editing_enabled', wpecp_prefix . 'editing_enabled' );
+		define( wpecp_ajax_prefix . 'editing_expiration', wpecp_prefix . 'editing_expiration' );
+		define( wpecp_ajax_prefix . 'custom_classes', wpecp_prefix . 'custom_classes' );
+		define( wpecp_ajax_prefix . 'wordpress_ids', wpecp_prefix . 'wordpress_ids' );
+		define( wpecp_ajax_prefix . 'custom_toolbars', wpecp_prefix . 'custom_toolbars' );
 
-		define( tcp_prefix . 'toolbar1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
-		define( tcp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
-		define( tcp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpembed,wpemoji,wplink,wptextpattern,wpview' );
+		define( wpecp_prefix . 'toolbar1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
+		define( wpecp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
+		define( wpecp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpembed,wpemoji,wplink,wptextpattern,wpview' );
 
-		define( tcp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
-		define( tcp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
+		define( wpecp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
+		define( wpecp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
 
 		// CSS Classes
-		define( tcp_prefix . 'css_prefix', tcp_prefix . 'css_' );
-		define( tcp_prefix . 'id_prefix', tcp_prefix . 'id_' );
-		define( tcp_css_prefix . 'button_class', 'tcp-button' );
-		define( tcp_css_prefix . 'edit_container', 'tcp-edit-container' );
-		define( tcp_css_prefix . 'edit_button_class', 'tcp-edit-comment' );
-		define( tcp_css_prefix . 'reply_button_class', 'tcp-reply-comment' );
-		define( tcp_css_prefix . 'submit_button_class', 'tcp-submit-comment' );
-		define( tcp_css_prefix . 'submit_edit_button_class', 'tcp-submit-edit' );
-		define( tcp_css_prefix . 'cancel_edit_button_class', 'tcp-cancel-edit' );
-		define( tcp_css_prefix . 'comment_reply_button_class', 'comment-reply-link' );
-		define( tcp_css_prefix . 'comment_content', tcp_prefix . 'comment_content' );
-		define( tcp_css_prefix . 'edit', 'tcp-edit' );
-		define( tcp_css_prefix . 'editor', 'tcp-editor' );
-		define( tcp_css_prefix . 'post_id', tcp_prefix . 'post_id' );
-		define( tcp_css_prefix . 'comment_id', tcp_prefix . 'comment_id' );
-		define( tcp_css_prefix . 'nonce', tcp_prefix . 'nonce' );
+		define( wpecp_prefix . 'css_prefix', wpecp_prefix . 'css_' );
+		define( wpecp_prefix . 'id_prefix', wpecp_prefix . 'id_' );
+		define( wpecp_css_prefix . 'button_class', 'wpecp-button' );
+		define( wpecp_css_prefix . 'edit_container', 'wpecp-edit-container' );
+		define( wpecp_css_prefix . 'edit_button_class', 'wpecp-edit-comment' );
+		define( wpecp_css_prefix . 'reply_button_class', 'wpecp-reply-comment' );
+		define( wpecp_css_prefix . 'submit_button_class', 'wpecp-submit-comment' );
+		define( wpecp_css_prefix . 'submit_edit_button_class', 'wpecp-submit-edit' );
+		define( wpecp_css_prefix . 'cancel_edit_button_class', 'wpecp-cancel-edit' );
+		define( wpecp_css_prefix . 'comment_reply_button_class', 'comment-reply-link' );
+		define( wpecp_css_prefix . 'comment_content', wpecp_prefix . 'comment_content' );
+		define( wpecp_css_prefix . 'edit', 'wpecp-edit' );
+		define( wpecp_css_prefix . 'editor', 'wpecp-editor' );
+		define( wpecp_css_prefix . 'post_id', wpecp_prefix . 'post_id' );
+		define( wpecp_css_prefix . 'comment_id', wpecp_prefix . 'comment_id' );
+		define( wpecp_css_prefix . 'nonce', wpecp_prefix . 'nonce' );
 
 		// WordPress IDs
-		define( tcp_id_prefix . 'comments', '#comments' );
-		define( tcp_id_prefix . 'respond', '#respond' );
-		define( tcp_id_prefix . 'comment_form', '#commentform' );
-		define( tcp_id_prefix . 'cancel_comment_reply', '#cancel-comment-reply-link' );
-		define( tcp_id_prefix . 'submit_comment', '#submit' );
+		define( wpecp_id_prefix . 'comments', '#comments' );
+		define( wpecp_id_prefix . 'respond', '#respond' );
+		define( wpecp_id_prefix . 'comment_form', '#commentform' );
+		define( wpecp_id_prefix . 'cancel_comment_reply', '#cancel-comment-reply-link' );
+		define( wpecp_id_prefix . 'submit_comment', '#submit' );
 
 
 		// Retrieve Options
 
 		// TCP Custom CSS Button Classes
-		$this->option_custom_classes_all = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_all' ) );
-		$this->option_custom_classes_reply = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_reply' ) );
-		$this->option_custom_classes_edit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_edit' ) );
-		$this->option_custom_classes_submit = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_submit' ) );
-		$this->option_custom_classes_cancel = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_classes . '_cancel' ) );
+		$this->option_custom_classes_all = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_all' ) );
+		$this->option_custom_classes_reply = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_reply' ) );
+		$this->option_custom_classes_edit = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_edit' ) );
+		$this->option_custom_classes_submit = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_submit' ) );
+		$this->option_custom_classes_cancel = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_cancel' ) );
 
 		// sanitize WordPress options
-		$this->option_editing_enabled = sanitize_html_class( get_option( tcp_ajax_editing_enabled ) );
+		$this->option_editing_enabled = sanitize_html_class( get_option( wpecp_ajax_editing_enabled ) );
 		$this->option_editing_enabled = ( $this->option_editing_enabled === 'off' ) ? 'off' : 'on';
-		$this->option_editing_expiration = sanitize_key( get_option( tcp_ajax_editing_expiration ) );
+		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
-		$this->option_toolbar1 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar1' ) );
-		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? tcp_toolbar1 : $this->option_toolbar1;
-		$this->option_toolbar2 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar2' ) );
-		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? tcp_toolbar2 : $this->option_toolbar2;
-		$this->option_toolbar3 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar3' ) );
+		$this->option_toolbar1 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar1' ) );
+		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? wpecp_toolbar1 : $this->option_toolbar1;
+		$this->option_toolbar2 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar2' ) );
+		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? wpecp_toolbar2 : $this->option_toolbar2;
+		$this->option_toolbar3 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar3' ) );
 		$this->option_toolbar3 = ( empty( trim( $this->option_toolbar3 ) ) ) ? '' : $this->option_toolbar3;
-		$this->option_toolbar4 = preg_replace( tcp_regex_html_class, '', get_option( tcp_ajax_custom_toolbars . '_toolbar4' ) );
+		$this->option_toolbar4 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar4' ) );
 		$this->option_toolbar4 = ( empty( trim( $this->option_toolbar4 ) ) ) ? '' : $this->option_toolbar4;
 
-		$this->option_wp_id_comments = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comments' ) );
-		$this->option_wp_id_comments = ( empty( trim( $this->option_wp_id_comments ) ) ) ? tcp_id_comments : $this->option_wp_id_comments;
-		$this->option_wp_id_respond = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_respond' ) );
-		$this->option_wp_id_respond = ( empty( trim( $this->option_wp_id_respond ) ) ) ? tcp_id_respond : $this->option_wp_id_respond;
-		$this->option_wp_id_comment_form = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_comment_form' ) );
-		$this->option_wp_id_comment_form = ( empty( trim( $this->option_wp_id_comment_form ) ) ) ? tcp_id_comment_form : $this->option_wp_id_comment_form;
-		$this->option_wp_id_comment_reply_link = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_reply' ) );
-		$this->option_wp_id_comment_reply_link = ( empty( trim( $this->option_wp_id_comment_reply_link ) ) ) ? tcp_css_comment_reply_button_class : $this->option_wp_id_comment_reply_link;
-		$this->option_wp_id_cancel_comment_reply = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_cancel' ) );
-		$this->option_wp_id_cancel_comment_reply = ( empty( trim( $this->option_wp_id_cancel_comment_reply ) ) ) ? tcp_id_cancel_comment_reply : $this->option_wp_id_cancel_comment_reply;
-		$this->option_wp_id_submit_comment = preg_replace( tcp_regex_html_id, '', get_option( tcp_ajax_wordpress_ids . '_submit' ) );
-		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? tcp_id_submit_comment : $this->option_wp_id_submit_comment;
+		$this->option_wp_id_comments = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comments' ) );
+		$this->option_wp_id_comments = ( empty( trim( $this->option_wp_id_comments ) ) ) ? wpecp_id_comments : $this->option_wp_id_comments;
+		$this->option_wp_id_respond = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_respond' ) );
+		$this->option_wp_id_respond = ( empty( trim( $this->option_wp_id_respond ) ) ) ? wpecp_id_respond : $this->option_wp_id_respond;
+		$this->option_wp_id_comment_form = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comment_form' ) );
+		$this->option_wp_id_comment_form = ( empty( trim( $this->option_wp_id_comment_form ) ) ) ? wpecp_id_comment_form : $this->option_wp_id_comment_form;
+		$this->option_wp_id_comment_reply_link = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_reply' ) );
+		$this->option_wp_id_comment_reply_link = ( empty( trim( $this->option_wp_id_comment_reply_link ) ) ) ? wpecp_css_comment_reply_button_class : $this->option_wp_id_comment_reply_link;
+		$this->option_wp_id_cancel_comment_reply = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_cancel' ) );
+		$this->option_wp_id_cancel_comment_reply = ( empty( trim( $this->option_wp_id_cancel_comment_reply ) ) ) ? wpecp_id_cancel_comment_reply : $this->option_wp_id_cancel_comment_reply;
+		$this->option_wp_id_submit_comment = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_submit' ) );
+		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? wpecp_id_submit_comment : $this->option_wp_id_submit_comment;
 
-		add_filter( 'plugin_action_links_' . tcp_plugin_file, array( $this, 'add_plugin_action_links' ), 10, 4 );
+		add_filter( 'plugin_action_links_' . wpecp_plugin_file, array( $this, 'add_plugin_action_links' ), 10, 4 );
 
 		// Ajax methods
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_wordpress_ids, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_wordpress_ids, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . tcp_ajax_custom_toolbars, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . tcp_ajax_custom_toolbars, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_wordpress_ids, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_wordpress_ids, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_custom_toolbars, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_custom_toolbars, array( $this, 'action_ajax_request' ) );
 
 		// initialize admin functions
 		// Add the options page and menu item.
@@ -171,8 +171,8 @@ class TinyMCECommentsPlus {
 
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
-		// load tinymce comments plus
-		add_action( 'init', array( $this, 'initialize_tinymce_comments_plus' ) );
+		// load WP Editor Comments Plus
+		add_action( 'init', array( $this, 'initialize_wp_editor_comments_plus' ) );
 	}
 
 	/**
@@ -220,10 +220,10 @@ class TinyMCECommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function add_plugin_action_links ( $actions, $plugin_file, $plugin_data, $context ) {
-		$tcp_plugin_links = array(
+		$wpecp_plugin_links = array(
 			'settings' => '<a href="' . admin_url( 'options-general.php?page=' . $this->plugin_slug ) . '">Settings</a>',
 		);
-		return array_merge( $actions, $tcp_plugin_links );
+		return array_merge( $actions, $wpecp_plugin_links );
 	}
 
 	/**
@@ -245,59 +245,57 @@ class TinyMCECommentsPlus {
 	 *
 	 * @since    1.0.0
 	 */
-	public function initialize_tinymce_comments_plus() {
+	public function initialize_wp_editor_comments_plus() {
 		if ( is_admin() ) { return; }
 
 		// Editor JavaScript Globals
-		$this->tcp_plugin_javascript_globals = array(
+		$this->wpecp_plugin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'editorStyles' => includes_url( "js/tinymce/skins/wordpress/wp-content.css", __FILE__ ),
-			'optionUpdateDelay' => tcp_ajax_option_update_delay,
-			'addCommentAction' => tcp_ajax_add_comment,
-			'updateCommentAction' => tcp_ajax_update_comment,
+			'optionUpdateDelay' => wpecp_ajax_option_update_delay,
+			'addCommentAction' => wpecp_ajax_add_comment,
+			'updateCommentAction' => wpecp_ajax_update_comment,
 			'editingExpiration' => $this->option_editing_expiration,
 
-			tcp_prefix . 'plugins' => tcp_plugins,
-			tcp_prefix . 'toolbar1' => $this->option_toolbar1,
-			tcp_prefix . 'toolbar2' => $this->option_toolbar2,
-			tcp_prefix . 'toolbar3' => $this->option_toolbar3,
-			tcp_prefix . 'toolbar4' => $this->option_toolbar4,
+			wpecp_prefix . 'plugins' => wpecp_plugins,
+			wpecp_prefix . 'toolbar1' => $this->option_toolbar1,
+			wpecp_prefix . 'toolbar2' => $this->option_toolbar2,
+			wpecp_prefix . 'toolbar3' => $this->option_toolbar3,
+			wpecp_prefix . 'toolbar4' => $this->option_toolbar4,
 
 			// Classes
-			tcp_css_prefix . 'button' => tcp_css_button_class,
-			tcp_css_prefix . 'edit_button' => tcp_css_edit_button_class,
-			tcp_css_prefix . 'reply_button' => tcp_css_reply_button_class,
-			tcp_css_prefix . 'submit_button' => tcp_css_submit_button_class,
-			tcp_css_prefix . 'edit_container' => tcp_css_edit_container,
-			tcp_css_prefix . 'submit_edit_button' => tcp_css_submit_edit_button_class,
-			tcp_css_prefix . 'cancel_edit_button' => tcp_css_cancel_edit_button_class,
-			tcp_css_prefix . 'comment_reply_button' => tcp_css_comment_reply_button_class,
-			tcp_css_prefix . 'edit' => tcp_css_edit,
-			tcp_css_prefix . 'editor' => tcp_css_editor,
-			tcp_css_prefix . 'comment_content' => tcp_css_comment_content,
-			tcp_css_prefix . 'post_id' => tcp_css_comment_id,
-			tcp_css_prefix . 'comment_id' => tcp_css_comment_id,
-			tcp_css_prefix . 'nonce' => tcp_css_nonce,
-			tcp_css_prefix . 'button_custom' => $this->option_custom_classes_all,
-			tcp_css_prefix . 'reply_button_custom' => $this->option_custom_classes_reply,
-			tcp_css_prefix . 'edit_button_custom' => $this->option_custom_classes_edit,
-			tcp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
-			tcp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
+			wpecp_css_prefix . 'button' => wpecp_css_button_class,
+			wpecp_css_prefix . 'edit_button' => wpecp_css_edit_button_class,
+			wpecp_css_prefix . 'reply_button' => wpecp_css_reply_button_class,
+			wpecp_css_prefix . 'submit_button' => wpecp_css_submit_button_class,
+			wpecp_css_prefix . 'edit_container' => wpecp_css_edit_container,
+			wpecp_css_prefix . 'submit_edit_button' => wpecp_css_submit_edit_button_class,
+			wpecp_css_prefix . 'cancel_edit_button' => wpecp_css_cancel_edit_button_class,
+			wpecp_css_prefix . 'comment_reply_button' => wpecp_css_comment_reply_button_class,
+			wpecp_css_prefix . 'edit' => wpecp_css_edit,
+			wpecp_css_prefix . 'editor' => wpecp_css_editor,
+			wpecp_css_prefix . 'comment_content' => wpecp_css_comment_content,
+			wpecp_css_prefix . 'post_id' => wpecp_css_comment_id,
+			wpecp_css_prefix . 'comment_id' => wpecp_css_comment_id,
+			wpecp_css_prefix . 'nonce' => wpecp_css_nonce,
+			wpecp_css_prefix . 'button_custom' => $this->option_custom_classes_all,
+			wpecp_css_prefix . 'reply_button_custom' => $this->option_custom_classes_reply,
+			wpecp_css_prefix . 'edit_button_custom' => $this->option_custom_classes_edit,
+			wpecp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
+			wpecp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
 			// IDs
-			tcp_id_prefix . 'comments' => $this->option_wp_id_comments,
-			tcp_id_prefix . 'respond' => $this->option_wp_id_respond,
-			tcp_id_prefix . 'comment_form' => $this->option_wp_id_comment_form,
-			tcp_id_prefix . 'comment_reply' => $this->option_wp_id_comment_reply_link,
-			tcp_id_prefix . 'cancel_comment_reply' => $this->option_wp_id_cancel_comment_reply,
-			tcp_id_prefix . 'submit_comment' => $this->option_wp_id_submit_comment
+			wpecp_id_prefix . 'comments' => $this->option_wp_id_comments,
+			wpecp_id_prefix . 'respond' => $this->option_wp_id_respond,
+			wpecp_id_prefix . 'comment_form' => $this->option_wp_id_comment_form,
+			wpecp_id_prefix . 'comment_reply' => $this->option_wp_id_comment_reply_link,
+			wpecp_id_prefix . 'cancel_comment_reply' => $this->option_wp_id_cancel_comment_reply,
+			wpecp_id_prefix . 'submit_comment' => $this->option_wp_id_submit_comment
 
 		);
 
 		// Load public-facing style sheet and JavaScript.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-
-		// add_action( 'comment_form', array( $this, 'action_comment_form' ), 10 );
 
 		// Define custom functionality.
 		add_filter( 'tiny_mce_before_init', array( $this, 'filter_format_tinymce' ), 10 );
@@ -360,27 +358,27 @@ class TinyMCECommentsPlus {
 		if ( $screen->id == $this->plugin_screen_hook_suffix ) {
 
 			// Admin JavaScript Globals
-			$this->tcp_admin_javascript_globals = array(
+			$this->wpecp_admin_javascript_globals = array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'optionUpdateDelay' => tcp_ajax_option_update_delay,
-				'optionConfirmationDelay' => tcp_ajax_confirmation_delay,
-				'editingEnabledAction' => tcp_ajax_editing_enabled,
-				'editingExpirationAction' => tcp_ajax_editing_expiration,
-				'customClassesAction' => tcp_ajax_custom_classes,
-				'wordpressIdsAction' => tcp_ajax_wordpress_ids,
-				'customToolbarsAction' => tcp_ajax_custom_toolbars
+				'optionUpdateDelay' => wpecp_ajax_option_update_delay,
+				'optionConfirmationDelay' => wpecp_ajax_confirmation_delay,
+				'editingEnabledAction' => wpecp_ajax_editing_enabled,
+				'editingExpirationAction' => wpecp_ajax_editing_expiration,
+				'customClassesAction' => wpecp_ajax_custom_classes,
+				'wordpressIdsAction' => wpecp_ajax_wordpress_ids,
+				'customToolbarsAction' => wpecp_ajax_custom_toolbars
 			);
 
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
 
-			if ( tcp_local_dev ) {
-				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone' ),	$this->version, false );
+			if ( wpecp_local_dev ) {
+				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ),	$this->version, false );
 			} else {
-				wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/app.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
+				wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
 			}
 
-			wp_localize_script( $this->plugin_slug . '-admin-script', tcp_javascript_globals, json_encode( $this->tcp_admin_javascript_globals ) );
+			wp_localize_script( $this->plugin_slug . '-admin-script', wpecp_javascript_globals, json_encode( $this->wpecp_admin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-admin-script' );
 
 		}
@@ -397,13 +395,13 @@ class TinyMCECommentsPlus {
 			// replace comment-reply to handle tinymce form moves
 		  wp_deregister_script( 'comment-reply' );
 
-			if ( tcp_local_dev ) {
-				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/app.js', array( 'jquery', 'backbone' ),	$this->version, true );
+			if ( wpecp_local_dev ) {
+				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ),	$this->version, true );
 			} else {
-				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/app.js", __FILE__ ), array( 'jquery', 'backbone' ),	$this->version, false );
+				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__ ), array( 'jquery', 'backbone' ),	$this->version, false );
 			}
 			// Instantiate Javascript Globals for plugin script
-			wp_localize_script( $this->plugin_slug . '-plugin-script', tcp_javascript_globals, json_encode( $this->tcp_plugin_javascript_globals ) );
+			wp_localize_script( $this->plugin_slug . '-plugin-script', wpecp_javascript_globals, json_encode( $this->wpecp_plugin_javascript_globals ) );
 			wp_enqueue_script( $this->plugin_slug . '-plugin-script' );
 		}
 	}
@@ -415,8 +413,8 @@ class TinyMCECommentsPlus {
 	 */
 	public function add_plugin_admin_menu() {
 		if ( current_user_can( 'administrator' ) ) {
-			$this->plugin_screen_hook_suffix = add_options_page( __( "TinyMCE Comments Plus - Settings", $this->plugin_slug ),
-				__( "TinyMCE Comments Plus", $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
+			$this->plugin_screen_hook_suffix = add_options_page( __( "WP Editor Comments Plus - Settings", $this->plugin_slug ),
+				__( "WP Editor Comments Plus", $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
 		}
 	}
 
@@ -454,7 +452,7 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function tcp_add_comment( $post_id, $content ) {
+	public function wpecp_add_comment( $post_id, $content ) {
 		global 	$post,
 				$current_user;
 
@@ -481,7 +479,7 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function tcp_update_comment( $post_id, $comment_id, $content ) {
+	public function wpecp_update_comment( $post_id, $comment_id, $content ) {
 		global 	$post,
 				$current_user;
 
@@ -515,7 +513,7 @@ class TinyMCECommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function tcp_save_option( $option, $value ) {
+	public function wpecp_save_option( $option, $value ) {
 		if ( ! current_user_can( 'manage_options' ) ) { wp_send_json_error( 'permission denied' ); }
 		return update_option( $option, $value );
 	}
@@ -536,80 +534,80 @@ class TinyMCECommentsPlus {
 
 		global $allowedtags;
  		// add additional tags to allowed tags in comments
- 		$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
+ 		$allowedtags = array_merge( $allowedtags, $this->wpecp_new_tags() );
 
 		switch ( $action ) {
-			case tcp_ajax_add_comment:
+			case wpecp_ajax_add_comment:
 				$post_id = intval( $_REQUEST[ 'postId' ] );
 				$comment_id = intval( $_REQUEST[ 'commentId' ] );
 				$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
 				// check ajax referer's security nonce
-				check_ajax_referer( tcp_ajax_add_comment . $post_id, 'security' );
+				check_ajax_referer( wpecp_ajax_add_comment . $post_id, 'security' );
 
-				$result = $this->tcp_add_comment( $post_id, $content );
+				$result = $this->wpecp_add_comment( $post_id, $content );
 			break;
 
-			case tcp_ajax_update_comment:
+			case wpecp_ajax_update_comment:
 				$post_id = intval( $_REQUEST[ 'postId' ] );
 				$comment_id = intval( $_REQUEST[ 'commentId' ] );
 				$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
 				if ( ! $comment_id ) { wp_send_json_error( 'bad request' ); }
 				// check ajax referer's security nonce
-				check_ajax_referer( tcp_ajax_update_comment . $comment_id, 'security' );
+				check_ajax_referer( wpecp_ajax_update_comment . $comment_id, 'security' );
 
-				$result = $this->tcp_update_comment( $post_id, $comment_id, $content );
+				$result = $this->wpecp_update_comment( $post_id, $comment_id, $content );
 			break;
 
-			case tcp_ajax_editing_enabled:
-				check_ajax_referer( tcp_ajax_editing_enabled, 'security' );
+			case wpecp_ajax_editing_enabled:
+				check_ajax_referer( wpecp_ajax_editing_enabled, 'security' );
 				// if user is not administrator
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
-				$result = $this->tcp_save_option( tcp_ajax_editing_enabled, $content );
+				$result = $this->wpecp_save_option( wpecp_ajax_editing_enabled, $content );
 			break;
 
-			case tcp_ajax_editing_expiration:
-				check_ajax_referer( tcp_ajax_editing_expiration, 'security' );
+			case wpecp_ajax_editing_expiration:
+				check_ajax_referer( wpecp_ajax_editing_expiration, 'security' );
 				// if user is not administrator
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
-				$result = $this->tcp_save_option( tcp_ajax_editing_expiration, $content );
+				$result = $this->wpecp_save_option( wpecp_ajax_editing_expiration, $content );
 			break;
 
-			case tcp_ajax_custom_classes:
-				check_ajax_referer( tcp_ajax_custom_classes, 'security' );
+			case wpecp_ajax_custom_classes:
+				check_ajax_referer( wpecp_ajax_custom_classes, 'security' );
 				// if user is not administrator
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = preg_replace( tcp_regex_html_class, '', $option );
+					$option = preg_replace( wpecp_regex_html_class, '', $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; }
-					else { $result = $this->tcp_save_option( tcp_ajax_custom_classes . $key, $option ); }
+					else { $result = $this->wpecp_save_option( wpecp_ajax_custom_classes . $key, $option ); }
 				}
 
 				$result = true;
 			break;
 
-			case tcp_ajax_wordpress_ids:
-				check_ajax_referer( tcp_ajax_wordpress_ids, 'security' );
+			case wpecp_ajax_wordpress_ids:
+				check_ajax_referer( wpecp_ajax_wordpress_ids, 'security' );
 				// if user is not administrator
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = preg_replace( tcp_regex_html_id, '', $option );
+					$option = preg_replace( wpecp_regex_html_id, '', $option );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
-					else { $result = $this->tcp_save_option( tcp_ajax_wordpress_ids . $key, $option ); }
+					else { $result = $this->wpecp_save_option( wpecp_ajax_wordpress_ids . $key, $option ); }
 				}
 
 				$result = true;
 			break;
 
-			case tcp_ajax_custom_toolbars:
-				check_ajax_referer( tcp_ajax_custom_toolbars, 'security' );
+			case wpecp_ajax_custom_toolbars:
+				check_ajax_referer( wpecp_ajax_custom_toolbars, 'security' );
 				// if user is not administrator
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				foreach( $_REQUEST[ 'content' ] as $key => $option ) {
-					$option = preg_replace( tcp_regex_html_class, '', strtolower( $option ) );
+					$option = preg_replace( wpecp_regex_html_class, '', strtolower( $option ) );
 					if ( ! sanitize_key( $key ) ) { $result = false; break; }
-					else { $result = $this->tcp_save_option( tcp_ajax_custom_toolbars . $key, $option ); }
+					else { $result = $this->wpecp_save_option( wpecp_ajax_custom_toolbars . $key, $option ); }
 				}
 				$result = true;
 			break;
@@ -653,7 +651,7 @@ class TinyMCECommentsPlus {
 	 	$args['paste_strip_class_attributes'] = 'none';
 	 	$args['paste_text_use_dialog'] = true;
 	 	$args['wpeditimage_disable_captions'] = true;
-		$args['plugins'] = tcp_plugins;
+		$args['plugins'] = wpecp_plugins;
 	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
@@ -687,7 +685,7 @@ class TinyMCECommentsPlus {
 			    'textarea_rows' => 12,
 			    'teeny' => false,
 				'tinymce' => array(
-					'plugins' => tcp_plugins,
+					'plugins' => wpecp_plugins,
 					'theme_advanced_buttons1' => $this->option_toolbar1,
           'theme_advanced_buttons2' => $this->option_toolbar2,
 					'theme_advanced_buttons3' => $this->option_toolbar3,
@@ -714,14 +712,14 @@ class TinyMCECommentsPlus {
 
 		$comment_id = $comment->comment_ID;
 		$post_id = $comment->comment_post_ID;
-		$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment_id );
+		$nonce = wp_create_nonce( wpecp_ajax_update_comment . $comment_id );
 
-		$tcp_content = sprintf(
-			'<div class="' . tcp_css_comment_content . '"
-						id="' . tcp_css_comment_content . '%d"
-						data-' . tcp_css_post_id . '="%d"
-						data-' . tcp_css_comment_id . '="%d"
-						data-' . tcp_css_nonce . '="%s">%s</div>',
+		$wpecp_content = sprintf(
+			'<div class="' . wpecp_css_comment_content . '"
+						id="' . wpecp_css_comment_content . '%d"
+						data-' . wpecp_css_post_id . '="%d"
+						data-' . wpecp_css_comment_id . '="%d"
+						data-' . wpecp_css_nonce . '="%s">%s</div>',
 			$comment_id,
 			$post_id,
 			$comment_id,
@@ -729,13 +727,13 @@ class TinyMCECommentsPlus {
 			$content
 		);
 
-		$tcp_editor = sprintf(
-			'<div class="' . tcp_css_editor . '"
-						data-' . tcp_css_comment_id . '="%d"></div>',
+		$wpecp_editor = sprintf(
+			'<div class="' . wpecp_css_editor . '"
+						data-' . wpecp_css_comment_id . '="%d"></div>',
 			$comment_id
 		);
 
-		return $tcp_content . $tcp_editor;
+		return $wpecp_content . $wpecp_editor;
 	}
 
 	/**
@@ -776,11 +774,11 @@ class TinyMCECommentsPlus {
 			current_user_can( 'administrator' )
 			) {
 
-			$nonce = wp_create_nonce( tcp_ajax_update_comment . $comment->comment_ID );
+			$nonce = wp_create_nonce( wpecp_ajax_update_comment . $comment->comment_ID );
 
-			$tcp_edit_link = '<div class="' . tcp_css_edit . '" data-' . tcp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
+			$wpecp_edit_link = '<div class="' . wpecp_css_edit . '" data-' . wpecp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
 
-			$args[ 'before' ] .= $tcp_edit_link;
+			$args[ 'before' ] .= $wpecp_edit_link;
 		}
 
 		return $args;
@@ -790,7 +788,7 @@ class TinyMCECommentsPlus {
 	* customise list of allowed HTML tags in comments
 	* @since    1.0.0
 	*/
-	public function tcp_new_tags() {
+	public function wpecp_new_tags() {
 		// additionally allowed tags
 		$new_tags = array(
 			'a' => array(
@@ -852,7 +850,7 @@ class TinyMCECommentsPlus {
 	public function filter_customize_allowed_tags( $comment_data ) {
 		global $allowedtags;
 
-		$allowedtags = array_merge( $allowedtags, $this->tcp_new_tags() );
+		$allowedtags = array_merge( $allowedtags, $this->wpecp_new_tags() );
 
 		return $comment_data;
 	}
