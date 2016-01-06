@@ -115,6 +115,7 @@
 					$wp_id_comments = get_option( wpecp_ajax_wordpress_ids .'_comments' );
 					$wp_id_respond = get_option( wpecp_ajax_wordpress_ids .'_respond' );
 					$wp_id_comment_form = get_option( wpecp_ajax_wordpress_ids .'_comment_form' );
+					$wp_id_comment = get_option( wpecp_ajax_wordpress_ids .'_comment_textarea' );
 					$wp_id_reply = get_option( wpecp_ajax_wordpress_ids .'_reply' );
 					$wp_id_cancel = get_option( wpecp_ajax_wordpress_ids .'_cancel' );
 					$wp_id_submit = get_option( wpecp_ajax_wordpress_ids .'_submit' );
@@ -132,6 +133,7 @@
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
 					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_id_respond ?>" data-wpecp-field="_respond"></label>
 					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_id_comment_form ?>" data-wpecp-field="_comment_form"></label>
+					<label><span>Comment Textarea</span> <input type="text" placeholder="#comment" value="<?php echo $wp_id_comment_textarea ?>" data-wpecp-field="_comment_textarea"></label>
 					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_id_reply ?>" data-wpecp-field="_reply"></label>
 					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_id_cancel ?>" data-wpecp-field="_cancel"></label>
 					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_id_submit ?>" data-wpecp-field="_submit"></label>
