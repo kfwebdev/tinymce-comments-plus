@@ -36,10 +36,10 @@ wpecp.initWPECP = function() {
 		},
 
 		initialize: function() {
-			this.$commentForm = this.$el.find( 'form' );
+			this.$commentForm = this.$el.find( wpecp.globals.wpecp_id_comment_form );
 			this.$textArea = this.$el.find( 'textarea' );
 			this.$submitButton = this.$commentForm.find( 'input[type=submit]' );
-			this.$submitButton.addClass( wpecp.globals.cssButton + ' ' + wpecp.globals.cssSubmitButton )
+			this.$submitButton.addClass( wpecp.globals.wcpecp_css_button + ' ' + wpecp.globals.wcpecp_css_submit_button )
 		},
 
 		submitForm: function( event ) {
