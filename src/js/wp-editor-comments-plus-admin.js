@@ -1,7 +1,5 @@
 'use strict';
 
-import humanizeDuration from 'humanize-duration';
-
 var
 	wpecp = window.wpecp || {},
 	wpecpGlobals = window.wpecpGlobals || {},

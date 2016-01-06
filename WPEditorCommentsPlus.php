@@ -25,6 +25,15 @@ class WPEditorCommentsPlus {
 	 */
 	protected $version = "1.0.0";
 
+		/**
+		 * Name of this plugin.
+		 *
+		 * @since    1.0.0
+		 *
+		 * @var      object
+		 */
+		protected static $plugin_name = "WP Editor Comments Plus";
+
 	/**
 	 * Unique identifier for your plugin.
 	 *
@@ -413,8 +422,8 @@ class WPEditorCommentsPlus {
 	 */
 	public function add_plugin_admin_menu() {
 		if ( current_user_can( 'administrator' ) ) {
-			$this->plugin_screen_hook_suffix = add_options_page( __( "WP Editor Comments Plus - Settings", $this->plugin_slug ),
-				__( "WP Editor Comments Plus", $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
+			$this->plugin_screen_hook_suffix = add_options_page( __( $this->plugin_name . " - Settings", $this->plugin_slug ),
+				__( $this->plugin_name, $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
 		}
 	}
 
