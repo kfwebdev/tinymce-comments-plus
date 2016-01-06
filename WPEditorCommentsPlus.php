@@ -70,7 +70,7 @@ class WPEditorCommentsPlus {
 	 */
 	private function __construct() {
 		define( 'wpecp_prefix', 'wpecp_' );
-		define( wpecp_prefix . 'local_dev', true );
+		define( wpecp_prefix . 'local_dev', false );
 		define( wpecp_prefix . 'javascript_globals', 'wpecpGlobals' );
 		define( wpecp_prefix . 'ajax_prefix', 'wpecp_ajax_' );
 		define( wpecp_ajax_prefix . 'option_update_delay', 2000 );
