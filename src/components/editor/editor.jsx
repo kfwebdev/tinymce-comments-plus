@@ -71,7 +71,7 @@ class EditorComponent extends React.Component {
           });
         },
         plugins: [
-          "charmap, colorpicker, fullscreen, lists, paste, tabfocus, textcolor, wordpress, wpdialogs, wpemoji, wplink, wpview"
+          this.props.tcpGlobals.tcp_plugins
         ],
         toolbar: [
           this.props.tcpGlobals.tcp_toolbar1,

@@ -61,7 +61,7 @@ class TinyMCECommentsPlus {
 	 */
 	private function __construct() {
 		define( 'tcp_prefix', 'tcp_' );
-		define( tcp_prefix . 'local_dev', false );
+		define( tcp_prefix . 'local_dev', true );
 		define( tcp_prefix . 'javascript_globals', 'tcpGlobals' );
 		define( tcp_prefix . 'ajax_prefix', 'tcp_ajax_' );
 		define( tcp_ajax_prefix . 'option_update_delay', 2000 );
@@ -76,7 +76,7 @@ class TinyMCECommentsPlus {
 
 		define( tcp_prefix . 'toolbar1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
 		define( tcp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
-		define( tcp_prefix . 'plugins', 'charmap,colorpicker,fullscreen,lists,paste,tabfocus,textcolor,wordpress,wpdialogs,wpemoji,wplink,wpview' );
+		define( tcp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpembed,wpemoji,wplink,wptextpattern,wpview' );
 
 		define( tcp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
 		define( tcp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
@@ -257,6 +257,7 @@ class TinyMCECommentsPlus {
 			'updateCommentAction' => tcp_ajax_update_comment,
 			'editingExpiration' => $this->option_editing_expiration,
 
+			tcp_prefix . 'plugins' => tcp_plugins,
 			tcp_prefix . 'toolbar1' => $this->option_toolbar1,
 			tcp_prefix . 'toolbar2' => $this->option_toolbar2,
 			tcp_prefix . 'toolbar3' => $this->option_toolbar3,
@@ -686,7 +687,7 @@ class TinyMCECommentsPlus {
 			    'textarea_rows' => 12,
 			    'teeny' => false,
 				'tinymce' => array(
-					'plugins' => 'charmap, colorpicker, fullscreen, lists, paste, tabfocus, textcolor, wordpress, wpdialogs, wpemoji, wplink, wpview',
+					'plugins' => tcp_plugins,
 					'theme_advanced_buttons1' => $this->option_toolbar1,
           'theme_advanced_buttons2' => $this->option_toolbar2,
 					'theme_advanced_buttons3' => $this->option_toolbar3,
