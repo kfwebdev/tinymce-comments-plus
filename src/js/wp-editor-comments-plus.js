@@ -116,6 +116,7 @@ wpecp.initWPECP = function() {
 			ReactDOM.render(<wpecp.Editor wpecpGlobals={ wpecp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } contentId={ contentId } />, this );
 		});
 
+		// bind respond element ( reply form )
 		new wpecp.RespondView({
 			el: $( wpecp.globals.wpecp_id_respond )
 		});
