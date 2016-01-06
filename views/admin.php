@@ -115,7 +115,7 @@
 					$wp_id_comments = get_option( wpecp_ajax_wordpress_ids .'_comments' );
 					$wp_id_respond = get_option( wpecp_ajax_wordpress_ids .'_respond' );
 					$wp_id_comment_form = get_option( wpecp_ajax_wordpress_ids .'_comment_form' );
-					$wp_id_comment = get_option( wpecp_ajax_wordpress_ids .'_comment_textarea' );
+					$wp_id_comment_textarea = get_option( wpecp_ajax_wordpress_ids .'_comment_textarea' );
 					$wp_id_reply = get_option( wpecp_ajax_wordpress_ids .'_reply' );
 					$wp_id_cancel = get_option( wpecp_ajax_wordpress_ids .'_cancel' );
 					$wp_id_submit = get_option( wpecp_ajax_wordpress_ids .'_submit' );
