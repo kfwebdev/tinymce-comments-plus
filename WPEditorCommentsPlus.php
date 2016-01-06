@@ -112,6 +112,7 @@ class WPEditorCommentsPlus {
 		define( wpecp_id_prefix . 'comments', '#comments' );
 		define( wpecp_id_prefix . 'respond', '#respond' );
 		define( wpecp_id_prefix . 'comment_form', '#commentform' );
+		define( wpecp_id_prefix . 'comment', '#comment' );
 		define( wpecp_id_prefix . 'cancel_comment_reply', '#cancel-comment-reply-link' );
 		define( wpecp_id_prefix . 'submit_comment', '#submit' );
 
@@ -296,6 +297,7 @@ class WPEditorCommentsPlus {
 			wpecp_id_prefix . 'comments' => $this->option_wp_id_comments,
 			wpecp_id_prefix . 'respond' => $this->option_wp_id_respond,
 			wpecp_id_prefix . 'comment_form' => $this->option_wp_id_comment_form,
+			wpecp_id_prefix . 'comment' => $this->option_wp_id_comment,
 			wpecp_id_prefix . 'comment_reply' => $this->option_wp_id_comment_reply_link,
 			wpecp_id_prefix . 'cancel_comment_reply' => $this->option_wp_id_cancel_comment_reply,
 			wpecp_id_prefix . 'submit_comment' => $this->option_wp_id_submit_comment
