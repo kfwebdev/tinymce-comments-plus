@@ -732,11 +732,7 @@ class WPEditorCommentsPlus {
 		$nonce = wp_create_nonce( wpecp_ajax_update_comment . $comment_id );
 
 		$wpecp_content = sprintf(
-			'<div class="' . wpecp_css_comment_content . '"
-						id="' . wpecp_css_comment_content . '%d"
-						data-' . wpecp_css_post_id . '="%d"
-						data-' . wpecp_css_comment_id . '="%d"
-						data-' . wpecp_css_nonce . '="%s">%s</div>',
+			'<div class="' . wpecp_css_comment_content . '" id="' . wpecp_css_comment_content . '%d" data-' . wpecp_css_post_id . '="%d" data-' . wpecp_css_comment_id . '="%d"	data-' . wpecp_css_nonce . '="%s">%s</div>',
 			$comment_id,
 			$post_id,
 			$comment_id,
@@ -745,8 +741,7 @@ class WPEditorCommentsPlus {
 		);
 
 		$wpecp_editor = sprintf(
-			'<div class="' . wpecp_css_editor . '"
-						data-' . wpecp_css_comment_id . '="%d"></div>',
+			'<div class="' . wpecp_css_editor . '" data-' . wpecp_css_comment_id . '="%d"></div>',
 			$comment_id
 		);
 
