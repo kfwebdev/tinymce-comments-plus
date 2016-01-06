@@ -690,9 +690,12 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function filter_tinymce_editor() {
+		// remove # from comment textarea id
+		$comment_textarea = str_replace( '#', '', $this->option_wp_id_comment_textarea );
+
 	  ob_start();
 
-	  wp_editor( '', 'comment',
+	  wp_editor( '', $comment_textarea,
 			array(
 				'skin' => 'wp_theme',
 			    'textarea_rows' => 12,

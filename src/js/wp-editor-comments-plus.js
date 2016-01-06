@@ -36,7 +36,7 @@ wpecp.initWPECP = function() {
 		},
 
 		initialize: function() {
-			this.$commentForm = this.$el.find( wpecp.globals.wpecp_id_comment_form );
+			this.$commentForm = this.$el.find( 'form' );
 			this.$textArea = this.$el.find( 'textarea' );
 			this.$submitButton = this.$commentForm.find( 'input[type=submit]' );
 			this.$submitButton.addClass( wpecp.globals.wpecp_css_button + ' ' + wpecp.globals.wpecp_css_submit_button )
