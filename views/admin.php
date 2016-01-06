@@ -31,6 +31,7 @@
 				<?php
 					$nonce = wp_create_nonce( wpecp_ajax_editing_expiration );
 					$expiration_option = get_option( wpecp_ajax_editing_expiration );
+					$expiration_option = ( intval( $expiration_option ) > 0 ) ? $expiration_option : 0;
 					$dtF = new DateTime( "@0" );
     			$dtT = new DateTime( "@$expiration_option" );
 					$expirations = $dtF->diff( $dtT );

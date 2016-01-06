@@ -32,7 +32,7 @@ class WPEditorCommentsPlus {
 		 *
 		 * @var      object
 		 */
-		protected static $plugin_name = "WP Editor Comments Plus";
+		protected $plugin_name = "WP Editor Comments Plus";
 
 	/**
 	 * Unique identifier for your plugin.
