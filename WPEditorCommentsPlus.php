@@ -85,7 +85,7 @@ class WPEditorCommentsPlus {
 
 		define( wpecp_prefix . 'toolbar1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
 		define( wpecp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
-		define( wpecp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpembed,wpemoji,wplink,wptextpattern,wpview' );
+		define( wpecp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpemoji,wplink,wpview' );
 
 		define( wpecp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
 		define( wpecp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
