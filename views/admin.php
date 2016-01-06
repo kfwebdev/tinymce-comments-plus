@@ -19,6 +19,7 @@
 				<?php
 					$nonce = wp_create_nonce( wpecp_ajax_editing_enabled );
 					$editing_option = get_option( wpecp_ajax_editing_enabled );
+					$editing_option = ( $editing_option === 'off' ) ? 'off' : 'on';
 				?>
 				<legend><span class="dashicons dashicons-welcome-write-blog"></span> Comment Editing</legend>
 				<p>Edit comments for logged in users</p>
