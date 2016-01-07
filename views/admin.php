@@ -25,7 +25,7 @@
 				<p>Edit comments for logged in users</p>
 				<div class="editing-control">
 					<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
-					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-wpecp-nc="<?php echo $nonce ?>" />
+					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-wpecp-nc="<?php echo esc_attr( $nonce ) ?>" />
 				</div>
 			</fieldset>
 			<fieldset class="comment-expiration">
@@ -76,10 +76,10 @@
 						<span class="dashicons"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>Toolbar row 1</span> <input type="text" placeholder="bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv" value="<?php echo $wpecp_toolbar1 ?>" data-wpecp-field="_toolbar1"></label>
-					<label><span>Toolbar row 2</span> <input type="text" placeholder="formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help" value="<?php echo $wpecp_toolbar2 ?>" data-wpecp-field="_toolbar2"></label>
-					<label><span>Toolbar row 3</span> <input type="text" placeholder="" value="<?php echo $wpecp_toolbar3 ?>" data-wpecp-field="_toolbar3"></label>
-					<label><span>Toolbar row 4</span> <input type="text" placeholder="" value="<?php echo $wpecp_toolbar4 ?>" data-wpecp-field="_toolbar4"></label>
+					<label><span>Toolbar row 1</span> <input type="text" placeholder="bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv" value="<?php echo esc_attr( $wpecp_toolbar1 ) ?>" data-wpecp-field="_toolbar1"></label>
+					<label><span>Toolbar row 2</span> <input type="text" placeholder="formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help" value="<?php echo esc_attr( $wpecp_toolbar2 ) ?>" data-wpecp-field="_toolbar2"></label>
+					<label><span>Toolbar row 3</span> <input type="text" placeholder="" value="<?php echo esc_attr( $wpecp_toolbar3 ) ?>" data-wpecp-field="_toolbar3"></label>
+					<label><span>Toolbar row 4</span> <input type="text" placeholder="" value="<?php echo esc_attr( $wpecp_toolbar4 ) ?>" data-wpecp-field="_toolbar4"></label>
 				</div>
 			</fieldset>
 		</div>
@@ -101,11 +101,11 @@
 						<span class="dashicons dashicons-yes"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>All Buttons</span> <input type="text" placeholder="wpecp-button" value="<?php echo $wpecp_classes_all ?>" data-wpecp-field="_all"></label>
-					<label><span>WordPress Reply Button</span> <input type="text" placeholder="wpecp-reply-comment" value="<?php echo $wpecp_classes_reply ?>" data-wpecp-field="_reply"></label>
-					<label><span>Edit Button</span> <input type="text" placeholder="wpecp-edit" value="<?php echo $wpecp_classes_edit ?>" data-wpecp-field="_edit"></label>
-					<label><span>Submit Edit Button</span> <input type="text" placeholder="wpecp-submit-edit" value="<?php echo $wpecp_classes_submit ?>" data-wpecp-field="_submit"></label>
-					<label><span>Cancel Edit Button</span> <input type="text" placeholder="wpecp-cancel-edit" value="<?php echo $wpecp_classes_cancel ?>" data-wpecp-field="_cancel"></label>
+					<label><span>All Buttons</span> <input type="text" placeholder="wpecp-button" value="<?php echo esc_attr( $wpecp_classes_all ); ?>" data-wpecp-field="_all"></label>
+					<label><span>WordPress Reply Button</span> <input type="text" placeholder="wpecp-reply-comment" value="<?php echo esc_attr( $wpecp_classes_reply ); ?>" data-wpecp-field="_reply"></label>
+					<label><span>Edit Button</span> <input type="text" placeholder="wpecp-edit" value="<?php echo esc_attr( $wpecp_classes_edit ); ?>" data-wpecp-field="_edit"></label>
+					<label><span>Submit Edit Button</span> <input type="text" placeholder="wpecp-submit-edit" value="<?php echo esc_attr( $wpecp_classes_submit ); ?>" data-wpecp-field="_submit"></label>
+					<label><span>Cancel Edit Button</span> <input type="text" placeholder="wpecp-cancel-edit" value="<?php echo esc_attr( $wpecp_classes_cancel ); ?>" data-wpecp-field="_cancel"></label>
 				</div>
 
 			</fieldset>
@@ -128,15 +128,15 @@
 						<span class="dashicons"></span>
 						<span class="message"></span>
 					</div>
-					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo $wp_id_comments ?>" data-wpecp-field="_comments"></label>
+					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo esc_attr( $wp_id_comments ); ?>" data-wpecp-field="_comments"></label>
 					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
 					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
-					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo $wp_id_respond ?>" data-wpecp-field="_respond"></label>
-					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo $wp_id_comment_form ?>" data-wpecp-field="_comment_form"></label>
-					<label><span>Comment Textarea</span> <input type="text" placeholder="#comment" value="<?php echo $wp_id_comment_textarea ?>" data-wpecp-field="_comment_textarea"></label>
-					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo $wp_id_reply ?>" data-wpecp-field="_reply"></label>
-					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo $wp_id_cancel ?>" data-wpecp-field="_cancel"></label>
-					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo $wp_id_submit ?>" data-wpecp-field="_submit"></label>
+					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo esc_attr( $wp_id_respond ); ?>" data-wpecp-field="_respond"></label>
+					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo esc_attr( $wp_id_comment_form ); ?>" data-wpecp-field="_comment_form"></label>
+					<label><span>Comment Textarea</span> <input type="text" placeholder="#comment" value="<?php echo esc_attr( $wp_id_comment_textarea ); ?>" data-wpecp-field="_comment_textarea"></label>
+					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo esc_attr( $wp_id_reply ); ?>" data-wpecp-field="_reply"></label>
+					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo esc_attr( $wp_id_cancel ); ?>" data-wpecp-field="_cancel"></label>
+					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo esc_attr( $wp_id_submit ); ?>" data-wpecp-field="_submit"></label>
 				</div>
 			</fieldset>
 		</div>
