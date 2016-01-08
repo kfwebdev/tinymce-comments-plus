@@ -8,7 +8,7 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Enhance comments with the built in WordPress TinyMCE editor, inline comment editing and asynchronous comment posting.
+Enhance your site's comments with the built in WordPress TinyMCE editor, inline comment editing and asynchronous comment posting.
 
 == Description ==
 
