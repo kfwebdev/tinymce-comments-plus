@@ -14,16 +14,16 @@ Enhance your site's comments with the built in WordPress TinyMCE editor, inline 
 
 WP Editor Comments Plus brings the power and ease of the WordPress content editor TinyMCE to your website's comments.
 
-=Richer Comment Content=
+= Richer Comment Content =
 WP Editor Comments Plus enables users to more easily and quickly compose their comments with formatting, images, colors, links and more.
 
-=Configurable Editing=
+= Configurable Editing =
 Logged in users can edit comments after posting them with the TinyMCE editor. This can be set to expire after certain amount of time or disabled entirely.
 
-=Asynchronous Comment Posting=
+= Asynchronous Comment Posting =
 With WP Editor Comments Plus activated, your site's comments are submitted asynchronously allowing your users an uninterrupted commenting experience.
 
-=Customizable Toolbars=
+= Customizable Toolbars =
 The editor toolbars in WP Editor Comments Plus can be configured up to 4 rows. Customize each row's buttons to fit your site's needs. Choose from buttons supported in standard WordPress installations by referencing this [list](http://archive.tinymce.com/wiki.php/TinyMCE3x:Buttons/controls). Note: only buttons supported by the standard WordPress TinyMCE plugins are available.
 
 == Installation ==
