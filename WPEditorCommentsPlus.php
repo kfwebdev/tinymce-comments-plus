@@ -132,28 +132,28 @@ class WPEditorCommentsPlus {
 		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
 		$this->option_toolbar1 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar1' ) );
-		$this->option_toolbar1 = ( empty( trim( $this->option_toolbar1 ) ) ) ? wpecp_toolbar1 : $this->option_toolbar1;
+		$this->option_toolbar1 = ( trim( $this->option_toolbar1 ) == false ) ? wpecp_toolbar1 : $this->option_toolbar1;
 		$this->option_toolbar2 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar2' ) );
-		$this->option_toolbar2 = ( empty( trim( $this->option_toolbar2 ) ) ) ? wpecp_toolbar2 : $this->option_toolbar2;
+		$this->option_toolbar2 = ( trim( $this->option_toolbar2 ) == false ) ? wpecp_toolbar2 : $this->option_toolbar2;
 		$this->option_toolbar3 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar3' ) );
-		$this->option_toolbar3 = ( empty( trim( $this->option_toolbar3 ) ) ) ? '' : $this->option_toolbar3;
+		$this->option_toolbar3 = ( trim( $this->option_toolbar3 ) == false ) ? '' : $this->option_toolbar3;
 		$this->option_toolbar4 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar4' ) );
-		$this->option_toolbar4 = ( empty( trim( $this->option_toolbar4 ) ) ) ? '' : $this->option_toolbar4;
+		$this->option_toolbar4 = ( trim( $this->option_toolbar4 ) == false ) ? '' : $this->option_toolbar4;
 
 		$this->option_wp_id_comments = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comments' ) );
-		$this->option_wp_id_comments = ( empty( trim( $this->option_wp_id_comments ) ) ) ? wpecp_id_comments : $this->option_wp_id_comments;
+		$this->option_wp_id_comments = ( trim( $this->option_wp_id_comments ) == false ) ? wpecp_id_comments : $this->option_wp_id_comments;
 		$this->option_wp_id_respond = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_respond' ) );
-		$this->option_wp_id_respond = ( empty( trim( $this->option_wp_id_respond ) ) ) ? wpecp_id_respond : $this->option_wp_id_respond;
+		$this->option_wp_id_respond = ( trim( $this->option_wp_id_respond ) == false ) ? wpecp_id_respond : $this->option_wp_id_respond;
 		$this->option_wp_id_comment_form = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comment_form' ) );
-		$this->option_wp_id_comment_form = ( empty( trim( $this->option_wp_id_comment_form ) ) ) ? wpecp_id_comment_form : $this->option_wp_id_comment_form;
+		$this->option_wp_id_comment_form = ( trim( $this->option_wp_id_comment_form ) == false ) ? wpecp_id_comment_form : $this->option_wp_id_comment_form;
 		$this->option_wp_id_comment_textarea = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comment_textarea' ) );
-		$this->option_wp_id_comment_textarea = ( empty( trim( $this->option_wp_id_comment_textarea ) ) ) ? wpecp_id_comment_textarea : $this->option_wp_id_comment_textarea;
+		$this->option_wp_id_comment_textarea = ( trim( $this->option_wp_id_comment_textarea ) == false ) ? wpecp_id_comment_textarea : $this->option_wp_id_comment_textarea;
 		$this->option_wp_id_comment_reply_link = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_reply' ) );
-		$this->option_wp_id_comment_reply_link = ( empty( trim( $this->option_wp_id_comment_reply_link ) ) ) ? wpecp_css_comment_reply_button_class : $this->option_wp_id_comment_reply_link;
+		$this->option_wp_id_comment_reply_link = ( trim( $this->option_wp_id_comment_reply_link ) == false ) ? wpecp_css_comment_reply_button_class : $this->option_wp_id_comment_reply_link;
 		$this->option_wp_id_cancel_comment_reply = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_cancel' ) );
-		$this->option_wp_id_cancel_comment_reply = ( empty( trim( $this->option_wp_id_cancel_comment_reply ) ) ) ? wpecp_id_cancel_comment_reply : $this->option_wp_id_cancel_comment_reply;
+		$this->option_wp_id_cancel_comment_reply = ( trim( $this->option_wp_id_cancel_comment_reply ) == false ) ? wpecp_id_cancel_comment_reply : $this->option_wp_id_cancel_comment_reply;
 		$this->option_wp_id_submit_comment = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_submit' ) );
-		$this->option_wp_id_submit_comment = ( empty( trim( $this->option_wp_id_submit_comment ) ) ) ? wpecp_id_submit_comment : $this->option_wp_id_submit_comment;
+		$this->option_wp_id_submit_comment = ( trim( $this->option_wp_id_submit_comment ) == false ) ? wpecp_id_submit_comment : $this->option_wp_id_submit_comment;
 
 		add_filter( 'plugin_action_links_' . wpecp_plugin_file, array( $this, 'add_plugin_action_links' ), 10, 4 );
 
