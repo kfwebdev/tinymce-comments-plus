@@ -1,7 +1,4 @@
-# WP Editor Comments Plus
-Enhance comments with the built in WordPress TinyMCE editor, inline comment editing and asynchronous comment posting.
-
-=== wp-editor-comments-plus ===
+=== WP Editor Comments Plus ===
 Contributors: kfwebdev
 Donate link: http://kentarofischer.com
 Tags: comments, spam
