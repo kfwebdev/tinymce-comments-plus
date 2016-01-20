@@ -14,7 +14,7 @@
  * Plugin Name: WP Editor Comments Plus
  * Plugin URI:  http://kentarofischer.com
  * Description: Enhance WordPress comments with the TinyMCE Editor, Inline Comment Editing and Asynchronous Posting.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Kentaro Fischer
  * Author URI:  http://kentarofischer.com
  * Text Domain: wp-editor-comments-plus-locale
