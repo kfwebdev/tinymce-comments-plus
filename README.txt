@@ -55,8 +55,8 @@ Uh oh, it's possible your theme uses different IDs than the default WordPress ID
 == Changelog ==
 
 = 1.0.1 =
-* Added preformatted to editor formatting dropdown menu
-* Fixed cursor jumping to end of line when editing admin text input fields
+* Enhancement: Added preformatted to editor formatting dropdown menu
+* Bug fix: Fixed cursor jumping to end of line when editing admin text input fields
 
 = 1.0 =
 * Initial release
