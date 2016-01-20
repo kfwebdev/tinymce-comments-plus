@@ -668,7 +668,7 @@ class WPEditorCommentsPlus {
 	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
-	  $args['block_formats'] = "Paragraph=p; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
+	  $args['block_formats'] = "Paragraph=p; Preformatted=pre; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
 	 	$args['toolbar1'] = $this->option_toolbar1;
 	 	$args['toolbar2'] = $this->option_toolbar2;
 	 	$args['toolbar3'] = $this->option_toolbar3;
