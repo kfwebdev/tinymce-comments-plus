@@ -312,8 +312,6 @@ wpecp.initAdmin = function() {
 				let field = $( input ).data( 'wpecp-field' );
 				// sanitize input data
 				that.content[ field ] = wpecp.sanitizeHtmlClass( input.value );
-				// update input with clean data
-				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
@@ -369,8 +367,6 @@ wpecp.initAdmin = function() {
 				let field = $( input ).data( 'wpecp-field' );
 				// sanitize input data
 				that.content[ field ] = wpecp.sanitizeHtmlClass( input.value );
-				// update input with clean data
-				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
@@ -426,8 +422,6 @@ wpecp.initAdmin = function() {
 				let field = $( input ).data( 'wpecp-field' );
 				// sanitize input data
 				that.content[ field ] = wpecp.sanitizeHtmlId( input.value );
-				// update input with clean data
-				$( input ).val( that.content[ field ] );
 			});
 
 			this.model.set( 'security', this.nonce );
