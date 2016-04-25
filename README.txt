@@ -3,8 +3,8 @@ Contributors: kfwebdev
 Donate link: http://kentarofischer.com
 Tags: comments, comment, editor, ajax, tinymce, async, wysiwyg, tinymce
 Requires at least: 3.5.1
-Tested up to: 4.4
-Stable tag: 1.0.1
+Tested up to: 4.5
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ Uh oh, it's possible your theme uses different IDs than the default WordPress ID
 2. Settings options for WP Editor Comments Plus.
 
 == Changelog ==
+
+= 1.1 =
+* Enhancement: Added option to hide toolbars by setting them to 'none' (without quotes)
+* Bug fix: Added li, strong and em tags to allowed html tags in comments to address issue with formatting being lost
 
 = 1.0.1 =
 * Enhancement: Added preformatted to editor formatting dropdown menu

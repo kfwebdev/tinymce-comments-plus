@@ -23,7 +23,7 @@ class WPEditorCommentsPlus {
 	 *
 	 * @var     string
 	 */
-	protected $version = "1.0.1";
+	protected $version = "1.1";
 
 		/**
 		 * Name of this plugin.
