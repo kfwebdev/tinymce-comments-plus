@@ -131,14 +131,30 @@ class WPEditorCommentsPlus {
 		$this->option_editing_enabled = ( $this->option_editing_enabled === 'off' ) ? 'off' : 'on';
 		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
+		$this->option_show_toolbars = false;
+
 		$this->option_toolbar1 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar1' ) );
 		$this->option_toolbar1 = ( trim( $this->option_toolbar1 ) == false ) ? wpecp_toolbar1 : $this->option_toolbar1;
+		if ( $this->option_toolbar1 == 'none' ) { $this->option_toolbar1 = false;	} else { $this->option_show_toolbars = true; }
+
 		$this->option_toolbar2 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar2' ) );
 		$this->option_toolbar2 = ( trim( $this->option_toolbar2 ) == false ) ? wpecp_toolbar2 : $this->option_toolbar2;
+		if ( $this->option_toolbar2 == 'none' ) { $this->option_toolbar2 = false;	} else { $this->option_show_toolbars = true; }
+
+		// if toolbar1 is hidden and toolbar2 is not, replace toolbar1 with toolbar2.
+		// this is done to initialize tinymce's configuration correctly.
+		if ( ! $this->option_toolbar1 && $this->option_toolbar2 != false ) {
+			$this->option_toolbar1 = $this->option_toolbar2;
+			$this->option_toolbar2 = false;
+		}
+
 		$this->option_toolbar3 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar3' ) );
 		$this->option_toolbar3 = ( trim( $this->option_toolbar3 ) == false ) ? '' : $this->option_toolbar3;
+		if ( $this->option_toolbar3 == 'none' || strlen( $this->option_toolbar3 ) == 0 ) { $this->option_toolbar3 = false; } else { $this->option_show_toolbars = true; }
+
 		$this->option_toolbar4 = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_toolbars . '_toolbar4' ) );
 		$this->option_toolbar4 = ( trim( $this->option_toolbar4 ) == false ) ? '' : $this->option_toolbar4;
+		if ( $this->option_toolbar4 == 'none' || strlen( $this->option_toolbar4 ) == 0 ) { $this->option_toolbar4 = false; } else { $this->option_show_toolbars = true; }
 
 		$this->option_wp_id_comments = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comments' ) );
 		$this->option_wp_id_comments = ( trim( $this->option_wp_id_comments ) == false ) ? wpecp_id_comments : $this->option_wp_id_comments;
@@ -270,6 +286,7 @@ class WPEditorCommentsPlus {
 			'editingExpiration' => $this->option_editing_expiration,
 
 			wpecp_prefix . 'plugins' => wpecp_plugins,
+			wpecp_prefix . 'show_toolbars' => $this->option_show_toolbars,
 			wpecp_prefix . 'toolbar1' => $this->option_toolbar1,
 			wpecp_prefix . 'toolbar2' => $this->option_toolbar2,
 			wpecp_prefix . 'toolbar3' => $this->option_toolbar3,
@@ -633,8 +650,8 @@ class WPEditorCommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	 public function filter_tinymce_buttons_1( $buttons, $editor_id ) {
-		 $buttons = explode( ' ', $this->option_toolbar1 );
+	 public function filter_tinymce_buttons_1( $buttons ) {
+		 $buttons = ( $this->option_toolbar1 == false ) ? [] : explode( ' ', $this->option_toolbar1 );
 
 		 return $buttons;
 	 }
@@ -643,7 +660,7 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	 public function filter_tinymce_buttons_2( $buttons ) {
-		 $buttons = explode( ' ', $this->option_toolbar2 );
+		 $buttons = ( $this->option_toolbar2 == false ) ? [] : explode( ' ', $this->option_toolbar2 );
 
 		 return $buttons;
 	 }
@@ -669,6 +686,7 @@ class WPEditorCommentsPlus {
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
 	  $args['block_formats'] = "Paragraph=p; Preformatted=pre; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
+	 	if ( ! $this->option_show_toolbars ) { $args['toolbar'] = $this->option_show_toolbars; }
 	 	$args['toolbar1'] = $this->option_toolbar1;
 	 	$args['toolbar2'] = $this->option_toolbar2;
 	 	$args['toolbar3'] = $this->option_toolbar3;
@@ -692,26 +710,26 @@ class WPEditorCommentsPlus {
 	public function filter_tinymce_editor() {
 		// remove # from comment textarea id
 		$comment_textarea = str_replace( '#', '', $this->option_wp_id_comment_textarea );
+		$editor_config = array(
+			'skin' => 'wp_theme',
+	    'textarea_rows' => 12,
+	    'teeny' => false,
+			'tinymce' => array(
+				'plugins' => wpecp_plugins,
+				'theme_advanced_buttons1' => $this->option_toolbar1,
+        'theme_advanced_buttons2' => $this->option_toolbar2,
+				'theme_advanced_buttons3' => $this->option_toolbar3,
+        'theme_advanced_buttons4' => $this->option_toolbar4
+			),
+			'wpeditimage_disable_captions' => true,
+	    'quicktags' => false,
+	    'media_buttons' => false
+		);
+		if ( ! $this->option_show_toolbars ) { $editor_config['toolbar'] = $this->option_show_toolbars; }
 
 	  ob_start();
 
-	  wp_editor( '', $comment_textarea,
-			array(
-				'skin' => 'wp_theme',
-			    'textarea_rows' => 12,
-			    'teeny' => false,
-					'tinymce' => array(
-						'plugins' => wpecp_plugins,
-						'theme_advanced_buttons1' => $this->option_toolbar1,
-	          'theme_advanced_buttons2' => $this->option_toolbar2,
-						'theme_advanced_buttons3' => $this->option_toolbar3,
-	          'theme_advanced_buttons4' => $this->option_toolbar4
-					),
-					'wpeditimage_disable_captions' => true,
-			    'quicktags' => false,
-			    'media_buttons' => false
-	  		)
-	  );
+	  wp_editor( '', $comment_textarea, $editor_config );
 
 	  $editor = ob_get_contents();
 

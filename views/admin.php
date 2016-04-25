@@ -69,7 +69,7 @@
 					$wpecp_toolbar4 = get_option( wpecp_ajax_custom_toolbars .'_toolbar4' );
 				?>
 				<legend><span class="dashicons dashicons-editor-kitchensink"></span> Customize TinyMCE Toolbar Buttons</legend>
-				<p>Configure toolbar row buttons in TinyMCE for comments. Leave blank for default layout.</p>
+				<p>Configure toolbar row buttons in TinyMCE for comments. Leave blank for default layout. Type none to hide any toolbar.</p>
 
 				<div class="box" data-wpecp-nc="<?php echo $nonce ?>">
 					<div class="confirmed">
