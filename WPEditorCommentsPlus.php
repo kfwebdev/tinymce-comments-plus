@@ -809,6 +809,8 @@ class WPEditorCommentsPlus {
 				'target' => true
 			),
 			'del' => true,
+			'strong' => true,
+			'em' => true,
 			'h1' => array(
 				'style' => true
 			),
@@ -833,24 +835,21 @@ class WPEditorCommentsPlus {
 				'style' => true,
 				'title' => true
 			),
-			'ol' => array(
-				'style' => true,
-				'li' => array(
-					'style' => true
-				)
-			),
 			'p' => array(
-				'style' => true
+				'style' => true,
 			),
 			'pre' => true,
 			'span' => array(
-				'style' => true
+				'style' => true,
+			),
+			'ol' => array(
+				'style' => true,
 			),
 			'ul' => array(
 				'style' => true,
-				'li' => array(
-					'style' => true
-				)
+			),
+			'li' => array(
+				'style' => true,
 			)
 		);
 
