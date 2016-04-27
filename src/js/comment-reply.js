@@ -7,7 +7,8 @@ window.addComment = {
 			cancel      = t.I( 'cancel-comment-reply-link' ),
 			parent      = t.I( 'comment_parent' ),
 			post        = t.I( 'comment_post_ID' ),
-			commentForm = respond.getElementsByTagName( 'form' )[0];
+			commentForm = respond.getElementsByTagName( 'form' )[0],
+			commentTextarea = commentForm.getElementsByTagName( 'textarea' )[0];
 
 		if ( ! comm || ! respond || ! cancel || ! parent || ! commentForm ) {
 			return;
@@ -23,7 +24,34 @@ window.addComment = {
 			respond.parentNode.insertBefore( div, respond );
 		}
 
-		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, commId );
+		// Store tinymce's configuration settings to rebuild the tinymce instance.
+		wpecp.editorSettings = tinymce.settings;
+		// If toolbar is not defined then disable the toolbar. Else build the toolbar array from the configuration settings.
+		wpecp.toolbars = ( typeof tinymce.settings.toolbar !== 'undefined'  ) ? false : [
+			tinymce.settings.toolbar1,
+			tinymce.settings.toolbar2,
+			tinymce.settings.toolbar3,
+			tinymce.settings.toolbar4
+		];
+
+		// Initialize new instance of tinyMCE with configuration settings of previous tinyMCE instance
+		wpecp.initEditor = function() {
+			tinymce.init({
+					menubar: false,
+					height: '100%',
+					selector: '#' + commentTextarea.id,
+					content_css: wpecp.editorSettings.content_css,
+					wpeditimage_disable_captions: true,
+					plugins: [
+						wpecp.editorSettings.plugins
+					],
+					toolbar: wpecp.toolbars
+			});
+		};
+
+		// Before moving the respond form, remove the tinyMCE instance.
+		// This is because tinyMCE must be reattached after moving it's element to function properly.
+		tinymce.activeEditor.remove();
 
 		comm.parentNode.insertBefore( respond, comm.nextSibling );
 		if ( post && postId ) {
@@ -32,8 +60,10 @@ window.addComment = {
 		parent.value = parentId;
 		cancel.style.display = '';
 
-		tinymce.EditorManager.execCommand( 'mceAddEditor', true, commId );
+		// After the respond form has been moved below the comment, reattach a new tinyMCE instance.
+		wpecp.initEditor();
 
+		// After attaching the tinyMCE instance, set focus to the new tinyMCE instance.
 		setTimeout( function() {
 			tinymce.activeEditor.focus();
 		}, 500 );
@@ -47,7 +77,8 @@ window.addComment = {
 				return;
 			}
 
-			tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, commId );
+			// If the respond form is canceled, remove the tinyMCE instance again before the form is moved back.
+			tinymce.activeEditor.remove();
 
 			t.I( 'comment_parent' ).value = '0';
 			temp.parentNode.insertBefore( respond, temp );
@@ -55,7 +86,9 @@ window.addComment = {
 			this.style.display = 'none';
 			this.onclick = null;
 
-			tinymce.EditorManager.execCommand( 'mceAddEditor', true, commId );
+			// After the respond form has been moved back, reattach a new tinyMCE instance.
+			// We don't set focus to this instance.
+			wpecp.initEditor();
 
 			return false;
 		};

@@ -4,10 +4,8 @@
     margin-bottom: 1.25em;
 }
 
-.wpecp-editor {
-    .mce-tinymce.mce-container {
-        border: 1px solid #eaeaea;
-    }
+.mce-tinymce.mce-container.mce-panel {
+  border: 1px solid #eaeaea;
 }
 
 .wpecp-edit {
