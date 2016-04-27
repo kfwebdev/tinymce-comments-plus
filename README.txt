@@ -54,6 +54,11 @@ Uh oh, it's possible your theme uses different IDs than the default WordPress ID
 
 == Changelog ==
 
+= 1.1.2 =
+Release date: April 26th, 2016
+
+* Bug fix: Addressed issue with reply button breaking respond form
+
 = 1.1 =
 * Enhancement: Added option to hide toolbars by setting them to 'none' (without quotes)
 * Bug fix: Added li, strong and em tags to allowed html tags in comments to address issue with formatting being lost
