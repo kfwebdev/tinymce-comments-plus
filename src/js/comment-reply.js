@@ -49,6 +49,16 @@ window.addComment = {
 			});
 		};
 
+		// Set focus on tinyMCE editor
+		wpecp.focusEditor = function() {
+			if ( typeof wpecp.focusTimeout !== 'undefined' ) {
+				clearTimeout( wpecp.focusTimeout );
+			}
+			wpecp.focusTimeout = setTimeout( function() {
+				tinymce.activeEditor.focus();
+			}, 500 );
+		};
+
 		// Before moving the respond form, remove the tinyMCE instance.
 		// This is because tinyMCE must be reattached after moving it's element to function properly.
 		tinymce.activeEditor.remove();
@@ -62,11 +72,8 @@ window.addComment = {
 
 		// After the respond form has been moved below the comment, reattach a new tinyMCE instance.
 		wpecp.initEditor();
-
 		// After attaching the tinyMCE instance, set focus to the new tinyMCE instance.
-		setTimeout( function() {
-			tinymce.activeEditor.focus();
-		}, 500 );
+		wpecp.focusEditor();
 
 		cancel.onclick = function() {
 			var t       = addComment,
