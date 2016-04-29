@@ -127,7 +127,7 @@ wpecp.initWPECP = function() {
 
 ( function( $ ){
    $(function(){
-      wpecp.initWPECP();
+    wpecp.initWPECP();
 		wpecp.bindEditors();
    });
 })( jQuery );

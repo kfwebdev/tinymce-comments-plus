@@ -25,13 +25,13 @@ window.addComment = {
 		}
 
 		// Store tinymce's configuration settings to rebuild the tinymce instance.
-		wpecp.editorSettings = tinymce.settings;
+		wpecp.tinymceSettings = tinymce.settings;
 		// If toolbar is not defined then disable the toolbar. Else build the toolbar array from the configuration settings.
-		wpecp.toolbars = ( typeof tinymce.settings.toolbar !== 'undefined'  ) ? false : [
-			tinymce.settings.toolbar1,
-			tinymce.settings.toolbar2,
-			tinymce.settings.toolbar3,
-			tinymce.settings.toolbar4
+		wpecp.toolbars = ( ! wpecp.globals.wpecp_show_toolbars ) ? false : [
+			wpecp.globals.wpecp_toolbar1,
+			wpecp.globals.wpecp_toolbar2,
+			wpecp.globals.wpecp_toolbar3,
+			wpecp.globals.wpecp_toolbar4
 		];
 
 		// Initialize new instance of tinyMCE with configuration settings of previous tinyMCE instance
@@ -40,10 +40,10 @@ window.addComment = {
 					menubar: false,
 					height: '100%',
 					selector: '#' + commentTextarea.id,
-					content_css: wpecp.editorSettings.content_css,
+					content_css: wpecp.tinymceSettings.content_css,
 					wpeditimage_disable_captions: true,
 					plugins: [
-						wpecp.editorSettings.plugins
+						wpecp.tinymceSettings.plugins
 					],
 					toolbar: wpecp.toolbars
 			});
