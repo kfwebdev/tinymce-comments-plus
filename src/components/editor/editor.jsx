@@ -24,8 +24,8 @@ class EditorComponent extends React.Component {
    }
 
    componentDidMount() {
-      let that = this,
-          commentContent = $( '#' + this.props.contentId ).html();
+      let that = this;
+      let commentContent = $( '#' + this.props.contentId ).html();
       this.setState({ tinyMCEcontent: commentContent });
       $( window ).on( 'toggleEditor', function( event ) {
          that.toggleEditor( event.editorId );
@@ -73,12 +73,14 @@ class EditorComponent extends React.Component {
     tinymce.init({
         menubar: false,
         height: '100%',
-        selector: "textarea",
+        selector: "textarea#" + this.props.editorId,
         content_css: this.props.wpecpGlobals.editorStyles,
         wpeditimage_disable_captions: true,
         setup : function(editor) {
           editor.on('change', function(e) {
-            that.setState({ tinyMCEcontent: editor.getContent()});
+            that.setState({
+              tinyMCEcontent: editor.getContent()
+            });
           });
         },
         plugins: [
