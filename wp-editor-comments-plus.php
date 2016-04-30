@@ -8,13 +8,13 @@
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
  * @license   GPL-2.0+
  * @link      http://kentarofischer.com
- * @copyright 1-4-2015 Kentaro Fischer
+ * @copyright 4-29-2016 Kentaro Fischer
  *
  * @wordpress-plugin
  * Plugin Name: WP Editor Comments Plus
  * Plugin URI:  http://kentarofischer.com
  * Description: Enhance WordPress comments with the TinyMCE Editor, Inline Comment Editing and Asynchronous Posting.
- * Version:     1.1.2
+ * Version:     1.1.3
  * Author:      Kentaro Fischer
  * Author URI:  http://kentarofischer.com
  * Text Domain: wp-editor-comments-plus-locale

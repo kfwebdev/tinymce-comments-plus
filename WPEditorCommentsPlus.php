@@ -6,7 +6,7 @@
  * @author    Kentaro Fischer <webdev@kentarofischer.com>
  * @license   GPL-2.0+
  * @link      http://kentarofischer.com
- * @copyright 1-4-2015 Kentaro Fischer
+ * @copyright 4-29-2016 Kentaro Fischer
  */
 
 /**
@@ -23,7 +23,7 @@ class WPEditorCommentsPlus {
 	 *
 	 * @var     string
 	 */
-	protected $version = "1.1.2";
+	protected $version = "1.1.3";
 
 		/**
 		 * Name of this plugin.
