@@ -61,7 +61,7 @@ window.addComment = {
 
 		// Before moving the respond form, remove the tinyMCE instance.
 		// This is because tinyMCE must be reattached after moving it's element to function properly.
-		tinymce.activeEditor.remove();
+		tinymce.get( commentTextarea.id ).remove();
 
 		comm.parentNode.insertBefore( respond, comm.nextSibling );
 		if ( post && postId ) {
@@ -85,7 +85,7 @@ window.addComment = {
 			}
 
 			// If the respond form is canceled, remove the tinyMCE instance again before the form is moved back.
-			tinymce.activeEditor.remove();
+			tinymce.get( commentTextarea.id ).remove();
 
 			t.I( 'comment_parent' ).value = '0';
 			temp.parentNode.insertBefore( respond, temp );

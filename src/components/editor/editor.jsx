@@ -92,6 +92,10 @@ class EditorComponent extends React.Component {
 
     // update tinyMCE content
     tinyMCE.get( this.props.editorId ).setContent( this.state.tinyMCEcontent );
+
+    if ( typeof wpecp.focusTimeout !== 'undefined' ) {
+      clearTimeout( wpecp.focusTimeout );
+    }
     tinyMCE.get( this.props.editorId ).focus();
   }
 
@@ -143,7 +147,7 @@ class EditorComponent extends React.Component {
   }
 
   removeTinyMCE() {
-    tinymce.remove( this.props.editorId );
+    tinymce.get( this.props.editorId ).remove();
   }
 
   render() {
