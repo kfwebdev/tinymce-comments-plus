@@ -78,7 +78,7 @@
 					</div>
 					<label><span>Toolbar row 1</span> <input type="text" placeholder="bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv" value="<?php echo esc_attr( $wpecp_toolbar1 ) ?>" data-wpecp-field="_toolbar1"></label>
 					<label><span>Toolbar row 2</span> <input type="text" placeholder="formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help" value="<?php echo esc_attr( $wpecp_toolbar2 ) ?>" data-wpecp-field="_toolbar2"></label>
-					<label><span>Toolbar row 3</span> <input type="text" placeholder="" value="<?php echo esc_attr( $wpecp_toolbar3 ) ?>" data-wpecp-field="_toolbar3"></label>
+					<label><span>Toolbar row 3</span> <input type="text" placeholder="fontselect fontsizeselect" value="<?php echo esc_attr( $wpecp_toolbar3 ) ?>" data-wpecp-field="_toolbar3"></label>
 					<label><span>Toolbar row 4</span> <input type="text" placeholder="" value="<?php echo esc_attr( $wpecp_toolbar4 ) ?>" data-wpecp-field="_toolbar4"></label>
 				</div>
 			</fieldset>
