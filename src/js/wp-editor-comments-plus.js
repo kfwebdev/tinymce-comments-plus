@@ -38,8 +38,8 @@ wpecp.initWPECP = function() {
 		initialize: function() {
 			this.$commentForm = $( wpecp.globals.wpecp_id_comment_form );
 			this.$textArea = $( wpecp.globals.wpecp_id_comment_textarea );
-			this.$submitButton = $( wpecp.globals.wpecp_id_submit_comment )
-			this.$submitButton.addClass( wpecp.globals.wpecp_css_button + ' ' + wpecp.globals.wpecp_css_submit_button )
+			this.$submitButton = $( wpecp.globals.wpecp_id_submit_comment );
+			this.$submitButton.addClass( wpecp.globals.wpecp_css_button + ' ' + wpecp.globals.wpecp_css_submit_button );
 		},
 
 		submitForm: function( event ) {

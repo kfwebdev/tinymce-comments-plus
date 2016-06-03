@@ -15,7 +15,8 @@ class EditorComponent extends React.Component {
       this.state = {
          showEditor: false,
          tinyMCEcontent: '',
-         showSpinner: false
+         showSpinner: false,
+         disableSubmit: false
       };
    }
 
@@ -26,7 +27,9 @@ class EditorComponent extends React.Component {
    componentDidMount() {
       let that = this;
       let commentContent = $( '#' + this.props.contentId ).html();
-      this.setState({ tinyMCEcontent: commentContent });
+      this.setState({
+        tinyMCEcontent: commentContent
+      });
       $( window ).on( 'toggleEditor', function( event ) {
          that.toggleEditor( event.editorId );
       });
@@ -34,7 +37,9 @@ class EditorComponent extends React.Component {
 
   toggleEditor( editorId ) {
       if ( this.props.editorId === editorId ) {
-         this.setState({ showEditor: !this.state.showEditor });
+         this.setState({
+           showEditor: !this.state.showEditor
+         });
 
          // if showEditor was false (before setState above)
          if ( !this.state.showEditor ) {
@@ -130,22 +135,30 @@ class EditorComponent extends React.Component {
     // validate nonce
     if ( ! re_nonce.test( nonce ) ) { return false; }
 
-    this.setState({ showSpinner: true });
+    if ( ! this.state.disableSubmit ) {
+      this.setState({
+        showSpinner: true,
+        disableSubmit: true
+      });
 
-    $.ajax({
-      url: this.props.wpecpGlobals.ajaxUrl,
-      type: 'post',
-      data: $.param( commentEditData )
-    })
-    .done( function( data ){
-      $content.html( data.comment_content );
-      that.cancelEditor();
-    })
-    .fail( function( data ){
-    })
-    .then( function() {
-      that.setState({ showSpinner: false });
-    });
+      $.ajax({
+        url: this.props.wpecpGlobals.ajaxUrl,
+        type: 'post',
+        data: $.param( commentEditData )
+      })
+      .done( function( data ){
+        $content.html( data.comment_content );
+        that.cancelEditor();
+      })
+      .fail( function( data ){
+      })
+      .then( function() {
+        that.setState({
+          showSpinner: false,
+          disableSubmit: false
+        });
+      });
+    }
   }
 
   removeTinyMCE() {
