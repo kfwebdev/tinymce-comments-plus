@@ -1,10 +1,10 @@
 === WP Editor Comments Plus ===
-Contributors: kfwebdev
+Contributors: neosnc
 Donate link: http://kentarofischer.com
 Tags: comments, comment, editor, ajax, tinymce, async, wysiwyg, tinymce
 Requires at least: 3.5.1
 Tested up to: 4.5.1
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,11 @@ Uh oh, it's possible your theme uses different IDs than the default WordPress ID
 2. Settings options for WP Editor Comments Plus.
 
 == Changelog ==
+
+= 1.1.4 =
+Release date: June 3rd, 2016
+
+* Bug fix: Added check to prevent multiple comment updates
 
 = 1.1.3 =
 Release date: April 29th, 2016
