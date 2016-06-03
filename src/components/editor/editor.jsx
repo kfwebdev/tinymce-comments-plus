@@ -151,6 +151,7 @@ class EditorComponent extends React.Component {
         that.cancelEditor();
       })
       .fail( function( data ){
+        // error
       })
       .then( function() {
         that.setState({

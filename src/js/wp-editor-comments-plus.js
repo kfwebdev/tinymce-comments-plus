@@ -40,6 +40,7 @@ wpecp.initWPECP = function() {
 			this.$textArea = $( wpecp.globals.wpecp_id_comment_textarea );
 			this.$submitButton = $( wpecp.globals.wpecp_id_submit_comment );
 			this.$submitButton.addClass( wpecp.globals.wpecp_css_button + ' ' + wpecp.globals.wpecp_css_submit_button );
+			this.disableSubmit = false;
 		},
 
 		submitForm: function( event ) {
@@ -53,39 +54,46 @@ wpecp.initWPECP = function() {
 			this.$submitButton.val( 'Posting...' );
 			this.$submitButton.attr( 'disabled', true );
 
-			$.ajax({
-				url: this.$commentForm.attr( 'action' ),
-				type: 'post',
-				data: this.$commentForm.serialize()
-			})
-			.done( function( data ){
-				self.$el.find( wpecp.globals.wpecp_id_cancel_comment_reply ).click();
-				self.$submitButton.attr( 'disabled', false );
-				self.$submitButton.val( submitText );
-				tinymce.activeEditor.setContent( '' );
+			if ( ! this.disableSubmit ) {
+				this.disableSubmit = true;
 
-				var
-					$commentData = $( data ).find( wpecp.globals.wpecp_id_comments ),
-					$commentsList = $( wpecp.globals.wpecp_id_comments )
-				;
+				$.ajax({
+					url: this.$commentForm.attr( 'action' ),
+					type: 'post',
+					data: this.$commentForm.serialize()
+				})
+				.done( function( data ){
+					self.$el.find( wpecp.globals.wpecp_id_cancel_comment_reply ).click();
+					self.$submitButton.attr( 'disabled', false );
+					self.$submitButton.val( submitText );
+					tinymce.activeEditor.setContent( '' );
 
-				if ( $commentData.length ) {
-					// remove tinymce editor before comments data is updated
-					tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
+					var
+						$commentData = $( data ).find( wpecp.globals.wpecp_id_comments ),
+						$commentsList = $( wpecp.globals.wpecp_id_comments )
+					;
 
-					// replace #comments element with data response #comments element
-					$commentsList.replaceWith( $commentData );
+					if ( $commentData.length ) {
+						// remove tinymce editor before comments data is updated
+						tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, 'comment' );
 
-					// rebind React components
-					wpecp.bindEditors();
+						// replace #comments element with data response #comments element
+						$commentsList.replaceWith( $commentData );
 
-					// restore the tinymce editor in the #respond element
-					tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
-				}
-			})
-			.fail( function( data ){
-				// error
-			});
+						// rebind React components
+						wpecp.bindEditors();
+
+						// restore the tinymce editor in the #respond element
+						tinymce.EditorManager.execCommand( 'mceAddEditor', true, 'comment' );
+					}
+				})
+				.fail( function( data ){
+					// error
+				})
+				.then( function( data ){
+					self.disableSubmit = false;
+				});
+			}
 		}
 	});
 
