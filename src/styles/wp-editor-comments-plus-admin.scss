@@ -25,9 +25,8 @@
             box-shadow: 3px 3px 4px #eaeaea;
 
             p {
-                display: inline-block;
-                margin: 0 1em 0;
-                font-size: .9em;
+                margin: 0 .8em 0;
+                font-size: 1em;
                 font-weight: normal;
             }
 
@@ -115,7 +114,26 @@
               }
             }
 
-            &.comment-editing,
+            .option-row {
+              display: inline-block;
+              margin-top: 10px;
+              width: 100%;
+
+              p {
+                float: left;
+              }
+
+              .options-control {
+                color: #666;
+                font-weight: bold;
+                line-height: 1.5;
+
+                select { color: #999; }
+                select.saved { color: #666; }
+              }
+            }
+
+            &.comment-options,
             &.comment-expiration,
             &.custom-toolbars,
             &.custom-classes,
@@ -123,6 +141,10 @@
               legend {
                 & > .dashicons {
                   color: $sea-green;
+                }
+
+                & + .option-row {
+                  margin-top: 0;
                 }
               }
             }
@@ -165,7 +187,7 @@
                 }
             }
 
-            .editing-control,
+            .options-control,
             .expiration-control {
                 float: right;
 
@@ -189,7 +211,7 @@
             }
 
             .expiration-control,
-            .editing-control {
+            .options-control {
                 & > output {
                     margin-top: 0;
                 }
@@ -293,6 +315,16 @@
                 display: block;
                 margin: 10px 0 0;
 
+                .option-row {
+                  border-top: 2px solid #eee;
+                  padding-top: 10px;
+                }
+
+                legend + .option-row {
+                  border-top: none;
+                  padding-top: 0;
+                }
+
                 &.custom-classes,
                 &.wordpress-ids,
                 &.custom-toolbars {
@@ -303,7 +335,7 @@
                   }
                 }
 
-                &.comment-editing,
+                &.comment-options,
                 &.custom-classes,
                 &.wordpress-ids,
                 &.comment-expiration {
@@ -322,8 +354,8 @@
                       margin: 0 1em;
                     }
 
-                    .editing-control {
-                        margin: .75em 1em 0;
+                    .options-control {
+                        margin: .75em .8em 0;
                         float: none;
                     }
 

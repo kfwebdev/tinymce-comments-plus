@@ -103,11 +103,9 @@ wpecp.initAdmin = function() {
 			// num & scroll lock
 			case ( key >= 144 && key <= 145 ):
 				return false;
-			break;
 
 			default:
 				return true;
-			break;
 		}
 	}
 
@@ -130,13 +128,17 @@ wpecp.initAdmin = function() {
 
 	// Admin Views
 
-	wpecp.editingEnabled = Backbone.View.extend({
-		events: {
-			'click input[type="checkbox"]': 'editingEnabled',
-			'click label': 'editingEnabled'
+	wpecp.optionView = Backbone.View.extend({
+		initialize: function( options ) {
+			this.options = options;
 		},
 
-		editingEnabled: function( event ) {
+		events: {
+			'click input[type="checkbox"]': 'toggleOption',
+			'click label': 'toggleOption'
+		},
+
+		toggleOption: function( event ) {
 			var that = this;
 			this.$input = this.$el.find( 'input[type=checkbox]' );
 			this.$label = this.$el.find( 'label' );
@@ -150,13 +152,41 @@ wpecp.initAdmin = function() {
 			this.checkValue = ( this.$input.is( ':checked' ) ? 'on' : 'off' );
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', wpecpGlobals.editingEnabledAction );
+			this.model.set( 'action', this.options.actionGlobal );
 			this.model.set( 'content', this.checkValue );
 
 			wpecp.ajaxSaveOption( this.model.toJSON() )
 			.done( function( response ) {
 				that.$label.text( ( that.$input.is( ':checked' ) ? 'Enabled' : 'Disabled' ) );
 			});
+		}
+	});
+
+	wpecp.imageUploadSettingView = Backbone.View.extend({
+		initialize: function( options ) {
+			this.options = options;
+		},
+
+		events: {
+			'change select': 'watchSelect'
+		},
+
+		watchSelect: function( event ) {
+			var that = this;
+			this.$select = this.$el.find( 'select' );
+			this.nonce = this.$select.data( 'wpecp-nc' );
+			this.selectValue = this.$select.val();
+
+			this.$select.removeClass('saved');
+
+			this.model.set( 'security', this.nonce );
+			this.model.set( 'action', this.options.actionGlobal );
+			this.model.set( 'content', this.selectValue );
+
+			wpecp.ajaxSaveOption( this.model.toJSON() )
+				.done( function( response ) {
+					that.$select.addClass('saved');
+				});
 		}
 	});
 
@@ -295,7 +325,7 @@ wpecp.initAdmin = function() {
 		updateToolbars: function( event ) {
 			var
 				that = this,
-				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				charCode = (typeof event.which == 'number') ? event.which : event.keyCode,
 				keyChar = String.fromCharCode( charCode )
 			;
 
@@ -350,7 +380,7 @@ wpecp.initAdmin = function() {
 		handleKeypress: function( event ) {
 			var
 				that = this,
-				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				charCode = (typeof event.which == 'number') ? event.which : event.keyCode,
 				keyChar = String.fromCharCode( charCode )
 			;
 
@@ -405,7 +435,7 @@ wpecp.initAdmin = function() {
 		updateIDs: function( event ) {
 			var
 				that = this,
-				charCode = (typeof event.which == "number") ? event.which : event.keyCode,
+				charCode = (typeof event.which == 'number') ? event.which : event.keyCode,
 				keyChar = String.fromCharCode( charCode )
 			;
 
@@ -445,8 +475,27 @@ wpecp.initAdmin = function() {
 		}
 	});
 
-	new wpecp.editingEnabled({
+	new wpecp.optionView({
 		el: $( '.wpecp-option .comment-editing' ),
+		actionGlobal: wpecpGlobals.editingEnabledAction,
+		model: new wpecp.ajaxModel
+	});
+
+	new wpecp.optionView({
+		el: $( '.wpecp-option .comment-deleting' ),
+		actionGlobal: wpecpGlobals.deletingEnabledAction,
+		model: new wpecp.ajaxModel
+	});
+
+	new wpecp.optionView({
+		el: $( '.wpecp-option .comment-oembed-support' ),
+		actionGlobal: wpecpGlobals.oEmbedSupportEnabledAction,
+		model: new wpecp.ajaxModel
+	});
+
+	new wpecp.imageUploadSettingView({
+		el: $( '.wpecp-option .comment-image-upload' ),
+		actionGlobal: wpecpGlobals.imageUploadSettingAction,
 		model: new wpecp.ajaxModel
 	});
 

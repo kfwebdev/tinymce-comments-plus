@@ -100,28 +100,64 @@ wpecp.initWPECP = function() {
 	wpecp.bindEditors = function() {
 		// include edit component
 		wpecp.Edit = require( '../components/edit/edit' );
-
-		// bind edit components
-		$( '.' + wpecp.globals.wpecp_css_edit ).each(function(){
-			let commentId = $( this ).data( wpecp.globals.wpecp_css_comment_id ),
-					editId = wpecp.globals.wpecp_css_edit + commentId,
-					editorId = wpecp.globals.wpecp_css_editor + commentId,
-					commentReplyLink = $( this ).siblings( '.' + wpecp.globals.wpecp_css_comment_reply_button )[ 0 ];
-
-			// wpecp.bindReply( commentReplyLink, true );
-			ReactDOM.render(<wpecp.Edit wpecpGlobals={ wpecp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } />, this );
-		});
-
+		// include delete component
+		wpecp.Delete = require( '../components/delete/delete' );
 		// include editor component
 		wpecp.Editor = require( '../components/editor/editor' );
+
+		// bind button components
+		$( wpecp.globals.wpecp_id_comment_reply ).each(function(){
+			const $editButton = $(this).siblings('.wpecp-edit'),
+				$deleteButton = $(this).siblings('.wpecp-delete');
+
+			$(this).addClass(`${wpecp.globals.wpecp_css_button} ${wpecp.globals.wpecp_css_reply_button}`);
+
+			if ($editButton.length) {
+				const commentId = $editButton.data( wpecp.globals.wpecp_css_comment_id ),
+					editId = wpecp.globals.wpecp_css_edit + commentId,
+					editorId = wpecp.globals.wpecp_css_editor + commentId;
+
+				ReactDOM.render(
+					<wpecp.Edit
+					wpecpGlobals={ wpecp.globals }
+					commentId={ commentId }
+					editId={ editId }
+					editorId={ editorId } />,
+					$editButton[0]
+				);
+			}
+
+			if ($deleteButton.length) {
+				const commentId = $deleteButton.data( wpecp.globals.wpecp_css_comment_id ),
+					deleteId = wpecp.globals.wpecp_css_delete + commentId,
+					deleteNonce = $deleteButton.data( wpecp.globals.wpecp_css_nonce );
+
+				ReactDOM.render(
+					<wpecp.Delete
+					wpecpGlobals={ wpecp.globals }
+					commentId={ commentId }
+					deleteId={ deleteId }
+					deleteNonce={ deleteNonce } />,
+					$deleteButton[0]
+				);
+			}
+		});
 
 		// bind editor components
 		$( '.' + wpecp.globals.wpecp_css_editor ).each(function(){
 			let commentId = $( this ).data( wpecp.globals.wpecp_css_comment_id ),
-					editId = wpecp.globals.wpecp_css_edit + commentId,
-					editorId = wpecp.globals.wpecp_css_editor + commentId,
-					contentId = wpecp.globals.wpecp_css_comment_content + commentId;
-			ReactDOM.render(<wpecp.Editor wpecpGlobals={ wpecp.globals } commentId={ commentId } editId={ editId } editorId={ editorId } contentId={ contentId } />, this );
+				editId = wpecp.globals.wpecp_css_edit + commentId,
+				editorId = wpecp.globals.wpecp_css_editor + commentId,
+				contentId = wpecp.globals.wpecp_css_comment_content + commentId;
+			ReactDOM.render(
+				<wpecp.Editor
+				wpecpGlobals={ wpecp.globals }
+				commentId={ commentId }
+				editId={ editId }
+				editorId={ editorId }
+				contentId={ contentId } />,
+				this
+			);
 		});
 
 		// bind respond element ( reply form )
@@ -136,6 +172,6 @@ wpecp.initWPECP = function() {
 ( function( $ ){
    $(function(){
     wpecp.initWPECP();
-		wpecp.bindEditors();
+	wpecp.bindEditors();
    });
 })( jQuery );

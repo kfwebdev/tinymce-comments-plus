@@ -30,7 +30,7 @@ class EditorComponent extends React.Component {
       this.setState({
         tinyMCEcontent: commentContent
       });
-      $( window ).on( 'toggleEditor', function( event ) {
+      $( window ).on( 'wpecpToggleEditor', function( event ) {
          that.toggleEditor( event.editorId );
       });
    }
@@ -45,7 +45,7 @@ class EditorComponent extends React.Component {
          if ( !this.state.showEditor ) {
            $( '#' + this.props.contentId ).hide();
            $( window ).trigger({
-             type: 'toggleEdit',
+             type: 'wpecpToggleEdit',
              editId: this.props.editId
            });
            this.initTinyMCE();
@@ -56,7 +56,7 @@ class EditorComponent extends React.Component {
   cancelEditor() {
     $( '#' + this.props.contentId ).show();
     $( window ).trigger({
-      type: 'toggleEdit',
+      type: 'wpecpToggleEdit',
       editId: this.props.editId
     });
     this.setState({ showEditor: false });
@@ -78,7 +78,7 @@ class EditorComponent extends React.Component {
     tinymce.init({
         menubar: false,
         height: '100%',
-        selector: "textarea#" + this.props.editorId,
+        selector: 'textarea#' + this.props.editorId,
         content_css: this.props.wpecpGlobals.editorStyles,
         wpeditimage_disable_captions: true,
         setup : function(editor) {
@@ -111,8 +111,7 @@ class EditorComponent extends React.Component {
       that = this,
       re_action = /^[a-z_]+$/,
       $content = $( '#' + this.props.contentId ),
-      $spinner = $( '.' + this.props.wpecpGlobals.wpecp_css_edit_container + ' .spinner' ),
-      postId = $content.data( this.props.wpecpGlobals.wpecp_css_comment_id ),
+      // postId = $content.data( this.props.wpecpGlobals.wpecp_css_post_id ),
       re_postId = /^[0-9]+$/,
       re_commentId = /^[0-9]+$/,
       nonce = $content.data( this.props.wpecpGlobals.wpecp_css_nonce ),
@@ -120,7 +119,7 @@ class EditorComponent extends React.Component {
       commentEditData = {
         action: this.props.wpecpGlobals.updateCommentAction,
         security: nonce,
-        postId: postId,
+        // postId: postId,
         commentId: this.props.commentId,
         content: this.state.tinyMCEcontent
       }
@@ -129,7 +128,7 @@ class EditorComponent extends React.Component {
     // validate action
     if ( ! re_action.test( this.props.wpecpGlobals.updateCommentAction ) ) { return false; }
     // validate postId
-    if ( ! re_postId.test( postId ) ) { return false; }
+    // if ( ! re_postId.test( postId ) ) { return false; }
     // validate commentId
     if ( ! re_commentId.test( this.props.commentId ) ) { return false; }
     // validate nonce
@@ -176,7 +175,7 @@ class EditorComponent extends React.Component {
               this.props.wpecpGlobals.wpecp_css_button_custom + ' ' +
               this.props.wpecpGlobals.wpecp_css_submit_edit_button + ' ' +
               this.props.wpecpGlobals.wpecp_css_submit_button_custom }>Submit</a>
-            <wpecp.Spinner wpecpGlobals={ this.props.wpecpGlobals } spinnerId={ 'spinner' + this.props.commentId } showSpinner={ this.state.showSpinner } />
+            <wpecp.Spinner wpecpGlobals={ this.props.wpecpGlobals } spinnerId={ 'editor-spinner' + this.props.commentId } showSpinner={ this.state.showSpinner } />
             <a href="javascript:void(0);" onClick={ this.cancelEditor } className={
                 this.props.wpecpGlobals.wpecp_css_button + ' ' +
                 this.props.wpecpGlobals.wpecp_css_button_custom + ' ' +

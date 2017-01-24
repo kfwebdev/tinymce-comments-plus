@@ -15,17 +15,52 @@
 
 	<div class="wpecp-settings">
 		<div class="wpecp-option">
-			<fieldset class="comment-editing">
+			<fieldset class="comment-options">
 				<?php
-					$nonce = wp_create_nonce( wpecp_ajax_editing_enabled );
+					$deleting_nonce = wp_create_nonce( wpecp_ajax_deleting_enabled );
+					$deleting_option = get_option( wpecp_ajax_deleting_enabled );
+					$deleting_option = ( $deleting_option === 'off' ) ? 'off' : 'on';
+					$editing_nonce = wp_create_nonce( wpecp_ajax_editing_enabled );
 					$editing_option = get_option( wpecp_ajax_editing_enabled );
 					$editing_option = ( $editing_option === 'off' ) ? 'off' : 'on';
+					$image_upload_nonce = wp_create_nonce( wpecp_ajax_image_upload_setting );
+					$image_upload_option = get_option( wpecp_ajax_image_upload_setting );
+					$image_upload_option = ( $image_upload_option === 'logged_in' || $image_upload_option === 'anyone' ) ? $image_upload_option : 'disabled';
+					$oembed_support_nonce = wp_create_nonce( wpecp_ajax_oembed_support_enabled );
+					$oembed_support_option = get_option( wpecp_ajax_oembed_support_enabled );
+					$oembed_support_option = ( $oembed_support_option === 'off' ) ? 'off' : 'on';
 				?>
-				<legend><span class="dashicons dashicons-welcome-write-blog"></span> Comment Editing</legend>
-				<p>Edit comments for logged in users</p>
-				<div class="editing-control">
-					<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
-					<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-wpecp-nc="<?php echo esc_attr( $nonce ) ?>" />
+				<legend><span class="dashicons dashicons-welcome-write-blog"></span> Comment Options</legend>
+				<div class="comment-editing option-row">
+					<p>Edit comments for logged in users</p>
+					<div class="options-control">
+						<label for="editing"><?php if ( $editing_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
+						<input name="editing" type="checkbox" <?php if ( $editing_option == 'on' ) { ?>checked="checked"<?php } ?> data-wpecp-nc="<?php echo esc_attr( $editing_nonce ) ?>" />
+					</div>
+				</div>
+				<div class="comment-deleting option-row">
+					<p>Delete comments for logged in users</p>
+					<div class="options-control">
+						<label for="deleting"><?php if ( $deleting_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
+						<input name="deleting" type="checkbox" <?php if ( $deleting_option == 'on' ) { ?>checked="checked"<?php } ?> data-wpecp-nc="<?php echo esc_attr( $deleting_nonce ) ?>" />
+					</div>
+				</div>
+				<div class="comment-oembed-support option-row">
+					<p>oEmbed support in comments</p>
+					<div class="options-control">
+						<label for="oembed-support"><?php if ( $oembed_support_option == 'on' ) { ?>Enabled<?php } else { ?>Disabled<?php } ?></label>
+						<input name="oembed-support" type="checkbox" <?php if ( $oembed_support_option == 'on' ) { ?>checked="checked"<?php } ?> data-wpecp-nc="<?php echo esc_attr( $oembed_support_nonce ) ?>" />
+					</div>
+				</div>
+				<div class="comment-image-upload option-row">
+					<p>Upload images in comments</p>
+					<div class="options-control">
+						<select class="saved" name="image-uploads" data-wpecp-nc="<?php echo esc_attr( $image_upload_nonce ) ?>">
+							<option value="disabled" <?php if ( $image_upload_option == 'disabled' ) { ?>selected="selected"<?php } ?>>Disabled</option>
+							<option value="logged_in" <?php if ( $image_upload_option == 'logged_in' ) { ?>selected="selected"<?php } ?>>Logged In Only</option>
+							<option value="anyone" <?php if ( $image_upload_option == 'anyone' ) { ?>selected="selected"<?php } ?>>Allow Anyone</option>
+						</select>
+					</div>
 				</div>
 			</fieldset>
 			<fieldset class="comment-expiration">
@@ -88,13 +123,14 @@
 				<?php
 					$nonce = wp_create_nonce( wpecp_ajax_custom_classes );
 					$wpecp_classes_all = get_option( wpecp_ajax_custom_classes . '_all' );
-					$wpecp_classes_reply = get_option( wpecp_ajax_custom_classes . '_reply' );
-					$wpecp_classes_edit = get_option( wpecp_ajax_custom_classes . '_edit' );
-					$wpecp_classes_submit = get_option( wpecp_ajax_custom_classes . '_submit' );
 					$wpecp_classes_cancel = get_option( wpecp_ajax_custom_classes . '_cancel' );
+					$wpecp_classes_delete = get_option( wpecp_ajax_custom_classes . '_delete' );
+					$wpecp_classes_edit = get_option( wpecp_ajax_custom_classes . '_edit' );
+					$wpecp_classes_reply = get_option( wpecp_ajax_custom_classes . '_reply' );
+					$wpecp_classes_submit = get_option( wpecp_ajax_custom_classes . '_submit' );
 				?>
 				<legend><span class="dashicons dashicons-media-code"></span> Custom CSS</legend>
-				<p>Add custom CSS classes to TinyMCE Comments Plus buttons</p>
+				<p>Add custom CSS classes to <?php echo $this->plugin_name ?> buttons</p>
 
 				<div class="box" data-wpecp-nc="<?php echo $nonce ?>">
 					<div class="confirmed">
@@ -104,6 +140,7 @@
 					<label><span>All Buttons</span> <input type="text" placeholder="wpecp-button" value="<?php echo esc_attr( $wpecp_classes_all ); ?>" data-wpecp-field="_all"></label>
 					<label><span>WordPress Reply Button</span> <input type="text" placeholder="wpecp-reply-comment" value="<?php echo esc_attr( $wpecp_classes_reply ); ?>" data-wpecp-field="_reply"></label>
 					<label><span>Edit Button</span> <input type="text" placeholder="wpecp-edit" value="<?php echo esc_attr( $wpecp_classes_edit ); ?>" data-wpecp-field="_edit"></label>
+					<label><span>Delete Button</span> <input type="text" placeholder="wpecp-delete" value="<?php echo esc_attr( $wpecp_classes_delete ); ?>" data-wpecp-field="_delete"></label>
 					<label><span>Submit Edit Button</span> <input type="text" placeholder="wpecp-submit-edit" value="<?php echo esc_attr( $wpecp_classes_submit ); ?>" data-wpecp-field="_submit"></label>
 					<label><span>Cancel Edit Button</span> <input type="text" placeholder="wpecp-cancel-edit" value="<?php echo esc_attr( $wpecp_classes_cancel ); ?>" data-wpecp-field="_cancel"></label>
 				</div>
@@ -113,6 +150,7 @@
 				<?php
 					$nonce = wp_create_nonce( wpecp_ajax_wordpress_ids );
 					$wp_id_comments = get_option( wpecp_ajax_wordpress_ids .'_comments' );
+					$wp_id_comment = get_option( wpecp_ajax_wordpress_ids .'_comment' );
 					$wp_id_respond = get_option( wpecp_ajax_wordpress_ids .'_respond' );
 					$wp_id_comment_form = get_option( wpecp_ajax_wordpress_ids .'_comment_form' );
 					$wp_id_comment_textarea = get_option( wpecp_ajax_wordpress_ids .'_comment_textarea' );
@@ -129,14 +167,13 @@
 						<span class="message"></span>
 					</div>
 					<label><span>Comments List</span> <input type="text" placeholder="#comments" value="<?php echo esc_attr( $wp_id_comments ); ?>" data-wpecp-field="_comments"></label>
-					<!-- <label><span>Comment ID Prefix</span> <input type="text" placeholder="" /></label>
-					<label><span>Comment</span> <input type="text" placeholder="" /></label> -->
-					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo esc_attr( $wp_id_respond ); ?>" data-wpecp-field="_respond"></label>
-					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo esc_attr( $wp_id_comment_form ); ?>" data-wpecp-field="_comment_form"></label>
-					<label><span>Comment Textarea</span> <input type="text" placeholder="#comment" value="<?php echo esc_attr( $wp_id_comment_textarea ); ?>" data-wpecp-field="_comment_textarea"></label>
-					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo esc_attr( $wp_id_reply ); ?>" data-wpecp-field="_reply"></label>
-					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo esc_attr( $wp_id_cancel ); ?>" data-wpecp-field="_cancel"></label>
-					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo esc_attr( $wp_id_submit ); ?>" data-wpecp-field="_submit"></label>
+					<label><span>Comment ID Prefix</span> <input type="text" placeholder="#comment-" value="<?php echo esc_attr( $wp_id_comment ); ?>" data-wpecp-field="_comment" /></label>
+					<label><span>Respond</span> <input type="text" placeholder="#respond" value="<?php echo esc_attr( $wp_id_respond ); ?>" data-wpecp-field="_respond" /></label>
+					<label><span>Comment Form</span> <input type="text" placeholder="#commentform" value="<?php echo esc_attr( $wp_id_comment_form ); ?>" data-wpecp-field="_comment_form" /></label>
+					<label><span>Comment Textarea</span> <input type="text" placeholder="#comment" value="<?php echo esc_attr( $wp_id_comment_textarea ); ?>" data-wpecp-field="_comment_textarea" /></label>
+					<label><span>Comment Reply Link</span> <input type="text" placeholder=".comment-reply-link" value="<?php echo esc_attr( $wp_id_reply ); ?>" data-wpecp-field="_reply" /></label>
+					<label><span>Cancel Comment Reply Link</span> <input type="text" placeholder="#cancel-comment-reply-link" value="<?php echo esc_attr( $wp_id_cancel ); ?>" data-wpecp-field="_cancel" /></label>
+					<label><span>Submit Comment</span> <input type="text" placeholder="#submit" value="<?php echo esc_attr( $wp_id_submit ); ?>" data-wpecp-field="_submit" /></label>
 				</div>
 			</fieldset>
 		</div>

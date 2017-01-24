@@ -21,7 +21,7 @@ class EditComponent extends React.Component {
 
    componentDidMount() {
      let that = this;
-     $( window ).on( 'toggleEdit', function( event ) {
+     $( window ).on( 'wpecpToggleEdit', function( event ) {
         that.toggleEdit( event.editId );
      });
    }
@@ -40,7 +40,7 @@ class EditComponent extends React.Component {
    editClick( event ) {
       event.preventDefault();
       $( window ).trigger({
-        type: 'toggleEditor',
+        type: 'wpecpToggleEditor',
         editorId: this.props.editorId
       });
    }
@@ -51,7 +51,10 @@ class EditComponent extends React.Component {
                     this.props.wpecpGlobals.wpecp_css_button + ' ' +
                     this.props.wpecpGlobals.wpecp_css_edit_button + ' ' +
                     this.props.wpecpGlobals.wpecp_css_button_custom + ' ' +
-                    this.props.wpecpGlobals.wpecp_css_edit_button_custom } id={ this.props.editId } onClick={ this.editClick } style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
+                    this.props.wpecpGlobals.wpecp_css_edit_button_custom }
+                    id={ this.props.editId }
+                    onClick={ this.editClick }
+                    style={ this.state.hideEdit ? { display:'none' }:{ display:'inline-block' } }>Edit</a>
         );
     }
 }

@@ -70,14 +70,18 @@ class WPEditorCommentsPlus {
 	 */
 	private function __construct() {
 		define( 'wpecp_prefix', 'wpecp_' );
-		define( wpecp_prefix . 'local_dev', false );
+		define( wpecp_prefix . 'local_dev', true );
 		define( wpecp_prefix . 'javascript_globals', 'wpecpGlobals' );
 		define( wpecp_prefix . 'ajax_prefix', 'wpecp_ajax_' );
 		define( wpecp_ajax_prefix . 'option_update_delay', 2000 );
 		define( wpecp_ajax_prefix . 'confirmation_delay', 3000 );
 		define( wpecp_ajax_prefix . 'add_comment', wpecp_prefix . 'add_comment' );
+		define( wpecp_ajax_prefix . 'delete_comment', wpecp_prefix . 'delete_comment' );
 		define( wpecp_ajax_prefix . 'update_comment', wpecp_prefix . 'update_comment' );
+		define( wpecp_ajax_prefix . 'deleting_enabled', wpecp_prefix . 'deleting_enabled' );
 		define( wpecp_ajax_prefix . 'editing_enabled', wpecp_prefix . 'editing_enabled' );
+		define( wpecp_ajax_prefix . 'oembed_support_enabled', wpecp_prefix . 'oembed_support_enabled' );
+		define( wpecp_ajax_prefix . 'image_upload_setting', wpecp_prefix . 'image_upload_setting' );
 		define( wpecp_ajax_prefix . 'editing_expiration', wpecp_prefix . 'editing_expiration' );
 		define( wpecp_ajax_prefix . 'custom_classes', wpecp_prefix . 'custom_classes' );
 		define( wpecp_ajax_prefix . 'wordpress_ids', wpecp_prefix . 'wordpress_ids' );
@@ -96,6 +100,8 @@ class WPEditorCommentsPlus {
 		define( wpecp_prefix . 'id_prefix', wpecp_prefix . 'id_' );
 		define( wpecp_css_prefix . 'button_class', 'wpecp-button' );
 		define( wpecp_css_prefix . 'edit_container', 'wpecp-edit-container' );
+		define( wpecp_css_prefix . 'delete_container', 'wpecp-delete-container' );
+		define( wpecp_css_prefix . 'delete_button_class', 'wpecp-delete-comment' );
 		define( wpecp_css_prefix . 'edit_button_class', 'wpecp-edit-comment' );
 		define( wpecp_css_prefix . 'reply_button_class', 'wpecp-reply-comment' );
 		define( wpecp_css_prefix . 'submit_button_class', 'wpecp-submit-comment' );
@@ -103,6 +109,7 @@ class WPEditorCommentsPlus {
 		define( wpecp_css_prefix . 'cancel_edit_button_class', 'wpecp-cancel-edit' );
 		define( wpecp_css_prefix . 'comment_reply_button_class', 'comment-reply-link' );
 		define( wpecp_css_prefix . 'comment_content', wpecp_prefix . 'comment_content' );
+		define( wpecp_css_prefix . 'delete', 'wpecp-delete' );
 		define( wpecp_css_prefix . 'edit', 'wpecp-edit' );
 		define( wpecp_css_prefix . 'editor', 'wpecp-editor' );
 		define( wpecp_css_prefix . 'post_id', wpecp_prefix . 'post_id' );
@@ -111,7 +118,9 @@ class WPEditorCommentsPlus {
 
 		// WordPress IDs
 		define( wpecp_id_prefix . 'comments', '#comments' );
+		define( wpecp_id_prefix . 'comment', '#comment-' );
 		define( wpecp_id_prefix . 'respond', '#respond' );
+		define( wpecp_id_prefix . 'reply', '.comment-reply-link' );
 		define( wpecp_id_prefix . 'comment_form', '#commentform' );
 		define( wpecp_id_prefix . 'comment_textarea', '#comment' );
 		define( wpecp_id_prefix . 'cancel_comment_reply', '#cancel-comment-reply-link' );
@@ -123,13 +132,20 @@ class WPEditorCommentsPlus {
 		// TCP Custom CSS Button Classes
 		$this->option_custom_classes_all = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_all' ) );
 		$this->option_custom_classes_reply = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_reply' ) );
+		$this->option_custom_classes_delete = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_delete' ) );
 		$this->option_custom_classes_edit = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_edit' ) );
 		$this->option_custom_classes_submit = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_submit' ) );
 		$this->option_custom_classes_cancel = preg_replace( wpecp_regex_html_class, '', get_option( wpecp_ajax_custom_classes . '_cancel' ) );
 
 		// sanitize WordPress options
+		$this->option_deleting_enabled = sanitize_html_class( get_option( wpecp_ajax_deleting_enabled ) );
+		$this->option_deleting_enabled = ( $this->option_deleting_enabled == 'off' ) ? 'off' : 'on';
 		$this->option_editing_enabled = sanitize_html_class( get_option( wpecp_ajax_editing_enabled ) );
-		$this->option_editing_enabled = ( $this->option_editing_enabled === 'off' ) ? 'off' : 'on';
+		$this->option_editing_enabled = ( $this->option_editing_enabled == 'off' ) ? 'off' : 'on';
+		$this->option_oembed_support_enabled = sanitize_html_class( get_option( wpecp_ajax_oembed_support_enabled ) );
+		$this->option_oembed_support_enabled = ( $this->option_oembed_support_enabled == 'off' ) ? 'off' : 'on';
+		$this->option_image_upload_setting = sanitize_html_class( get_option( wpecp_ajax_image_upload_setting ) );
+		$this->option_image_upload_setting = ( $this->option_image_upload_setting == 'off' ) ? 'off' : 'on';
 		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
 		$this->option_show_toolbars = false;
@@ -159,6 +175,8 @@ class WPEditorCommentsPlus {
 
 		$this->option_wp_id_comments = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comments' ) );
 		$this->option_wp_id_comments = ( trim( $this->option_wp_id_comments ) == false ) ? wpecp_id_comments : $this->option_wp_id_comments;
+		$this->option_wp_id_comment = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comment' ) );
+		$this->option_wp_id_comment = ( trim( $this->option_wp_id_comment ) == false ) ? wpecp_id_comment : $this->option_wp_id_comment;
 		$this->option_wp_id_respond = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_respond' ) );
 		$this->option_wp_id_respond = ( trim( $this->option_wp_id_respond ) == false ) ? wpecp_id_respond : $this->option_wp_id_respond;
 		$this->option_wp_id_comment_form = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comment_form' ) );
@@ -166,7 +184,7 @@ class WPEditorCommentsPlus {
 		$this->option_wp_id_comment_textarea = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_comment_textarea' ) );
 		$this->option_wp_id_comment_textarea = ( trim( $this->option_wp_id_comment_textarea ) == false ) ? wpecp_id_comment_textarea : $this->option_wp_id_comment_textarea;
 		$this->option_wp_id_comment_reply_link = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_reply' ) );
-		$this->option_wp_id_comment_reply_link = ( trim( $this->option_wp_id_comment_reply_link ) == false ) ? wpecp_css_comment_reply_button_class : $this->option_wp_id_comment_reply_link;
+		$this->option_wp_id_comment_reply_link = ( trim( $this->option_wp_id_comment_reply_link ) == false ) ? wpecp_id_reply : $this->option_wp_id_comment_reply_link;
 		$this->option_wp_id_cancel_comment_reply = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_cancel' ) );
 		$this->option_wp_id_cancel_comment_reply = ( trim( $this->option_wp_id_cancel_comment_reply ) == false ) ? wpecp_id_cancel_comment_reply : $this->option_wp_id_cancel_comment_reply;
 		$this->option_wp_id_submit_comment = preg_replace( wpecp_regex_html_id, '', get_option( wpecp_ajax_wordpress_ids . '_submit' ) );
@@ -179,8 +197,16 @@ class WPEditorCommentsPlus {
 		add_action( 'wp_ajax_' . wpecp_ajax_add_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_delete_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_delete_comment, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_deleting_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_deleting_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
@@ -284,6 +310,7 @@ class WPEditorCommentsPlus {
 			'optionUpdateDelay' => wpecp_ajax_option_update_delay,
 			'addCommentAction' => wpecp_ajax_add_comment,
 			'updateCommentAction' => wpecp_ajax_update_comment,
+			'deleteCommentAction' => wpecp_ajax_delete_comment,
 			'editingExpiration' => $this->option_editing_expiration,
 
 			wpecp_prefix . 'plugins' => wpecp_plugins,
@@ -295,6 +322,8 @@ class WPEditorCommentsPlus {
 
 			// Classes
 			wpecp_css_prefix . 'button' => wpecp_css_button_class,
+			wpecp_css_prefix . 'delete_container' => wpecp_css_delete_container,
+			wpecp_css_prefix . 'delete_button' => wpecp_css_delete_button_class,
 			wpecp_css_prefix . 'edit_button' => wpecp_css_edit_button_class,
 			wpecp_css_prefix . 'reply_button' => wpecp_css_reply_button_class,
 			wpecp_css_prefix . 'submit_button' => wpecp_css_submit_button_class,
@@ -302,19 +331,22 @@ class WPEditorCommentsPlus {
 			wpecp_css_prefix . 'submit_edit_button' => wpecp_css_submit_edit_button_class,
 			wpecp_css_prefix . 'cancel_edit_button' => wpecp_css_cancel_edit_button_class,
 			wpecp_css_prefix . 'comment_reply_button' => wpecp_css_comment_reply_button_class,
+			wpecp_css_prefix . 'delete' => wpecp_css_delete,
 			wpecp_css_prefix . 'edit' => wpecp_css_edit,
 			wpecp_css_prefix . 'editor' => wpecp_css_editor,
 			wpecp_css_prefix . 'comment_content' => wpecp_css_comment_content,
-			wpecp_css_prefix . 'post_id' => wpecp_css_comment_id,
+			wpecp_css_prefix . 'post_id' => wpecp_css_post_id,
 			wpecp_css_prefix . 'comment_id' => wpecp_css_comment_id,
 			wpecp_css_prefix . 'nonce' => wpecp_css_nonce,
 			wpecp_css_prefix . 'button_custom' => $this->option_custom_classes_all,
 			wpecp_css_prefix . 'reply_button_custom' => $this->option_custom_classes_reply,
+			wpecp_css_prefix . 'delete_button_custom' => $this->option_custom_classes_delete,
 			wpecp_css_prefix . 'edit_button_custom' => $this->option_custom_classes_edit,
 			wpecp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
 			wpecp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
 			// IDs
 			wpecp_id_prefix . 'comments' => $this->option_wp_id_comments,
+			wpecp_id_prefix . 'comment' => $this->option_wp_id_comment,
 			wpecp_id_prefix . 'respond' => $this->option_wp_id_respond,
 			wpecp_id_prefix . 'comment_form' => $this->option_wp_id_comment_form,
 			wpecp_id_prefix . 'comment_textarea' => $this->option_wp_id_comment_textarea,
@@ -394,6 +426,9 @@ class WPEditorCommentsPlus {
 				'optionUpdateDelay' => wpecp_ajax_option_update_delay,
 				'optionConfirmationDelay' => wpecp_ajax_confirmation_delay,
 				'editingEnabledAction' => wpecp_ajax_editing_enabled,
+				'deletingEnabledAction' => wpecp_ajax_deleting_enabled,
+				'oEmbedSupportEnabledAction' => wpecp_ajax_oembed_support_enabled,
+				'imageUploadSettingAction' => wpecp_ajax_image_upload_setting,
 				'editingExpirationAction' => wpecp_ajax_editing_expiration,
 				'customClassesAction' => wpecp_ajax_custom_classes,
 				'wordpressIdsAction' => wpecp_ajax_wordpress_ids,
@@ -465,15 +500,15 @@ class WPEditorCommentsPlus {
 	* check if current user can edit comment
 	* @since    1.0.0
 	*/
-	public function user_can_edit( $comment_user_id ) {
+	public function user_can_edit_comment( $comment ) {
 		global $current_user;
-		if ( ! $current_user ) { get_currentuserinfo(); }
+		if ( !$current_user ) { get_currentuserinfo(); }
 		$can_edit = current_user_can( 'moderate_comments' );
 
 		// if user can moderate comments (admin) then user can edit
 		if ( $can_edit ) { return true; }
 		// else if user is comment author then user can edit
-		else if ( $comment_user_id == $current_user->ID ) { return true; }
+		else if ( $comment->user_id == $current_user->ID ) { return true; }
 		// else user cannot edit
 		else { return false; }
 	}
@@ -489,7 +524,9 @@ class WPEditorCommentsPlus {
 
 		get_currentuserinfo();
 
-		if ( ! current_user_can( 'edit_posts' ) ) { wp_send_json_error( 'permission denied' ); }
+		if (!current_user_can( 'administrator' )) {
+			if ( ! current_user_can( 'edit_posts' ) ) { wp_send_json_error( 'permission denied' ); }
+		}
 
 		$add_comment = array(
 			'comment_post_ID' => $post_id,
@@ -510,7 +547,7 @@ class WPEditorCommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function wpecp_update_comment( $post_id, $comment_id, $content ) {
+	public function wpecp_update_comment( $comment_id, $content ) {
 		global 	$post,
 				$current_user;
 
@@ -519,15 +556,15 @@ class WPEditorCommentsPlus {
 		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
 		$comment_age = floor( $comment_age / 60 );
 
-		if ( ! current_user_can( 'edit_posts' ) &&
-			 $current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
+		if (!current_user_can( 'administrator' )) {
+			if ( !is_user_logged_in() ||
+				$current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
 
-		// comment editing has expiration period
-		if ( $this->option_editing_expiration > 0 &&
-			// if the comment is past editing period expiration
-			$comment_age > $this->option_editing_expiration &&
-			// user is not an administrator
-			! current_user_can( 'administrator' ) ) { wp_send_json_error( 'permission denied' ); }
+			// comment editing has expiration period
+			if ( $this->option_editing_expiration > 0 &&
+				// if the comment is past editing period expiration
+				$comment_age > $this->option_editing_expiration ) { wp_send_json_error( 'permission denied' ); }
+		}
 
 		$update = array(
 			'comment_ID' => $comment_id,
@@ -538,6 +575,34 @@ class WPEditorCommentsPlus {
 			wp_send_json( $update );
 		} else {
 			wp_send_json_error( 'failed to update comment' );
+		}
+	}
+
+	/**
+	 * @since    1.0.0
+	 */
+	public function wpecp_delete_comment( $comment_id ) {
+		global 	$current_user;
+
+		get_currentuserinfo();
+		$comment = get_comment( $comment_id );
+		// $comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
+		// $comment_age = floor( $comment_age / 60 );
+
+		if (!current_user_can( 'administrator' )) {
+			// if user is not logged in or not the comment author
+			if ( !is_user_logged_in() ||
+				$current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
+			// // comment editing has expiration period
+			// if ( $this->option_editing_expiration > 0 &&
+			// 	// if the comment is past editing period expiration
+			// 	$comment_age > $this->option_editing_expiration ) { wp_send_json_error( 'permission denied' ); }
+		}
+
+		if ( wp_delete_comment( $comment_id ) ) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error( 'failed to delete comment' );
 		}
 	}
 
@@ -572,6 +637,9 @@ class WPEditorCommentsPlus {
 				$post_id = intval( $_REQUEST[ 'postId' ] );
 				$comment_id = intval( $_REQUEST[ 'commentId' ] );
 				$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
+				if ( ! $post_id ) { wp_send_json_error( 'bad request' ); }
+				if ( ! $comment_id ) { wp_send_json_error( 'bad request' ); }
+				if ( ! $content ) { wp_send_json_error( 'bad request' ); }
 				// check ajax referer's security nonce
 				check_ajax_referer( wpecp_ajax_add_comment . $post_id, 'security' );
 
@@ -579,14 +647,23 @@ class WPEditorCommentsPlus {
 			break;
 
 			case wpecp_ajax_update_comment:
-				$post_id = intval( $_REQUEST[ 'postId' ] );
 				$comment_id = intval( $_REQUEST[ 'commentId' ] );
 				$content = wp_kses( $_REQUEST[ 'content' ], $allowedtags );
 				if ( ! $comment_id ) { wp_send_json_error( 'bad request' ); }
+				if ( ! $content ) { wp_send_json_error( 'bad request' ); }
 				// check ajax referer's security nonce
 				check_ajax_referer( wpecp_ajax_update_comment . $comment_id, 'security' );
 
 				$result = $this->wpecp_update_comment( $post_id, $comment_id, $content );
+			break;
+
+			case wpecp_ajax_delete_comment:
+				$comment_id = intval( $_REQUEST[ 'commentId' ] );
+				if ( ! $comment_id ) { wp_send_json_error( 'bad request' ); }
+				// check ajax referer's security nonce
+				check_ajax_referer( wpecp_ajax_delete_comment . $comment_id, 'security' );
+
+				$result = $this->wpecp_delete_comment( $comment_id );
 			break;
 
 			case wpecp_ajax_editing_enabled:
@@ -595,6 +672,30 @@ class WPEditorCommentsPlus {
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
 				$result = $this->wpecp_save_option( wpecp_ajax_editing_enabled, $content );
+			break;
+
+			case wpecp_ajax_deleting_enabled:
+				check_ajax_referer( wpecp_ajax_deleting_enabled, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->wpecp_save_option( wpecp_ajax_deleting_enabled, $content );
+			break;
+
+			case wpecp_ajax_oembed_support_enabled:
+				check_ajax_referer( wpecp_ajax_oembed_support_enabled, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->wpecp_save_option( wpecp_ajax_oembed_support_enabled, $content );
+			break;
+
+			case wpecp_ajax_image_upload_setting:
+				check_ajax_referer( wpecp_ajax_image_upload_setting, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->wpecp_save_option( wpecp_ajax_image_upload_setting, $content );
 			break;
 
 			case wpecp_ajax_editing_expiration:
@@ -713,18 +814,18 @@ class WPEditorCommentsPlus {
 		$comment_textarea = str_replace( '#', '', $this->option_wp_id_comment_textarea );
 		$editor_config = array(
 			'skin' => 'wp_theme',
-	    'textarea_rows' => 12,
-	    'teeny' => false,
+			'textarea_rows' => 12,
+			'teeny' => false,
 			'tinymce' => array(
-				'plugins' => wpecp_plugins,
-				'theme_advanced_buttons1' => $this->option_toolbar1,
-        'theme_advanced_buttons2' => $this->option_toolbar2,
-				'theme_advanced_buttons3' => $this->option_toolbar3,
-        'theme_advanced_buttons4' => $this->option_toolbar4
-			),
+			'plugins' => wpecp_plugins,
+			'theme_advanced_buttons1' => $this->option_toolbar1,
+			'theme_advanced_buttons2' => $this->option_toolbar2,
+			'theme_advanced_buttons3' => $this->option_toolbar3,
+			'theme_advanced_buttons4' => $this->option_toolbar4
+		),
 			'wpeditimage_disable_captions' => true,
-	    'quicktags' => false,
-	    'media_buttons' => false
+			'quicktags' => false,
+			'media_buttons' => false
 		);
 		if ( ! $this->option_show_toolbars ) { $editor_config['toolbar'] = $this->option_show_toolbars; }
 
@@ -744,7 +845,7 @@ class WPEditorCommentsPlus {
 	 */
 	public function filter_comment_editing( $content, $comment ) {
 
-		if ( ! $this->user_can_edit( $comment->user_id ) ) { return $content; }
+		if ( !$this->user_can_edit_comment( $comment ) ) { return $content; }
 
 		$comment_id = $comment->comment_ID;
 		$post_id = $comment->comment_post_ID;
@@ -772,6 +873,7 @@ class WPEditorCommentsPlus {
 	 */
 	public function filter_comment_reply_link( $args ) {
 		global $current_user;
+		if ( !$current_user ) { get_currentuserinfo(); }
 
 		// insert custom CSS classes
 		$custom_classes = $this->option_custom_classes_all . ' ' . $this->option_custom_classes_reply;
@@ -783,33 +885,55 @@ class WPEditorCommentsPlus {
 	/**
 	 * @since    1.0.0
 	 */
-	public function filter_comment_reply_link_args( $args, $comment, $post ) {
+	public function filter_comment_reply_link_args( $args, $comment) {
 		global $current_user;
+		if ( !$current_user ) { get_currentuserinfo(); }
 
+		$add_edit_target = true;
+		$add_delete_target = true;
 		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
 		$comment_age = floor( $comment_age );
 
-		// Insert edit button targets
-		// If editing option is enabled
-		if ( ( $this->option_editing_enabled === 'on' &&
+		// Insert edit button target
+		if (!current_user_can( 'administrator' )) {
+			// If editing option is enabled
+			if ( $this->option_editing_enabled == 'off' ||
 				// if user is logged in
-				is_user_logged_in() &&
+				!is_user_logged_in() ||
 				// if user created this comment
-				$comment->user_id == $current_user->ID &&
-				// if comment editing does not expire
-				( $this->option_editing_expiration == 0 ||
-				// or comment editing has not expired
-					$comment_age <= $this->option_editing_expiration )
-			) ||
-			// Or user is administrator
-			current_user_can( 'administrator' )
-			) {
+				$comment->user_id != $current_user->ID ||
+				// if comment editing does expire
+				( $this->option_editing_expiration > 0 &&
+				// or comment editing has expired
+				$comment_age >= $this->option_editing_expiration )
+				) {
+					$add_edit_target = false;
+			}
+		}
 
+		if ($add_edit_target) {
 			$nonce = wp_create_nonce( wpecp_ajax_update_comment . $comment->comment_ID );
-
-			$wpecp_edit_link = '<div class="' . wpecp_css_edit . '" data-' . wpecp_css_comment_id . '="' . $comment->comment_ID . '"></div>' . PHP_EOL;
-
+			$wpecp_edit_link = '<div class="' . wpecp_css_edit . '" data-'.wpecp_css_comment_id.'="'.$comment->comment_ID.'" data-'.wpecp_css_nonce.'="'.$nonce.'"></div>';
 			$args[ 'before' ] .= $wpecp_edit_link;
+		}
+
+
+		// Insert delete button target
+		if (!current_user_can( 'administrator' )) {
+			// If delete option is enabled
+			if ( $this->option_deleting_enabled == 'off' ||
+				// if user is logged in
+				!is_user_logged_in() ||
+				// if user created this comment
+				$comment->user_id != $current_user->ID ) {
+				$add_delete_target = false;
+			}
+		}
+
+		if ($add_delete_target) {
+			$nonce = wp_create_nonce( wpecp_ajax_delete_comment . $comment->comment_ID );
+			$wpecp_delete_link = '<div class="' . wpecp_css_delete . '" data-'.wpecp_css_comment_id.'="'.$comment->comment_ID.'" data-'.wpecp_css_nonce.'="'.$nonce.'"></div>';
+			$args[ 'before' ] .= $wpecp_delete_link;
 		}
 
 		return $args;

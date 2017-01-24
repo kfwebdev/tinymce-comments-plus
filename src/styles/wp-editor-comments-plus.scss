@@ -8,10 +8,12 @@
   border: 1px solid #eaeaea;
 }
 
+.wpecp-delete,
 .wpecp-edit {
   display: inline-block;
 }
 
+.wpecp-delete-comment,
 .wpecp-edit-comment {
     margin-right: 1em;
 }
@@ -32,7 +34,21 @@
   .spinner {
     display: none;
     position: relative;
-    top: 2px;
+    top: 3px;
+    margin: 0 5px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.wpecp-delete-container {
+  margin: 5px 0 1rem;
+
+  .spinner {
+    display: none;
+    position: relative;
+    top: 3px;
+    left: -6px;
     margin: 0 5px;
     width: 16px;
     height: 16px;
