@@ -373,6 +373,13 @@ class WPEditorCommentsPlus {
 		add_filter( 'comment_reply_link', array( $this, 'filter_comment_reply_link' ), 10, 3 );
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 10, 2 );
+
+		if ($this->option_oembed_support_enabled == 'on') {
+			$make_clickable = has_filter( 'get_comment_text', 'make_clickable' );
+			$oembed_priority = ( $make_clickable ) ? $make_clickable - 1 : 10;
+
+			add_filter( 'get_comment_text', array( $this, 'filter_oembed_comments' ), $oembed_priority );
+		}
 	}
 
 	/**
@@ -610,6 +617,23 @@ class WPEditorCommentsPlus {
 	}
 
 	/**
+	 * @since    1.1.4
+	 */
+	public function wpecp_toggle_upload_image_setting( $setting ) {
+		switch ($setting) {
+			case wpecp_image_upload_disabled:
+				$wp_roles->remove_cap('contributor', 'upload_files');
+				$wp_roles->remove_cap('subscriber', 'upload_files');
+			break;
+			case wpecp_image_upload_logged_in:
+				$wp_roles->add_cap('contributor', 'upload_files');
+				$wp_roles->add_cap('subscriber', 'upload_files');
+			break;
+		}
+	}
+
+
+	/**
 	 * @since    1.0.0
 	 */
 	public function wpecp_save_option( $option, $value ) {
@@ -701,16 +725,7 @@ class WPEditorCommentsPlus {
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
 				$result = $this->wpecp_save_option( wpecp_ajax_image_upload_setting, $content );
 				if ($result) {
-					switch ($content) {
-						case wpecp_image_upload_disabled:
-							$wp_roles->remove_cap('contributor', 'upload_files');
-							$wp_roles->remove_cap('subscriber', 'upload_files');
-						break;
-						case wpecp_image_upload_logged_in:
-							$wp_roles->add_cap('contributor', 'upload_files');
-							$wp_roles->add_cap('subscriber', 'upload_files');
-						break;
-					}
+					wpecp_toggle_upload_image_setting($content);
 				}
 			break;
 
@@ -1030,6 +1045,21 @@ class WPEditorCommentsPlus {
 		$allowedtags = array_merge( $allowedtags, $this->wpecp_new_tags() );
 
 		return $comment_data;
+	}
+
+	/**
+	 * @since    1.1.4
+	 */
+	public function filter_oembed_comments( $comment ) {
+		global $wp_embed;
+
+		// disable auto discovery for comments
+		add_filter( 'embed_oembed_discover', '__return_false', 999 );
+		$comment = $wp_embed->autoembed( $comment );
+		// restore auto discovery per WordPress default
+		remove_filter( 'embed_oembed_discover', '__return_false', 999 );
+
+		return $comment;
 	}
 
 }
