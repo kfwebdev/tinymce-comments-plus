@@ -19,13 +19,13 @@
 				<?php
 					$deleting_nonce = wp_create_nonce( wpecp_ajax_deleting_enabled );
 					$deleting_option = get_option( wpecp_ajax_deleting_enabled );
-					$deleting_option = ( $deleting_option === 'off' ) ? 'off' : 'on';
+					$deleting_option = ( $deleting_option == 'off' ) ? 'off' : 'on';
 					$editing_nonce = wp_create_nonce( wpecp_ajax_editing_enabled );
 					$editing_option = get_option( wpecp_ajax_editing_enabled );
-					$editing_option = ( $editing_option === 'off' ) ? 'off' : 'on';
+					$editing_option = ( $editing_option == 'off' ) ? 'off' : 'on';
 					$image_upload_nonce = wp_create_nonce( wpecp_ajax_image_upload_setting );
 					$image_upload_option = get_option( wpecp_ajax_image_upload_setting );
-					$image_upload_option = ( $image_upload_option === 'logged_in' || $image_upload_option === 'anyone' ) ? $image_upload_option : 'disabled';
+					$image_upload_option = ( $image_upload_option == wpecp_image_upload_logged_in ) ? wpecp_image_upload_logged_in : wpecp_image_upload_disabled;
 					$oembed_support_nonce = wp_create_nonce( wpecp_ajax_oembed_support_enabled );
 					$oembed_support_option = get_option( wpecp_ajax_oembed_support_enabled );
 					$oembed_support_option = ( $oembed_support_option === 'off' ) ? 'off' : 'on';
@@ -56,9 +56,8 @@
 					<p>Upload images in comments</p>
 					<div class="options-control">
 						<select class="saved" name="image-uploads" data-wpecp-nc="<?php echo esc_attr( $image_upload_nonce ) ?>">
-							<option value="disabled" <?php if ( $image_upload_option == 'disabled' ) { ?>selected="selected"<?php } ?>>Disabled</option>
-							<option value="logged_in" <?php if ( $image_upload_option == 'logged_in' ) { ?>selected="selected"<?php } ?>>Logged In Only</option>
-							<option value="anyone" <?php if ( $image_upload_option == 'anyone' ) { ?>selected="selected"<?php } ?>>Allow Anyone</option>
+							<option value="<?php echo wpecp_image_upload_disabled; ?>" <?php if ( $image_upload_option == wpecp_image_upload_disabled ) { ?>selected="selected"<?php } ?>>Disabled</option>
+							<option value="<?php echo wpecp_image_upload_logged_in; ?>" <?php if ( $image_upload_option == wpecp_image_upload_logged_in ) { ?>selected="selected"<?php } ?>>Logged In Only</option>
 						</select>
 					</div>
 				</div>

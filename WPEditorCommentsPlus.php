@@ -92,6 +92,9 @@ class WPEditorCommentsPlus {
 		define( wpecp_prefix . 'toolbar3', 'fontselect fontsizeselect' );
 		define( wpecp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpemoji,wplink,wpview' );
 
+		define( wpecp_prefix . 'image_upload_disabled', wpecp_prefix . 'image_upload_disabled' );
+		define( wpecp_prefix . 'image_upload_logged_in', wpecp_prefix . 'image_upload_logged_in' );
+
 		define( wpecp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
 		define( wpecp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
 
@@ -145,7 +148,8 @@ class WPEditorCommentsPlus {
 		$this->option_oembed_support_enabled = sanitize_html_class( get_option( wpecp_ajax_oembed_support_enabled ) );
 		$this->option_oembed_support_enabled = ( $this->option_oembed_support_enabled == 'off' ) ? 'off' : 'on';
 		$this->option_image_upload_setting = sanitize_html_class( get_option( wpecp_ajax_image_upload_setting ) );
-		$this->option_image_upload_setting = ( $this->option_image_upload_setting == 'off' ) ? 'off' : 'on';
+		$this->option_image_upload_setting = ( $this->option_image_upload_setting != wpecp_image_upload_disabled ) ? $this->option_image_upload_setting : wpecp_image_upload_disabled;
+
 		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
 		$this->option_show_toolbars = false;
@@ -238,7 +242,6 @@ class WPEditorCommentsPlus {
 	 * @return    object    A single instance of this class.
 	 */
 	public static function get_instance() {
-
 		// If the single instance hasn"t been set, set it now.
 		if (null == self::$instance) {
 			self::$instance = new self;
@@ -618,6 +621,7 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function action_ajax_request() {
+		global $wp_roles;
 
 		// validate ajax request variables
 		$result = false;
@@ -696,6 +700,18 @@ class WPEditorCommentsPlus {
 				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
 				$result = $this->wpecp_save_option( wpecp_ajax_image_upload_setting, $content );
+				if ($result) {
+					switch ($content) {
+						case wpecp_image_upload_disabled:
+							$wp_roles->remove_cap('contributor', 'upload_files');
+							$wp_roles->remove_cap('subscriber', 'upload_files');
+						break;
+						case wpecp_image_upload_logged_in:
+							$wp_roles->add_cap('contributor', 'upload_files');
+							$wp_roles->add_cap('subscriber', 'upload_files');
+						break;
+					}
+				}
 			break;
 
 			case wpecp_ajax_editing_expiration:
@@ -771,23 +787,26 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	 public function filter_format_tinymce( $args ) {
-	 	$args['remove_linebreaks'] = false;
+		$media_buttons = ( $this->option_image_upload_setting == wpecp_image_upload_logged_in && is_user_logged_in() ) ? true : false;
+
+	 	$args['accessibility_focus'] = true;
 	 	$args['gecko_spellcheck'] = true;
 	 	$args['keep_styles'] = true;
-	 	$args['accessibility_focus'] = true;
-	 	$args['tabfocus_elements'] = 'major-publishing-actions';
 	 	$args['media_strict'] = false;
+	 	$args['media_buttons'] = $media_buttons;
 	 	$args['paste_data_images'] = true;
 	 	$args['paste_remove_styles'] = false;
 	 	$args['paste_remove_spans'] = false;
 	 	$args['paste_strip_class_attributes'] = 'none';
 	 	$args['paste_text_use_dialog'] = true;
-	 	$args['wpeditimage_disable_captions'] = true;
 		$args['plugins'] = wpecp_plugins;
+	 	$args['remove_linebreaks'] = false;
+	 	$args['tabfocus_elements'] = 'major-publishing-actions';
+	 	$args['wpeditimage_disable_captions'] = true;
 	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
 	 	$args['wpautop'] = true;
 	 	$args['apply_source_formatting'] = false;
-	  $args['block_formats'] = "Paragraph=p; Preformatted=pre; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
+	  	$args['block_formats'] = "Paragraph=p; Preformatted=pre; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
 	 	if ( ! $this->option_show_toolbars ) { $args['toolbar'] = $this->option_show_toolbars; }
 	 	$args['toolbar1'] = $this->option_toolbar1;
 	 	$args['toolbar2'] = $this->option_toolbar2;
@@ -810,6 +829,8 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function filter_tinymce_editor() {
+		$media_buttons = ( $this->option_image_upload_setting == wpecp_image_upload_logged_in && is_user_logged_in() ) ? true : false;
+
 		// remove # from comment textarea id
 		$comment_textarea = str_replace( '#', '', $this->option_wp_id_comment_textarea );
 		$editor_config = array(
@@ -825,7 +846,7 @@ class WPEditorCommentsPlus {
 		),
 			'wpeditimage_disable_captions' => true,
 			'quicktags' => false,
-			'media_buttons' => false
+			'media_buttons' => $media_buttons
 		);
 		if ( ! $this->option_show_toolbars ) { $editor_config['toolbar'] = $this->option_show_toolbars; }
 
