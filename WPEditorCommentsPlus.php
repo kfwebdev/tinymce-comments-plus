@@ -82,6 +82,7 @@ class WPEditorCommentsPlus {
 		define( wpecp_ajax_prefix . 'editing_enabled', wpecp_prefix . 'editing_enabled' );
 		define( wpecp_ajax_prefix . 'oembed_support_enabled', wpecp_prefix . 'oembed_support_enabled' );
 		define( wpecp_ajax_prefix . 'image_upload_setting', wpecp_prefix . 'image_upload_setting' );
+		define( wpecp_ajax_prefix . 'deleting_expiration', wpecp_prefix . 'deleting_expiration' );
 		define( wpecp_ajax_prefix . 'editing_expiration', wpecp_prefix . 'editing_expiration' );
 		define( wpecp_ajax_prefix . 'custom_classes', wpecp_prefix . 'custom_classes' );
 		define( wpecp_ajax_prefix . 'wordpress_ids', wpecp_prefix . 'wordpress_ids' );
@@ -92,6 +93,8 @@ class WPEditorCommentsPlus {
 		define( wpecp_prefix . 'toolbar3', 'fontselect fontsizeselect' );
 		define( wpecp_prefix . 'plugins', 'charmap,colorpicker,compat3x,directionality,fullscreen,hr,image,lists,paste,tabfocus,textcolor,wordpress,wpautoresize,wpdialogs,wpeditimage,wpemoji,wplink,wpview' );
 
+		define( wpecp_prefix . 'on', wpecp_prefix . 'on' );
+		define( wpecp_prefix . 'off', wpecp_prefix . 'off' );
 		define( wpecp_prefix . 'image_upload_disabled', wpecp_prefix . 'image_upload_disabled' );
 		define( wpecp_prefix . 'image_upload_logged_in', wpecp_prefix . 'image_upload_logged_in' );
 
@@ -142,14 +145,15 @@ class WPEditorCommentsPlus {
 
 		// sanitize WordPress options
 		$this->option_deleting_enabled = sanitize_html_class( get_option( wpecp_ajax_deleting_enabled ) );
-		$this->option_deleting_enabled = ( $this->option_deleting_enabled == 'off' ) ? 'off' : 'on';
+		$this->option_deleting_enabled = ( $this->option_deleting_enabled == wpecp_off ) ? wpecp_off : wpecp_on;
 		$this->option_editing_enabled = sanitize_html_class( get_option( wpecp_ajax_editing_enabled ) );
-		$this->option_editing_enabled = ( $this->option_editing_enabled == 'off' ) ? 'off' : 'on';
+		$this->option_editing_enabled = ( $this->option_editing_enabled == wpecp_off ) ? wpecp_off : wpecp_on;
 		$this->option_oembed_support_enabled = sanitize_html_class( get_option( wpecp_ajax_oembed_support_enabled ) );
-		$this->option_oembed_support_enabled = ( $this->option_oembed_support_enabled == 'off' ) ? 'off' : 'on';
+		$this->option_oembed_support_enabled = ( $this->option_oembed_support_enabled == wpecp_off ) ? wpecp_off : wpecp_on;
 		$this->option_image_upload_setting = sanitize_html_class( get_option( wpecp_ajax_image_upload_setting ) );
 		$this->option_image_upload_setting = ( $this->option_image_upload_setting != wpecp_image_upload_disabled ) ? $this->option_image_upload_setting : wpecp_image_upload_disabled;
 
+		$this->option_deleting_expiration = sanitize_key( get_option( wpecp_ajax_deleting_expiration ) );
 		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
 		$this->option_show_toolbars = false;
@@ -211,6 +215,8 @@ class WPEditorCommentsPlus {
 		add_action( 'wp_ajax_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_deleting_expiration, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_deleting_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
@@ -314,6 +320,7 @@ class WPEditorCommentsPlus {
 			'addCommentAction' => wpecp_ajax_add_comment,
 			'updateCommentAction' => wpecp_ajax_update_comment,
 			'deleteCommentAction' => wpecp_ajax_delete_comment,
+			'deletingExpiration' => $this->option_deleting_expiration,
 			'editingExpiration' => $this->option_editing_expiration,
 
 			wpecp_prefix . 'plugins' => wpecp_plugins,
@@ -347,6 +354,7 @@ class WPEditorCommentsPlus {
 			wpecp_css_prefix . 'edit_button_custom' => $this->option_custom_classes_edit,
 			wpecp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
 			wpecp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
+
 			// IDs
 			wpecp_id_prefix . 'comments' => $this->option_wp_id_comments,
 			wpecp_id_prefix . 'comment' => $this->option_wp_id_comment,
@@ -374,11 +382,14 @@ class WPEditorCommentsPlus {
 		add_filter( 'comment_reply_link_args', array( $this, 'filter_comment_reply_link_args' ), 10, 3 );
 		add_filter( 'comment_text', array( $this, 'filter_comment_editing' ), 10, 2 );
 
-		if ($this->option_oembed_support_enabled == 'on') {
+		if ($this->option_oembed_support_enabled == wpecp_on) {
 			$make_clickable = has_filter( 'get_comment_text', 'make_clickable' );
 			$oembed_priority = ( $make_clickable ) ? $make_clickable - 1 : 10;
-
 			add_filter( 'get_comment_text', array( $this, 'filter_oembed_comments' ), $oembed_priority );
+		}
+
+		if ($this->option_image_upload_setting == wpecp_image_upload_logged_in) {
+			add_filter( 'ajax_query_attachments_args', array( $this, 'filter_show_user_attachments' ), 20, 1 );
 		}
 	}
 
@@ -439,6 +450,7 @@ class WPEditorCommentsPlus {
 				'deletingEnabledAction' => wpecp_ajax_deleting_enabled,
 				'oEmbedSupportEnabledAction' => wpecp_ajax_oembed_support_enabled,
 				'imageUploadSettingAction' => wpecp_ajax_image_upload_setting,
+				'deletingExpirationAction' => wpecp_ajax_deleting_expiration,
 				'editingExpirationAction' => wpecp_ajax_editing_expiration,
 				'customClassesAction' => wpecp_ajax_custom_classes,
 				'wordpressIdsAction' => wpecp_ajax_wordpress_ids,
@@ -449,7 +461,7 @@ class WPEditorCommentsPlus {
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
 
 			if ( wpecp_local_dev ) {
-				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ),	$this->version, false );
+				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ), $this->version, false );
 			} else {
 				wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
 			}
@@ -472,9 +484,9 @@ class WPEditorCommentsPlus {
 		  wp_deregister_script( 'comment-reply' );
 
 			if ( wpecp_local_dev ) {
-				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ),	$this->version, true );
+				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ), $this->version, true );
 			} else {
-				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__ ), array( 'jquery', 'backbone' ),	$this->version, false );
+				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__ ), array( 'jquery', 'backbone' ), $this->version, false );
 			}
 			// Instantiate Javascript Globals for plugin script
 			wp_localize_script( $this->plugin_slug . '-plugin-script', wpecp_javascript_globals, json_encode( $this->wpecp_plugin_javascript_globals ) );
@@ -490,7 +502,7 @@ class WPEditorCommentsPlus {
 	public function add_plugin_admin_menu() {
 		if ( current_user_can( 'administrator' ) ) {
 			$this->plugin_screen_hook_suffix = add_options_page( __( $this->plugin_name . " - Settings", $this->plugin_slug ),
-				__( $this->plugin_name, $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
+			__( $this->plugin_name, $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
 		}
 	}
 
@@ -596,17 +608,17 @@ class WPEditorCommentsPlus {
 
 		get_currentuserinfo();
 		$comment = get_comment( $comment_id );
-		// $comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
-		// $comment_age = floor( $comment_age / 60 );
+		$comment_age = current_time( 'timestamp' ) - strtotime( $comment->comment_date );
+		$comment_age = floor( $comment_age / 60 );
 
 		if (!current_user_can( 'administrator' )) {
 			// if user is not logged in or not the comment author
 			if ( !is_user_logged_in() ||
 				$current_user->ID != $comment->user_id ) { wp_send_json_error( 'permission denied' ); }
-			// // comment editing has expiration period
-			// if ( $this->option_editing_expiration > 0 &&
-			// 	// if the comment is past editing period expiration
-			// 	$comment_age > $this->option_editing_expiration ) { wp_send_json_error( 'permission denied' ); }
+			// comment editing has expiration period
+			if ( $this->option_deleting_expiration > 0 &&
+				// if the comment is past editing period expiration
+				$comment_age > $this->option_deleting_expiration ) { wp_send_json_error( 'permission denied' ); }
 		}
 
 		if ( wp_delete_comment( $comment_id ) ) {
@@ -619,15 +631,29 @@ class WPEditorCommentsPlus {
 	/**
 	 * @since    1.1.4
 	 */
-	public function wpecp_toggle_upload_image_setting( $setting ) {
+	private function wpecp_toggle_upload_image_setting( $setting ) {
+		global $wp_roles;
+
+		$caps = array(
+			'upload_files'
+		);
+
 		switch ($setting) {
 			case wpecp_image_upload_disabled:
-				$wp_roles->remove_cap('contributor', 'upload_files');
-				$wp_roles->remove_cap('subscriber', 'upload_files');
+				foreach ($caps as $cap) {
+					$wp_roles->remove_cap('contributor', $cap);
+				}
+				foreach ($caps as $cap) {
+					$wp_roles->remove_cap('subscriber', $cap);
+				}
 			break;
 			case wpecp_image_upload_logged_in:
-				$wp_roles->add_cap('contributor', 'upload_files');
-				$wp_roles->add_cap('subscriber', 'upload_files');
+				foreach ($caps as $cap) {
+					$wp_roles->add_cap('contributor', $cap);
+				}
+				foreach ($caps as $cap) {
+					$wp_roles->add_cap('subscriber', $cap);
+				}
 			break;
 		}
 	}
@@ -725,8 +751,16 @@ class WPEditorCommentsPlus {
 				$content = sanitize_key( $_REQUEST[ 'content' ] );
 				$result = $this->wpecp_save_option( wpecp_ajax_image_upload_setting, $content );
 				if ($result) {
-					wpecp_toggle_upload_image_setting($content);
+					$this->wpecp_toggle_upload_image_setting($content);
 				}
+			break;
+
+			case wpecp_ajax_deleting_expiration:
+				check_ajax_referer( wpecp_ajax_deleting_expiration, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->wpecp_save_option( wpecp_ajax_deleting_expiration, $content );
 			break;
 
 			case wpecp_ajax_editing_expiration:
@@ -776,7 +810,7 @@ class WPEditorCommentsPlus {
 			break;
 		}
 
-		wp_send_json( $result );
+		$result ? wp_send_json_success() : wp_send_json_error();
 	}
 
 
@@ -933,7 +967,7 @@ class WPEditorCommentsPlus {
 		// Insert edit button target
 		if (!current_user_can( 'administrator' )) {
 			// If editing option is enabled
-			if ( $this->option_editing_enabled == 'off' ||
+			if ( $this->option_editing_enabled == wpecp_off ||
 				// if user is logged in
 				!is_user_logged_in() ||
 				// if user created this comment
@@ -957,11 +991,16 @@ class WPEditorCommentsPlus {
 		// Insert delete button target
 		if (!current_user_can( 'administrator' )) {
 			// If delete option is enabled
-			if ( $this->option_deleting_enabled == 'off' ||
+			if ( $this->option_deleting_enabled == wpecp_off ||
 				// if user is logged in
 				!is_user_logged_in() ||
 				// if user created this comment
-				$comment->user_id != $current_user->ID ) {
+				$comment->user_id != $current_user->ID ||
+				// if comment editing does expire
+				( $this->option_deleting_expiration > 0 &&
+				// or comment editing has expired
+				$comment_age >= $this->option_deleting_expiration )
+			   ) {
 				$add_delete_target = false;
 			}
 		}
@@ -1060,6 +1099,19 @@ class WPEditorCommentsPlus {
 		remove_filter( 'embed_oembed_discover', '__return_false', 999 );
 
 		return $comment;
+	}
+
+	/**
+	 * @since    1.1.4
+	 */
+	public function filter_show_user_attachments( $query = array() ) {
+		if ( current_user_can( 'administrator' ) || current_user_can( 'editor' ) ) { return $query; }
+
+		$user_id = get_current_user_id();
+		if( $user_id ) {
+			$query['author'] = $user_id;
+		}
+		return $query;
 	}
 
 }

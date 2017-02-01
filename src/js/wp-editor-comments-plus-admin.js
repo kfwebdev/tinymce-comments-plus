@@ -180,7 +180,7 @@ wpecp.initAdmin = function() {
 			this.$select.removeClass('saved');
 
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', this.options.actionGlobal );
+			this.model.set( 'action', wpecpGlobals.imageUploadSettingAction );
 			this.model.set( 'content', this.selectValue );
 
 			wpecp.ajaxSaveOption( this.model.toJSON() )
@@ -196,16 +196,17 @@ wpecp.initAdmin = function() {
 			'change input': 'changeExpiration'
 		},
 
-		initialize: function() {
+		initialize: function( options ) {
 			var that = this;
 
-			this.$expiration = this.$el.find( '.expiration-control' );
+			this.options = options;
+			this.confirmView = {};
+			this.confirmView.$confirmed = $(this.$el.parent().find( '.confirmed' )[0]);
 			this.$days = this.$el.find('.days > input');
 			this.$hours = this.$el.find('.hours > input');
 			this.$minutes = this.$el.find('.minutes > input');
 			this.$seconds = this.$el.find('.seconds > input');
-			this.$confirmed = this.$el.find( '.confirmed' );
-			this.nonce = this.$expiration.data( 'wpecp-nc' );
+			this.nonce = this.$el.data( 'wpecp-nc' );
 			this.timeoutUpdate = false;
 
 			this.$days.spinner({
@@ -289,21 +290,25 @@ wpecp.initAdmin = function() {
 
 		updateExpiration: function() {
 			var that = this;
+			var globalAction = '';
+			if (this.options.type === 'editing') { globalAction = wpecpGlobals.editingExpirationAction; }
+			else if (this.options.type === 'deleting') { globalAction = wpecpGlobals.deletingExpirationAction; }
+			
 			this.model.set( 'security', this.nonce );
-			this.model.set( 'action', wpecpGlobals.editingExpirationAction );
+			this.model.set( 'action', globalAction );
 			this.model.set( 'content', this.expiration );
 
 			clearTimeout( this.timeoutUpdate );
 
 			this.timeoutUpdate = setTimeout( function(){
-				wpecp.confirmationSaving( that );
+				wpecp.confirmationSaving(that.confirmView);
 				wpecp.ajaxSaveOption( that.model.toJSON() )
 				.fail(function( data ) {
-					wpecp.confirmationFail( that );
+					wpecp.confirmationFail( that.confirmView );
 				})
 				.done(function( data ) {
-					that.confirmationMessage = 'Editing Period Saved';
-					wpecp.confirmationDone( that );
+					that.confirmationMessage = 'Expiration Saved';
+					wpecp.confirmationDone( that.confirmView );
 				});
 				clearTimeout( that.timeoutUpdate );
 			}, wpecpGlobals.optionUpdateDelay );
@@ -495,12 +500,18 @@ wpecp.initAdmin = function() {
 
 	new wpecp.imageUploadSettingView({
 		el: $( '.wpecp-option .comment-image-upload' ),
-		actionGlobal: wpecpGlobals.imageUploadSettingAction,
 		model: new wpecp.ajaxModel
 	});
 
 	new wpecp.adjustExpiration({
-		el: $( '.wpecp-option .comment-expiration' ),
+		el: $( '.wpecp-option .comment-expiration .editing-expiration' ),
+		type: 'editing',
+		model: new wpecp.ajaxModel
+	});
+
+	new wpecp.adjustExpiration({
+		el: $( '.wpecp-option .comment-expiration .deleting-expiration' ),
+		type: 'deleting',
 		model: new wpecp.ajaxModel
 	});
 
