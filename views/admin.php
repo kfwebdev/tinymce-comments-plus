@@ -64,31 +64,53 @@
 			</fieldset>
 			<fieldset class="comment-expiration">
 				<?php
-					$nonce = wp_create_nonce( wpecp_ajax_editing_expiration );
-					$expiration_option = get_option( wpecp_ajax_editing_expiration );
-					$expiration_option = ( intval( $expiration_option ) > 0 ) ? $expiration_option : 0;
-					$dtF = new DateTime( "@0" );
-    			$dtT = new DateTime( "@$expiration_option" );
-					$expirations = $dtF->diff( $dtT );
+					$editing_nonce = wp_create_nonce( wpecp_ajax_editing_expiration );
+					$editing_expiration_option = get_option( wpecp_ajax_editing_expiration );
+					$editing_expiration_option = ( intval( $editing_expiration_option ) > 0 ) ? $editing_expiration_option : 0;
+					$editing_dtF = new DateTime( "@0" );
+    				$editing_dtT = new DateTime( "@$editing_expiration_option" );
+					$editing_expirations = $editing_dtF->diff( $editing_dtT );
+					$deleting_nonce = wp_create_nonce( wpecp_ajax_deleting_expiration );
+					$deleting_expiration_option = get_option( wpecp_ajax_deleting_expiration );
+					$deleting_expiration_option = ( intval( $deleting_expiration_option ) > 0 ) ? $deleting_expiration_option : 0;
+					$deleting_dtF = new DateTime( "@0" );
+    				$deleting_dtT = new DateTime( "@$deleting_expiration_option" );
+					$deleting_expirations = $deleting_dtF->diff( $deleting_dtT );
 				?>
-				<legend><span class="dashicons dashicons-clock"></span> Comment Editing Period</legend>
+				<legend><span class="dashicons dashicons-clock"></span> Edit Comment Expiration</legend>
 				<div class="confirmed">
 					<span class="dashicons dashicons-yes"></span>
 					<span class="message"></span>
 				</div>
-				<p>Duration to allow comments to be edited. Leave all fields at 0 to always allow editing.</p>
-				<div class="expiration-control" data-wpecp-nc="<?php echo $nonce ?>">
-					<label for="days" class="days">Days
-						<input name="days" value="<?php echo $expirations->format('%a'); ?>">
+				<p>Leave values at 0 to always allow comment edits.</p>
+				<div class="expiration-control editing-expiration" data-wpecp-nc="<?php echo $editing_nonce ?>">
+					<label for="editing_days" class="days">Days
+						<input name="editing_days" value="<?php echo $editing_expirations->format('%a'); ?>">
 					</label>
-					<label for="hours" class="hours">Hours
-						<input name="hours" value="<?php echo $expirations->format('%h'); ?>">
+					<label for="editing_hours" class="hours">Hours
+						<input name="editing_hours" value="<?php echo $editing_expirations->format('%h'); ?>">
 					</label>
-					<label for="minutes" class="minutes">Minutes
-						<input name="minutes" value="<?php echo $expirations->format('%i'); ?>">
+					<label for="editing_minutes" class="minutes">Minutes
+						<input name="editing_minutes" value="<?php echo $editing_expirations->format('%i'); ?>">
 					</label>
-					<label for="seconds" class="seconds">Seconds
-						<input name="seconds" value="<?php echo $expirations->format('%s'); ?>">
+					<label for="editing_seconds" class="seconds">Seconds
+						<input name="editing_seconds" value="<?php echo $editing_expirations->format('%s'); ?>">
+					</label>
+				</div>
+				<legend class="expiration-divider"><span class="dashicons dashicons-clock"></span> Delete Comment Expiration</legend>
+				<p>Leave values at 0 to always allow comment deleting.</p>
+				<div class="expiration-control deleting-expiration" data-wpecp-nc="<?php echo $deleting_nonce ?>">
+					<label for="deleting_days" class="days">Days
+						<input name="deleting_days" value="<?php echo $deleting_expirations->format('%a'); ?>">
+					</label>
+					<label for="deleting_hours" class="hours">Hours
+						<input name="deleting_hours" value="<?php echo $deleting_expirations->format('%h'); ?>">
+					</label>
+					<label for="deleting_minutes" class="minutes">Minutes
+						<input name="deleting_minutes" value="<?php echo $deleting_expirations->format('%i'); ?>">
+					</label>
+					<label for="deleting_seconds" class="seconds">Seconds
+						<input name="deleting_seconds" value="<?php echo $deleting_expirations->format('%s'); ?>">
 					</label>
 				</div>
 			</fieldset>

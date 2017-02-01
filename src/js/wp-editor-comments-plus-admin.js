@@ -199,13 +199,12 @@ wpecp.initAdmin = function() {
 		initialize: function() {
 			var that = this;
 
-			this.$expiration = this.$el.find( '.expiration-control' );
 			this.$days = this.$el.find('.days > input');
 			this.$hours = this.$el.find('.hours > input');
 			this.$minutes = this.$el.find('.minutes > input');
 			this.$seconds = this.$el.find('.seconds > input');
 			this.$confirmed = this.$el.find( '.confirmed' );
-			this.nonce = this.$expiration.data( 'wpecp-nc' );
+			this.nonce = this.$el.data( 'wpecp-nc' );
 			this.timeoutUpdate = false;
 
 			this.$days.spinner({
@@ -500,7 +499,12 @@ wpecp.initAdmin = function() {
 	});
 
 	new wpecp.adjustExpiration({
-		el: $( '.wpecp-option .comment-expiration' ),
+		el: $( '.wpecp-option .comment-expiration .editing-expiration' ),
+		model: new wpecp.ajaxModel
+	});
+
+	new wpecp.adjustExpiration({
+		el: $( '.wpecp-option .comment-expiration .deleting-expiration' ),
 		model: new wpecp.ajaxModel
 	});
 

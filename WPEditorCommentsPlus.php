@@ -82,6 +82,7 @@ class WPEditorCommentsPlus {
 		define( wpecp_ajax_prefix . 'editing_enabled', wpecp_prefix . 'editing_enabled' );
 		define( wpecp_ajax_prefix . 'oembed_support_enabled', wpecp_prefix . 'oembed_support_enabled' );
 		define( wpecp_ajax_prefix . 'image_upload_setting', wpecp_prefix . 'image_upload_setting' );
+		define( wpecp_ajax_prefix . 'deleting_expiration', wpecp_prefix . 'deleting_expiration' );
 		define( wpecp_ajax_prefix . 'editing_expiration', wpecp_prefix . 'editing_expiration' );
 		define( wpecp_ajax_prefix . 'custom_classes', wpecp_prefix . 'custom_classes' );
 		define( wpecp_ajax_prefix . 'wordpress_ids', wpecp_prefix . 'wordpress_ids' );
@@ -150,6 +151,7 @@ class WPEditorCommentsPlus {
 		$this->option_image_upload_setting = sanitize_html_class( get_option( wpecp_ajax_image_upload_setting ) );
 		$this->option_image_upload_setting = ( $this->option_image_upload_setting != wpecp_image_upload_disabled ) ? $this->option_image_upload_setting : wpecp_image_upload_disabled;
 
+		$this->option_deleting_expiration = sanitize_key( get_option( wpecp_ajax_deleting_expiration ) );
 		$this->option_editing_expiration = sanitize_key( get_option( wpecp_ajax_editing_expiration ) );
 
 		$this->option_show_toolbars = false;
@@ -211,6 +213,8 @@ class WPEditorCommentsPlus {
 		add_action( 'wp_ajax_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_deleting_expiration, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_deleting_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
@@ -314,6 +318,7 @@ class WPEditorCommentsPlus {
 			'addCommentAction' => wpecp_ajax_add_comment,
 			'updateCommentAction' => wpecp_ajax_update_comment,
 			'deleteCommentAction' => wpecp_ajax_delete_comment,
+			'deletingExpiration' => $this->option_deleting_expiration,
 			'editingExpiration' => $this->option_editing_expiration,
 
 			wpecp_prefix . 'plugins' => wpecp_plugins,
@@ -347,6 +352,7 @@ class WPEditorCommentsPlus {
 			wpecp_css_prefix . 'edit_button_custom' => $this->option_custom_classes_edit,
 			wpecp_css_prefix . 'submit_button_custom' => $this->option_custom_classes_submit,
 			wpecp_css_prefix . 'cancel_button_custom' => $this->option_custom_classes_cancel,
+
 			// IDs
 			wpecp_id_prefix . 'comments' => $this->option_wp_id_comments,
 			wpecp_id_prefix . 'comment' => $this->option_wp_id_comment,
@@ -377,7 +383,6 @@ class WPEditorCommentsPlus {
 		if ($this->option_oembed_support_enabled == 'on') {
 			$make_clickable = has_filter( 'get_comment_text', 'make_clickable' );
 			$oembed_priority = ( $make_clickable ) ? $make_clickable - 1 : 10;
-
 			add_filter( 'get_comment_text', array( $this, 'filter_oembed_comments' ), $oembed_priority );
 		}
 	}
@@ -439,6 +444,7 @@ class WPEditorCommentsPlus {
 				'deletingEnabledAction' => wpecp_ajax_deleting_enabled,
 				'oEmbedSupportEnabledAction' => wpecp_ajax_oembed_support_enabled,
 				'imageUploadSettingAction' => wpecp_ajax_image_upload_setting,
+				'deletingExpirationAction' => wpecp_ajax_deleting_expiration,
 				'editingExpirationAction' => wpecp_ajax_editing_expiration,
 				'customClassesAction' => wpecp_ajax_custom_classes,
 				'wordpressIdsAction' => wpecp_ajax_wordpress_ids,
@@ -449,7 +455,7 @@ class WPEditorCommentsPlus {
 			wp_enqueue_script( 'jquery-ui-spinner', array( 'jquery-ui-core' ) );
 
 			if ( wpecp_local_dev ) {
-				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ),	$this->version, false );
+				wp_register_script( $this->plugin_slug . '-admin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ), $this->version, false );
 			} else {
 				wp_register_script( $this->plugin_slug . "-admin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__), array( 'jquery', 'backbone' ), $this->version );
 			}
@@ -472,9 +478,9 @@ class WPEditorCommentsPlus {
 		  wp_deregister_script( 'comment-reply' );
 
 			if ( wpecp_local_dev ) {
-				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ),	$this->version, true );
+				wp_register_script( $this->plugin_slug . '-plugin-script', 'http://localhost:8000/assets/wpEditorCommentsPlus.js', array( 'jquery', 'backbone' ), $this->version, true );
 			} else {
-				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__ ), array( 'jquery', 'backbone' ),	$this->version, false );
+				wp_register_script( $this->plugin_slug . "-plugin-script", plugins_url( "dist/assets/wpEditorCommentsPlus.js", __FILE__ ), array( 'jquery', 'backbone' ), $this->version, false );
 			}
 			// Instantiate Javascript Globals for plugin script
 			wp_localize_script( $this->plugin_slug . '-plugin-script', wpecp_javascript_globals, json_encode( $this->wpecp_plugin_javascript_globals ) );
@@ -490,7 +496,7 @@ class WPEditorCommentsPlus {
 	public function add_plugin_admin_menu() {
 		if ( current_user_can( 'administrator' ) ) {
 			$this->plugin_screen_hook_suffix = add_options_page( __( $this->plugin_name . " - Settings", $this->plugin_slug ),
-				__( $this->plugin_name, $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
+			__( $this->plugin_name, $this->plugin_slug ), "read", $this->plugin_slug, array( $this, "display_plugin_admin_page" ) );
 		}
 	}
 
@@ -727,6 +733,14 @@ class WPEditorCommentsPlus {
 				if ($result) {
 					wpecp_toggle_upload_image_setting($content);
 				}
+			break;
+
+			case wpecp_ajax_deleting_expiration:
+				check_ajax_referer( wpecp_ajax_deleting_expiration, 'security' );
+				// if user is not administrator
+				if ( ! current_user_can( 'administrator' ) ) { wp_send_json_error( 'bad request' ); }
+				$content = sanitize_key( $_REQUEST[ 'content' ] );
+				$result = $this->wpecp_save_option( wpecp_ajax_deleting_expiration, $content );
 			break;
 
 			case wpecp_ajax_editing_expiration:
