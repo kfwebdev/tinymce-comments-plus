@@ -1,8 +1,7 @@
 'use strict';
 import React from 'react';
 
-var
-    $ = jQuery;
+var $ = jQuery;
 
 wpecp.Spinner = require( '../spinner/spinner' );
 

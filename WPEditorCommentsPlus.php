@@ -87,6 +87,9 @@ class WPEditorCommentsPlus {
 		define( wpecp_ajax_prefix . 'custom_classes', wpecp_prefix . 'custom_classes' );
 		define( wpecp_ajax_prefix . 'wordpress_ids', wpecp_prefix . 'wordpress_ids' );
 		define( wpecp_ajax_prefix . 'custom_toolbars', wpecp_prefix . 'custom_toolbars' );
+		define( wpecp_ajax_prefix . 'image_upload', wpecp_prefix . 'image_upload' );
+		define( wpecp_ajax_prefix . 'image_upload_name', wpecp_prefix . 'upload_file' );
+		define( wpecp_ajax_prefix . 'image_upload_cancel', wpecp_prefix . 'image_upload_cancel' );
 
 		define( wpecp_prefix . 'toolbar1', 'bold italic strikethrough bullist numlist blockquote hr alignleft aligncenter alignright image link unlink wp_more spellchecker wp_adv' );
 		define( wpecp_prefix . 'toolbar2', 'formatselect underline alignjustify forecolor pastetext removeformat charmap outdent indent undo redo wp_help' );
@@ -97,6 +100,7 @@ class WPEditorCommentsPlus {
 		define( wpecp_prefix . 'off', wpecp_prefix . 'off' );
 		define( wpecp_prefix . 'image_upload_disabled', wpecp_prefix . 'image_upload_disabled' );
 		define( wpecp_prefix . 'image_upload_logged_in', wpecp_prefix . 'image_upload_logged_in' );
+		define( wpecp_prefix . 'image_upload_nonce', wpecp_prefix . 'image_upload_nonce' );
 
 		define( wpecp_prefix . 'regex_html_class', '/([^0-9a-z-_ ])+/i' );
 		define( wpecp_prefix . 'regex_html_id', '/([^0-9a-z-_.# ])+/i' );
@@ -207,18 +211,27 @@ class WPEditorCommentsPlus {
 		add_action( 'wp_ajax_' . wpecp_ajax_update_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_delete_comment, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_delete_comment, array( $this, 'action_ajax_request' ) );
+
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_deleting_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_deleting_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
-		add_action( 'wp_ajax_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_deleting_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_deleting_expiration, array( $this, 'action_ajax_request' ) );
+
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_editing_enabled, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_editing_expiration, array( $this, 'action_ajax_request' ) );
+
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_oembed_support_enabled, array( $this, 'action_ajax_request' ) );
+
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_image_upload, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_image_upload_setting, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_image_upload_cancel, array( $this, 'action_ajax_request' ) );
+		add_action( 'wp_ajax_' . wpecp_ajax_image_upload_cancel, array( $this, 'action_ajax_request' ) );
+
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_' . wpecp_ajax_custom_classes, array( $this, 'action_ajax_request' ) );
 		add_action( 'wp_ajax_nopriv_' . wpecp_ajax_wordpress_ids, array( $this, 'action_ajax_request' ) );
@@ -316,12 +329,16 @@ class WPEditorCommentsPlus {
 		$this->wpecp_plugin_javascript_globals = array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'editorStyles' => includes_url( "js/tinymce/skins/wordpress/wp-content.css", __FILE__ ),
-			'optionUpdateDelay' => wpecp_ajax_option_update_delay,
+
 			'addCommentAction' => wpecp_ajax_add_comment,
-			'updateCommentAction' => wpecp_ajax_update_comment,
 			'deleteCommentAction' => wpecp_ajax_delete_comment,
 			'deletingExpiration' => $this->option_deleting_expiration,
 			'editingExpiration' => $this->option_editing_expiration,
+			'imageUploadAction' => wpecp_ajax_image_upload,
+			'imageUploadCancelAction' => wpecp_ajax_image_upload_cancel,
+			'imageUploadName' => wpecp_ajax_image_upload_name,
+			'optionUpdateDelay' => wpecp_ajax_option_update_delay,
+			'updateCommentAction' => wpecp_ajax_update_comment,
 
 			wpecp_prefix . 'plugins' => wpecp_plugins,
 			wpecp_prefix . 'show_toolbars' => $this->option_show_toolbars,
@@ -329,6 +346,8 @@ class WPEditorCommentsPlus {
 			wpecp_prefix . 'toolbar2' => $this->option_toolbar2,
 			wpecp_prefix . 'toolbar3' => $this->option_toolbar3,
 			wpecp_prefix . 'toolbar4' => $this->option_toolbar4,
+
+			wpecp_prefix . 'image_upload_nonce' => wpecp_image_upload_nonce,
 
 			// Classes
 			wpecp_css_prefix . 'button' => wpecp_css_button_class,
@@ -444,17 +463,17 @@ class WPEditorCommentsPlus {
 			// Admin JavaScript Globals
 			$this->wpecp_admin_javascript_globals = array(
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'optionUpdateDelay' => wpecp_ajax_option_update_delay,
-				'optionConfirmationDelay' => wpecp_ajax_confirmation_delay,
-				'editingEnabledAction' => wpecp_ajax_editing_enabled,
-				'deletingEnabledAction' => wpecp_ajax_deleting_enabled,
-				'oEmbedSupportEnabledAction' => wpecp_ajax_oembed_support_enabled,
-				'imageUploadSettingAction' => wpecp_ajax_image_upload_setting,
-				'deletingExpirationAction' => wpecp_ajax_deleting_expiration,
-				'editingExpirationAction' => wpecp_ajax_editing_expiration,
 				'customClassesAction' => wpecp_ajax_custom_classes,
-				'wordpressIdsAction' => wpecp_ajax_wordpress_ids,
-				'customToolbarsAction' => wpecp_ajax_custom_toolbars
+				'customToolbarsAction' => wpecp_ajax_custom_toolbars,
+				'deletingEnabledAction' => wpecp_ajax_deleting_enabled,
+				'deletingExpirationAction' => wpecp_ajax_deleting_expiration,
+				'editingEnabledAction' => wpecp_ajax_editing_enabled,
+				'editingExpirationAction' => wpecp_ajax_editing_expiration,
+				'imageUploadSettingAction' => wpecp_ajax_image_upload_setting,
+				'oEmbedSupportEnabledAction' => wpecp_ajax_oembed_support_enabled,
+				'optionConfirmationDelay' => wpecp_ajax_confirmation_delay,
+				'optionUpdateDelay' => wpecp_ajax_option_update_delay,
+				'wordpressIdsAction' => wpecp_ajax_wordpress_ids
 			);
 
 			wp_enqueue_script( 'jquery-ui-core', array( 'jquery' ) );
@@ -596,7 +615,7 @@ class WPEditorCommentsPlus {
 		if ( wp_update_comment( $update ) ) {
 			wp_send_json( $update );
 		} else {
-			wp_send_json_error( 'failed to update comment' );
+			wp_send_json_error();
 		}
 	}
 
@@ -808,9 +827,57 @@ class WPEditorCommentsPlus {
 				}
 				$result = true;
 			break;
+
+			case wpecp_ajax_image_upload:
+				$post_id = intval( $_REQUEST[ 'postId' ] );
+				if ( ! $post_id ) { wp_send_json_error( 'bad request' ); }
+				if ( !is_user_logged_in() ) { wp_send_json_error( 'bad request' ); }
+				// check ajax referer's security nonce
+				check_ajax_referer( wpecp_ajax_image_upload . $post_id, 'security' );
+
+				require_once( ABSPATH . 'wp-admin/includes/image.php' );
+				require_once( ABSPATH . 'wp-admin/includes/file.php' );
+				require_once( ABSPATH . 'wp-admin/includes/media.php' );
+
+				$move_overrides = array( 
+					'action' => false, 
+					'test_form' => false 
+				);
+				$attachment_id = media_handle_upload( wpecp_ajax_image_upload_name, 0, array(), $move_overrides );
+				$attachment_url = wp_get_attachment_url($attachment_id);
+
+				if ( !is_wp_error($attachment_id) && $attachment_url ) {
+					$result = array(
+						'imageAttachmentId' => $attachment_id,
+						'imageFilename' => basename($attachment_url),
+						'imageUrl' => $attachment_url 
+					);
+				} else {
+					$result = false;
+				}
+			break;
+
+			case wpecp_ajax_image_upload_cancel:
+				$attachment_id = intval( $_REQUEST[ 'attachmentId' ] );
+				$post_id = intval( $_REQUEST[ 'postId' ] );
+				if ( ! $attachment_id ) { wp_send_json_error( 'bad request' ); }
+				if ( ! $post_id ) { wp_send_json_error( 'bad request' ); }
+				if ( !is_user_logged_in() ) { wp_send_json_error( 'bad request' ); }
+				// check ajax referer's security nonce
+				check_ajax_referer( wpecp_ajax_image_upload . $post_id, 'security' );
+
+				$attachment_post = get_post($attachment_id);
+				$post_author = intval($attachment_post->post_author);
+
+				if ($post_author === get_current_user_id()) {
+					$result = (wp_delete_attachment($attachment_id) !== false) ? true : false;
+				} else {
+					$result = false;
+				}
+			break;
 		}
 
-		$result ? wp_send_json_success() : wp_send_json_error();
+		$result ? wp_send_json_success($result) : wp_send_json_error();
 	}
 
 
@@ -836,13 +903,16 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	 public function filter_format_tinymce( $args ) {
-		$media_buttons = ( $this->option_image_upload_setting == wpecp_image_upload_logged_in && is_user_logged_in() ) ? true : false;
+		// $media_buttons = ( $this->option_image_upload_setting == wpecp_image_upload_logged_in && is_user_logged_in() ) ? true : false;
 
 	 	$args['accessibility_focus'] = true;
+	 	$args['apply_source_formatting'] = false;
+	  	$args['block_formats'] = "Paragraph=p; Preformatted=pre; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
 	 	$args['gecko_spellcheck'] = true;
+		$args['image_description'] = true;
 	 	$args['keep_styles'] = true;
 	 	$args['media_strict'] = false;
-	 	$args['media_buttons'] = $media_buttons;
+	 	$args['media_buttons'] = false;
 	 	$args['paste_data_images'] = true;
 	 	$args['paste_remove_styles'] = false;
 	 	$args['paste_remove_spans'] = false;
@@ -851,11 +921,10 @@ class WPEditorCommentsPlus {
 		$args['plugins'] = wpecp_plugins;
 	 	$args['remove_linebreaks'] = false;
 	 	$args['tabfocus_elements'] = 'major-publishing-actions';
+		$args['teeny'] = false;
 	 	$args['wpeditimage_disable_captions'] = true;
 	 	//$args['content_css'] = get_template_directory_uri() . "/editor-style.css";
 	 	$args['wpautop'] = true;
-	 	$args['apply_source_formatting'] = false;
-	  	$args['block_formats'] = "Paragraph=p; Preformatted=pre; Heading 1=h1; Heading 2=h2; Heading 3=h3; Heading 4=h4";
 	 	if ( ! $this->option_show_toolbars ) { $args['toolbar'] = $this->option_show_toolbars; }
 	 	$args['toolbar1'] = $this->option_toolbar1;
 	 	$args['toolbar2'] = $this->option_toolbar2;
@@ -878,24 +947,40 @@ class WPEditorCommentsPlus {
 	 * @since    1.0.0
 	 */
 	public function filter_tinymce_editor() {
-		$media_buttons = ( $this->option_image_upload_setting == wpecp_image_upload_logged_in && is_user_logged_in() ) ? true : false;
+		$post = get_post();
+		$image_upload_nonce = wp_create_nonce( wpecp_ajax_image_upload . $post->ID );
+		// $media_buttons = ( $this->option_image_upload_setting == wpecp_image_upload_logged_in && is_user_logged_in() ) ? true : false;
+
+		$file_picker_callback = 'function (callback, value, meta, settings) { ' . PHP_EOL;
+		$file_picker_callback .= 'const filePickerSettings = {' . PHP_EOL;
+		$file_picker_callback .= 'postId: '.$post->ID.',' . PHP_EOL;
+		$file_picker_callback .= 'imageUploadNonce: "'. $image_upload_nonce . '"' . PHP_EOL;
+		$file_picker_callback .= '};' . PHP_EOL;
+		$file_picker_callback .= 'wpecp.filePicker(callback, value, meta, filePickerSettings);';
+		$file_picker_callback .= '}' . PHP_EOL;
 
 		// remove # from comment textarea id
 		$comment_textarea = str_replace( '#', '', $this->option_wp_id_comment_textarea );
 		$editor_config = array(
+			'media_buttons' => false,
+			'quicktags' => false,
 			'skin' => 'wp_theme',
 			'textarea_rows' => 12,
 			'teeny' => false,
 			'tinymce' => array(
-			'plugins' => wpecp_plugins,
-			'theme_advanced_buttons1' => $this->option_toolbar1,
-			'theme_advanced_buttons2' => $this->option_toolbar2,
-			'theme_advanced_buttons3' => $this->option_toolbar3,
-			'theme_advanced_buttons4' => $this->option_toolbar4
-		),
-			'wpeditimage_disable_captions' => true,
-			'quicktags' => false,
-			'media_buttons' => $media_buttons
+				'convert_urls' => false,
+				'file_picker_callback' => $file_picker_callback,
+				'file_picker_callback_types' => 'image',
+				'image_description' => true,
+				'plugins' => wpecp_plugins,
+				'relative_urls' => false,
+				'remove_script_host' => false,
+				'theme_advanced_buttons1' => $this->option_toolbar1,
+				'theme_advanced_buttons2' => $this->option_toolbar2,
+				'theme_advanced_buttons3' => $this->option_toolbar3,
+				'theme_advanced_buttons4' => $this->option_toolbar4
+			),
+			'wpeditimage_disable_captions' => true
 		);
 		if ( ! $this->option_show_toolbars ) { $editor_config['toolbar'] = $this->option_show_toolbars; }
 
@@ -919,20 +1004,33 @@ class WPEditorCommentsPlus {
 
 		$comment_id = $comment->comment_ID;
 		$post_id = $comment->comment_post_ID;
-		$nonce = wp_create_nonce( wpecp_ajax_update_comment . $comment_id );
+		$update_nonce = wp_create_nonce( wpecp_ajax_update_comment . $comment_id );
+		$image_upload_nonce = wp_create_nonce( wpecp_ajax_image_upload . $post_id );
 
 		$wpecp_content = sprintf(
-			'<div class="' . wpecp_css_comment_content . '" id="' . wpecp_css_comment_content . '%d" data-' . wpecp_css_post_id . '="%d" data-' . wpecp_css_comment_id . '="%d"	data-' . wpecp_css_nonce . '="%s">%s</div>',
+			'<div class="' . wpecp_css_comment_content .
+			'" id="' . wpecp_css_comment_content . 
+			'%d" data-' . wpecp_css_post_id . 
+			'="%d" data-' . wpecp_css_comment_id . 
+			'="%d"	data-' . wpecp_css_nonce . 
+			'="%s">%s</div>',
 			$comment_id,
 			$post_id,
 			$comment_id,
-			$nonce,
+			$update_nonce,
 			$content
 		);
 
 		$wpecp_editor = sprintf(
-			'<div class="' . wpecp_css_editor . '" data-' . wpecp_css_comment_id . '="%d"></div>',
-			$comment_id
+			'<div class="' . wpecp_css_editor . 
+			'" data-' . wpecp_css_comment_id . 
+			'="%d" data-' . wpecp_css_post_id . 
+			'="%d" data-' . wpecp_css_nonce . 
+			'="%s" data-'. wpecp_image_upload_nonce.'="%s"></div>',
+			$comment_id,
+			$post_id,
+			$update_nonce,
+			$image_upload_nonce
 		);
 
 		return $wpecp_content . $wpecp_editor;
@@ -1048,10 +1146,12 @@ class WPEditorCommentsPlus {
 				'style' => true
 			),
 			'img' => array(
-				'src' => true,
 				'alt' => true,
+				'height' => true,
+				'src' => true,
 				'style' => true,
-				'title' => true
+				'title' => true,
+				'width' => true
 			),
 			'p' => array(
 				'style' => true,
